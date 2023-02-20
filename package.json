@@ -1,7 +1,7 @@
 {
-  "name": "frontend",
-  "version": "3.2.0",
-  "description": "CoreUI React Open Source Bootstrap 4 Admin Template",
+  "name": "sare-ui",
+  "version": "1.0.0",
+  "description": "SARE UI application buit with CoreUI React Open Source Bootstrap 4 Admin Template",
   "author": {
     "name": "CoreUI",
     "url": "https://coreui.io",
