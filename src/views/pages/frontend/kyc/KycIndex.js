@@ -10,7 +10,7 @@ import {
 } from "reactstrap";
 import { useParams } from 'react-router-dom';
 import KycSuccess from './KycSuccess';
-import KycProcess from './KycProcess';
+import KycValidate from './KycValidate';
 
 function KycIndex() {
   const [kycData, setKycData] = useState({});
@@ -34,7 +34,7 @@ function KycIndex() {
     <>
       {
         (kycData?.data?.kyc_status === 'approved') ?
-          <KycSuccess /> : <KycProcess />
+          <KycSuccess /> : <KycValidate />
       }
       {/* {kycData?.data?.kyc_status === 'approved' ? (
                 <KycSuccess />
