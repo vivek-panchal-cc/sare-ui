@@ -1,20 +1,20 @@
 import React from 'react'
 import { Container, Row, Col, Card, CardBody, CardTitle } from "reactstrap";
 
-function KycSuccess() {
+function KycRecieved() {
   return (
     <>
       <div className="section text-center">
         <Container>
           <div className="text-center">
-            <Card className='col-md-6 offset-md-3'>
+            <Card className='col-md-6 offset-md-3 my-2'>
               <CardBody>
-                <CardTitle>Kyc verified</CardTitle>
+                <CardTitle><b>KYC Recieved successfully.</b></CardTitle>
                 <CardBody>
                   <br />
                   <Row className='text-center'>
                     <Col md="6" className='offset-md-3'>
-                      <p><strong>Your KYC process is complete, <br />Please contine with the SARE app/USSD service. </strong></p>
+                      <p><strong>Your KYC has been received and will be reviewed. </strong></p>
                     </Col>
                   </Row>
                   <br />
@@ -27,4 +27,4 @@ function KycSuccess() {
     </>
   )
 }
-export default KycSuccess;
+export default KycRecieved;

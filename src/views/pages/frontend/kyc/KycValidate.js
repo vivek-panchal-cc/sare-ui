@@ -4,8 +4,9 @@ import OTPInput, { ResendOTP } from "otp-input-react";
 // reactstrap components
 import { Button, Container, Row, Col, Card, CardBody, CardTitle } from "reactstrap";
 import KycUpload from './KycUpload';
-import { history } from '_helpers';
 import { useRouteMatch } from 'react-router-dom';
+import { kycService } from "../../../../services/frontend/kyc.service";
+import { notify, history, _canAccess } from '../../../../_helpers/index';
 
 function KycValidate() {
   const [otp, setOTP] = useState("");
@@ -16,7 +17,6 @@ function KycValidate() {
     strict: true,
     sensitive: true
   });
-  console.log("urlData", urlData);
   // if(!urlData || !urlData.mobile){
   //   history.push('/');
   // }
@@ -28,18 +28,32 @@ function KycValidate() {
   const renderTime = () => React.Fragment;
 
   function checkOtp() {
-    console.log("urlData.url", urlData.url);
+    kycService.validateOtp({
+      'mobile_number': urlData.params.mobile,
+      'otp': otp
+    }).then(res => {
+      console.log("res", res);
+      if (res.status === false) {
+        notify.error(res.message);
+      } else {
+        notify.success(res.message);
+        if (res.data.otp_key) {
+          history.push(urlData.url + '/' + res.data.otp_key);
+        }
+      }
+    });
+  }
 
-    // get hash key for further process
-    const secretKey = "6759E2A6556D897293CBE672C76F3B369A6775F24141CA7D42C400A8DCC8E647";
-    history.push(urlData.url + '/' + secretKey);
-
-    // if (otp === '9999') {
-    //   setIsOtpValid(true);
-    // } else {
-    //   setIsOtpValid(false);
-    // }
-    console.log("isOtpValid", isOtpValid);
+  function resendOtp() {
+    kycService.resendOtp({
+      'mobile_number': urlData.params.mobile,
+    }).then(res => {
+      if (res.status === false) {
+        notify.error(res.message);
+      } else {
+        notify.success(res.message);
+      }
+    });
   }
 
   return (
@@ -59,7 +73,7 @@ function KycValidate() {
                       <Card className='col-md-6 offset-md-3'>
                         {/* <CardHeader>Featured</CardHeader> */}
                         <CardBody>
-                          <CardTitle>Please enter OTP sent to registered phone number</CardTitle>
+                          <CardTitle><b>Please enter OTP sent to registered phone number</b></CardTitle>
                           <CardBody>
                             <br />
                             <Row className='text-center'>
@@ -70,7 +84,7 @@ function KycValidate() {
                             <br />
                             <Row className='text-center'>
                               <Col md="5" className='offset-md-2'>
-                                <ResendOTP renderButton={renderButton} renderTime={renderTime} />
+                                <ResendOTP renderButton={renderButton} renderTime={renderTime} onResendClick={() => resendOtp()} />
                               </Col>
                               {
                                 (() => {
