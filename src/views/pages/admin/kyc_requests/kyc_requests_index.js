@@ -7,7 +7,7 @@ import CIcon from '@coreui/icons-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSort, faSortDown, faSortUp, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { kycRequestService } from "../../../../services/admin/kyc_request.service";
-import { notify, history, _canAccess, _loginUsersDetails } from '../../../../_helpers/index';
+import { notify, history, _canAccess, _loginUsersDetails, capitalize } from '../../../../_helpers/index';
 import { globalConstants } from '../../../../constants/admin/global.constants';
 const CheckBoxes = React.lazy(() => import('../../../../components/admin/Checkboxes'));
 const MultiActionBar = React.lazy(() => import('../../../../components/admin/MultiActionBar'));
@@ -305,7 +305,7 @@ class KycRequest_list extends React.Component {
                           {/* <td>  {_canAccess('cms_pages', 'view') && <CLink to={`/admin/cms_pages/detailview/${u._id}`}>{u.title}</CLink>}</td> */}
                           <td>{u.account_number}</td>
                           <td>{u.name}</td>
-                          <td>{u.status.slice(0, 1).toUpperCase() + u.status.slice(1, u.status.length)}</td>
+                          <td>{capitalize(u.status)}</td>
                           {(_canAccess('cms_pages', 'update')) && <>
                             <td>
                               {_canAccess('cms_pages', 'update') && <CTooltip content={globalConstants.Details_BTN}>

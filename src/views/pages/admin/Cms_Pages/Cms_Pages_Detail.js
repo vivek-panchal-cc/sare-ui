@@ -46,7 +46,6 @@ class Detailview extends React.Component {
                         body={blog.content}
                         desc={blog.meta_desc}
                         meta_title={blog.meta_title}
-
                     />
                 })}
             </div>

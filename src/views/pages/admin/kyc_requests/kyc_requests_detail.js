@@ -3,55 +3,44 @@
 import React from 'react'
 import { notify } from '../../../../_helpers';
 import { kycRequestService } from '../../../../services/admin'
-import Fullpage from './Cms_Pages_FullPost';
+import KycDetailComponent from './kyc_details_component';
 class Kyc_Requests_Detail extends React.Component {
 
-    /*********** Define Initial Satte ****************/
+  /*********** Define Initial Satte ****************/
 
-    state = {
-        pages: [],
-        id: this.props.match.params.id  // Getting Id From Url
-    };
+  state = {
+    kycDetail: [],
+    id: this.props.match.params.id  // Getting Id From Url
+  };
 
-    /************ Retrieve Api very first time component render to Dom ******************/
-    componentDidMount() {
+  /************ Retrieve Api very first time component render to Dom ******************/
+  componentDidMount() {
 
-        this.getDetailview();
-    }
+    this.getDetailview();
+  }
 
-    /************ Define Function for retrieving Record for display particular post  ******************/
-    getDetailview() {
-        kycRequestService.detailview(this.state.id).then(res => {
+  /************ Define Function for retrieving Record for display particular post  ******************/
+  getDetailview() {
+    kycRequestService.detailview(this.state.id).then(res => {
+      if (res.status === false) {
+        notify.error(res.message);
+      } else {
+        this.setState({ kycDetail: [res.result], });
+      }
+    });
+  }
+  /****************************** Render Data To Dom ***************************************/
 
-            if (res.status === false) {
-                notify.error(res.message);
-            } else {
-                this.setState({
-                    pages: [res.result],
-                }
-                );
-            }
-        });
-    }
-    /****************************** Render Data To Dom ***************************************/
-
-    render() {
-        return (
-            <div>
-
-                {this.state.pages.map(blog => {
-                    return <Fullpage title={blog.title}
-                        key={blog._id}
-                        date={blog.createdAt}
-                        body={blog.content}
-                        desc={blog.meta_desc}
-                        meta_title={blog.meta_title}
-
-                    />
-                })}
-            </div>
-        )
-
-    }
+  render() {
+    return (
+      <div>
+        {
+          this.state.kycDetail.map(kycDetail => {
+            return <KycDetailComponent kycDetail={kycDetail} />
+          })
+        }
+      </div>
+    )
+  }
 }
 export default Kyc_Requests_Detail;
