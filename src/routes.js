@@ -18,6 +18,9 @@ const CMS_Page_Index = React.lazy(() => import('./views/pages/admin/Cms_Pages/Cm
 const CMS_Page_Edit = React.lazy(() => import('./views/pages/admin/Cms_Pages/Cms_Pages_Edit'));
 const CMS_Page_Detail = React.lazy(() => import('./views/pages/admin/Cms_Pages/Cms_Pages_Detail'));
 
+const Kyc_Requests_Index = React.lazy(() => import('./views/pages/admin/kyc_requests/kyc_requests_index'));
+const Kyc_Requests_Detail = React.lazy(() => import('./views/pages/admin/kyc_requests/kyc_requests_detail'));
+
 //Import file for Menu Management
 
 const Menu_Management_Index = React.lazy(() => import('./views/pages/admin/menu_management/Menu_Management_Index'));
@@ -77,18 +80,20 @@ const routes = [
   { path: '/admin/cms_pages/edit/:id', exact: true, name: '  Edit', component: CMS_Page_Edit, module_name: 'cms_pages', action: 'update' },
   { path: '/admin/cms_pages/detailview/:id', exact: true, name: 'DetailView', component: CMS_Page_Detail, module_name: 'cms_pages', action: 'view' },
 
+  { path: '/admin/kyc_requests', exact: true, name: 'KycRequests ', component: Kyc_Requests_Index, module_name: 'kyc_request', action: 'view' },
+  { path: '/admin/kyc_requests/detailview/:id', exact: true, name: 'KycRequestDetail', component: Kyc_Requests_Detail, module_name: 'kyc_request', action: 'view' },
 
-  //  module_name and action parameter used for ACL mechanisam its required column menu management 
+  //  module_name and action parameter used for ACL mechanisam its required column menu management
   { path: '/admin/menu_management', exact: true, name: 'Menu', component: Menu_Management_Index, module_name: 'menu_management', action: 'view' },
   { path: '/admin/menu_management/add', exact: true, name: 'Add', component: Menu_Management_Add, module_name: 'menu_management', action: 'create' },
   { path: '/admin/menu_management/edit/:id', exact: true, name: 'Edit', component: Menu_Management_Edit, module_name: 'menu_management', action: 'update' },
 
-  //  module_name and action parameter used for ACL mechanisam its required column menu management 
+  //  module_name and action parameter used for ACL mechanisam its required column menu management
   { path: '/admin/menu_management/menu_items/:id', exact: true,  name: 'Menu Items Management', component: Menu_Items_Index,module_name:'menu_management',action:'menumanage' },
   { path: '/admin/menu_management/menu_items/add/:id', exact: true,  name: 'Add Menu Items', component: Menu_Items_Add, module_name:'menu_management',action:'menumanage' },
   { path: '/admin/menu_management/menu_items/edit/:category_id/:id', exact: true,  name: 'Edit Menu Items ', component: Menu_Items_Edit, module_name:'menu_management',action:'menumanage'},
 
-   //  module_name and action parameter used for ACL mechanisam its required column Banner  management 
+   //  module_name and action parameter used for ACL mechanisam its required column Banner  management
    { path: '/admin/banner_management', exact: true,  name: 'Banner', component: Banner_Management_Index,module_name:'banner_management',action:'view' },
    { path: '/admin/banner_management/add', exact: true,  name: 'Add', component: Banner_Management_Add, module_name:'banner_management',action:'create' },
    { path: '/admin/banner_management/edit/:id', exact: true,  name: 'Edit', component: Banner_Management_Edit, module_name:'banner_management',action:'update'},

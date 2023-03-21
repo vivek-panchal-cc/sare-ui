@@ -15,9 +15,9 @@ function TheFrontLayout() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(layoutActions.getMenus());
-    dispatch(layoutActions.getBanners());
-    dispatch(layoutActions.getsitedata());
+    // dispatch(layoutActions.getMenus());
+    // dispatch(layoutActions.getBanners());
+    // dispatch(layoutActions.getsitedata());
   });
 
   return (
