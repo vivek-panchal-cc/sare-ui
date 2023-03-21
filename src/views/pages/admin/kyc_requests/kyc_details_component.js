@@ -1,16 +1,39 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './page.css'
 import moment from 'moment'
-import { CCard, CCardBody, CCardHeader, CCol, CRow, CContainer, CCardFooter, CTooltip, CLink, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter } from '@coreui/react'
+import { CCard, CCardBody, CCardHeader, CCol, CRow, CContainer, CCardFooter, CTooltip, CLink, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CButton, CFormGroup, CLabel, CInput, CFormText, CSelect, CTextarea } from '@coreui/react'
 import ReactHtmlParser from 'react-html-parser';
 import { capitalize } from '_helpers';
 import { globalConstants } from '../../../../constants/admin/global.constants';
+import { notify, history } from '../../../../_helpers/index';
 import CIcon from '@coreui/icons-react';
+import { kycRequestService } from '../../../../services/admin/kyc_request.service';
 
 const KycDetailComponent = (props) => {
+  const [isKycModalOpen, setKycModalOpen] = useState(false);
+  const toggle = () => setKycModalOpen(!isKycModalOpen);
   // this.state = {
   //   _openPopup: false,
   // };
+
+  const [comment, setComment] = useState('');
+  const [status, setStatus] = useState(props.kycDetail.status);
+
+  function handleSubmit() {
+    kycRequestService.updateRequest(props.kycDetail.id, {
+      admin_comment: comment,
+      status: status
+    }).then(res => {
+      if (res.status) {
+        notify.success(res.message);
+        // window.location.reload();
+        history.push('/admin/kyc_requests');
+      } else {
+        notify.error(res.message);
+      }
+    })
+  }
+
   return (
     <>
       <CContainer fluid>
@@ -28,7 +51,10 @@ const KycDetailComponent = (props) => {
                   </CCol>
                   <CCol sm="6">
                     <h6>Submission Date : {moment(props.kycDetail.createdAt).format('LL')}</h6>
-                    <h6>Status : {capitalize(props.kycDetail.status)}</h6><CIcon name="cil-pencil"></CIcon>
+                    <h6>Status : {capitalize(props.kycDetail.status)}</h6>
+                    <CButton color="success" onClick={toggle} >
+                      <CIcon name="cil-pencil" ></CIcon>
+                    </CButton>
                   </CCol>
                 </CRow>
               </CCardBody>
@@ -108,22 +134,36 @@ const KycDetailComponent = (props) => {
           </CCol>
         </CRow>
       </CContainer>
-      {/* <CModal
-        show={this.state._openPopup}
-        onClose={() => { this.setState({ _openPopup: !this.state._openPopup }) }}
-        color="danger"
+      <CModal
+        show={isKycModalOpen}
+        onClose={() => { setKycModalOpen(!isKycModalOpen) }}
       >
         <CModalHeader closeButton>
-          <CModalTitle>Delete Page</CModalTitle>
+          <CModalTitle>Change Status</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          Are you sure you want to delete this record?
+          <CFormGroup row>
+            <CCol md="12">
+              <CFormGroup >
+                <CLabel htmlFor="menu_category">Status</CLabel>
+                <CSelect aria-label="Status" onChange={(e) => { setStatus(e.target.value) }} value={props.kycDetail.status}>
+                  <option value="pending">Pending</option>
+                  <option value="approved">Approved</option>
+                  <option value="rejected">Rejected</option>
+                </CSelect>
+              </CFormGroup>
+              <CFormGroup >
+                <CLabel htmlFor="menu_category">Comment</CLabel>
+                <CTextarea type="text" id="comment" name="comment" placeholder="Enter Comment" autoComplete="comment " onChange={(e) => { setComment(e.target.value) }} />
+              </CFormGroup>
+            </CCol>
+          </CFormGroup>
         </CModalBody>
-        <CModalFooter> */}
-          {/* <CButton color="danger" onClick={() => this.deleteUser()} >Delete</CButton>
-          <CButton color="secondary" onClick={() => { this.setState({ _openPopup: !this.state._openPopup }) }}>Cancel</CButton> */}
-        {/* </CModalFooter>
-      </CModal> */}
+        <CModalFooter>
+          <CButton color="success" onClick={() => handleSubmit()} >Submit</CButton>
+          <CButton color="secondary" onClick={() => { setKycModalOpen(!isKycModalOpen) }}>Cancel</CButton>
+        </CModalFooter>
+      </CModal>
     </>
   )
 }
