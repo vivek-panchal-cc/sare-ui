@@ -1,0 +1,245 @@
+@font-face {font-family: 'Plus Jakarta Sans Light';src: url('../fonts/PlusJakartaSans-Light.woff2') format('woff2'),url('../fonts/PlusJakartaSans-Light.woff') format('woff'),url('../fonts/PlusJakartaSans-Light.ttf') format('truetype');font-weight: 300;font-style: normal;font-display: swap;}
+@font-face {font-family: 'Plus Jakarta Sans ExtraLight';src: url('../fonts/PlusJakartaSans-ExtraLight.woff2') format('woff2'),url('../fonts/PlusJakartaSans-ExtraLight.woff') format('woff'),url('../fonts/PlusJakartaSans-ExtraLight.ttf') format('truetype');font-weight: 200;font-style: normal;font-display: swap;}
+@font-face {font-family: 'Plus Jakarta Sans Medium';src: url('../fonts/PlusJakartaSans-Medium.woff2') format('woff2'),url('../fonts/PlusJakartaSans-Medium.woff') format('woff'),url('../fonts/PlusJakartaSans-Medium.ttf') format('truetype');font-weight: 500;font-style: normal;font-display: swap;}
+@font-face {font-family: 'Plus Jakarta Sans Bold';src: url('../fonts/PlusJakartaSans-Bold.woff2') format('woff2'),url('../fonts/PlusJakartaSans-Bold.woff') format('woff'),url('../fonts/PlusJakartaSans-Bold.ttf') format('truetype');font-weight: bold;font-style: normal;font-display: swap;}
+@font-face {font-family: 'Plus Jakarta Sans ExtraBold';src: url('../fonts/PlusJakartaSans-ExtraBold.woff2') format('woff2'),url('../fonts/PlusJakartaSans-ExtraBold.woff') format('woff'),url('../fonts/PlusJakartaSans-ExtraBold.ttf') format('truetype');font-weight: bold;font-style: normal;font-display: swap;}
+@font-face {font-family: 'Plus Jakarta Sans';src: url('../fonts/PlusJakartaSans-Regular.woff2') format('woff2'),url('../fonts/PlusJakartaSans-Regular.woff') format('woff'),url('../fonts/PlusJakartaSans-Regular.ttf') format('truetype');font-weight: normal;font-style: normal;font-display: swap;}
+@font-face {font-family: 'Plus Jakarta Sans SemiBold';src: url('../fonts/PlusJakartaSans-SemiBold.woff2') format('woff2'),url('../fonts/PlusJakartaSans-SemiBold.woff') format('woff'),url('../fonts/PlusJakartaSans-SemiBold.ttf') format('truetype');font-weight: 600;font-style: normal;font-display: swap;}
+@font-face {font-family: 'Urbanist Bold';src: url('../fonts/Urbanist-Bold.woff2') format('woff2'),url('../fonts/Urbanist-Bold.woff') format('woff'),url('../fonts/Urbanist-Bold.ttf') format('truetype');font-weight: bold;font-style: normal;font-display: swap;}
+
+
+/* common css start */
+:root{--primary-color: #003862;--button-color: #00AEEF;--text-color: #242C3D;--white-color: #fff;--red-color: #ff4423;--sucess-color: #7FB519;--light-blue: #7E94B4;}
+*{padding: 0;margin: 0;box-sizing: border-box;}
+A{text-decoration: none;}
+body{font-family: 'Plus Jakarta Sans SemiBold';background-color: var(--primary-color);font-weight: 600;}
+.common-size{font-size: 16px;line-height: 24px;font-weight: 600;}
+.bg-red{background-color: var(--red-color);}
+.text-red{color: var(--red-color);}
+.text-color{color: var(--text-color);}
+.red-color{color: var(--red-color);}
+.sucess-color{color: var(--sucess-color);}
+.light-blue{color: var(--light-blue);}
+
+.Plus-Jakarta-Sans{font-family: 'Plus Jakarta Sans';}
+.Plus-Jakarta-Sans-Medium{font-family: 'Plus Jakarta Sans Medium';font-weight: 500;}
+.Plus-Jakarta-Sans-Bold{font-family: 'Plus Jakarta Sans Bold';font-weight: 700;}
+
+.text-center{text-align: center;}
+.main-section > .container {max-width: 357px;margin: 0 auto;width: 100%;padding: 0 15px;}
+.logo-part{padding-top: 29px;padding-bottom: 48px;}
+.logo{width: 184px;}
+.box{background-color: var(--white-color);padding: 33px 28px 23px;border-radius: 8px;margin-bottom: 30px;}
+.btn-design{background-color: var(--button-color);color: var(--white-color);padding: 14px;display: block;border-radius: 12px;width: 100%;border: none;font-family: 'Plus Jakarta Sans SemiBold';font-weight: 600;cursor: pointer;}
+.edit-design{background-color: transparent;border: 1px solid var(--button-color);color: var(--button-color);padding: 14px;display: block;border-radius: 12px;width: 100%;font-family: 'Plus Jakarta Sans SemiBold';font-weight: 600;cursor: pointer;}
+.sub-heading{font-size: 22px;line-height: 30.8px;}
+.mb-10{margin-bottom: 10px;}
+.px-10{padding-left: 10px;padding-right: 10px;}
+.pt-10{padding-top: 10px;}
+.position-relative{position: relative;}
+.overlay-1{background-color: rgba(255, 68, 35, 0.1);}
+.overlay-2{background-color: rgba(0, 174, 239, 0.1);}
+/* common css end */
+
+/* kyc complete page css */
+.complete-logo{width: 100px;}
+.complete-part{padding-bottom: 33px;}
+.complete-heading{padding-bottom: 53px;}
+/* kyc complete page css */
+
+/* otp page  */
+.cancel-btn{color: var(--button-color);font-size: 14px;line-height: 21px;margin-top: 15px;display: inline-block;}
+.main-section.enter-otp-page .input-design {padding: 40px 0 28px;}
+.main-section.enter-otp-page .otp-input {display: flex;align-items: center;justify-content: space-between;margin-bottom: 22px;}
+.main-section.enter-otp-page .otp-input > input {max-width: 60px;height: 52px;border: 1px solid #ECECED;padding: 13px 24px;border-radius: 8px;font-family: 'Urbanist Bold';font-weight: 700;}
+.main-section.enter-otp-page .message-form {display: flex;align-items: center;justify-content: center;margin-bottom: 22px;}
+.main-section.enter-otp-page .message-form > p {display: inline-flex;align-items: center;font-size: 12px;line-height: 18px;}
+.main-section.enter-otp-page .message-form .space{margin: 0 5px;}
+.main-section.enter-otp-page .message-form > p > img {margin-right: 8px;}
+.main-section.enter-otp-page .resend-btn {color: var(--button-color);background-color: transparent;border: none;text-decoration: underline;font-size: 12px;line-height: 18px;}
+.otp-time {font-family: 'Plus Jakarta Sans Medium';font-weight: 500;margin-bottom: 17px;}
+/* otp page  */
+
+/* kyc-status page  */
+.kyc-status-page .kyc-status-img{width: 100px;}
+.kyc-status-page .loader-main {margin: 24px auto 40px;width: 218px;height: 218px;border-radius: 50%;border: 10px solid rgba(126, 148, 180, 0.1);display: flex;align-items: center;justify-content: center;position: relative;}
+.kyc-status-page .loader-main .sub-loader {position: absolute;background-image: url(../images/loader.svg);width: 218px;height: 218px;top: -10px;right: -10px;background-repeat: no-repeat;background-position: top right;animation: rotate 1.5s infinite linear;transform-origin: 50% 50%;}
+.kyc-status-page .checking-text{margin-bottom: 12px;}
+
+@keyframes rotate {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+} 
+/* kyc-status page  */
+
+/* key error page  */
+.kyc-error-page .error-img{margin-right: 13px;}
+.kyc-error-page .heading-error {display: flex;align-items: center;font-size: 12px;line-height: 18px;margin-bottom: 13px;}
+.kyc-error-page .overlay-2 .heading-error{margin-bottom: 7px;}
+.kyc-error-page .error-mes-box {padding: 12px 11px 17px;border-radius: 8px;overflow: hidden;}
+.kyc-error-page .error-list {list-style: decimal;text-align: left;padding-left: 44px;}
+.kyc-error-page .error-list > li {font-size: 12px;line-height: 20px;color: var(--red-color);font-family: 'Plus Jakarta Sans';font-weight: 400;}
+.kyc-error-page .error-list > li::marker {font-family: 'Plus Jakarta Sans';font-variant-numeric: unset;font-weight: 400;}
+.kyc-error-page .heading-error-mes{padding-left: 28px;font-size: 12px;line-height: 20px;color: var(--text-color);font-family: 'Plus Jakarta Sans';font-weight: 400;}
+.kyc-error-page .box{padding-left: 16px;padding-right: 16px;}
+/* key error page  */
+
+/* kyc received page  */
+.kyc-received-page .reviewe-img{width: 100px;}
+.kyc-received-page .kyc-received-img{display: flex;margin: 16px auto 23px;width: 162px;height: 162px;background-color: rgba(0, 174, 239, 0.2);align-items: center;justify-content: center;border-radius: 50%;}
+.kyc-received-page .kyc-form-page .sub-heading{margin-bottom: 27px;}
+.kyc-received-page .box{
+    padding-left: 16px;
+    padding-right: 16px;
+}
+/* kyc received page  */
+
+.kyc-form-page .sub-heading{
+    margin-bottom: 27px;
+}
+.kyc-form-page .form-box label{
+    font-size: 14px;
+    line-height: 21px;
+    color: var(--text-color);
+    margin-bottom: 8px;
+    display: block;
+    font-family: 'Plus Jakarta Sans Medium';
+    font-weight: 500;
+}
+.kyc-form-page .form-box input{
+    border: 1px solid #ECECED;
+    padding: 10px 24px;
+    display: block;
+    width: 100%;
+    margin-bottom: 8px;
+    font-size: 14px;
+    line-height: 21px;
+    height: 42px;
+    font-family: 'Plus Jakarta Sans Medium';
+    font-weight: 500;
+    color: var(--text-color);
+    border-radius: 8px;
+}
+.kyc-form-page .form-box input:focus{
+    outline: none;
+}
+.kyc-form-page .form-box input[readonly]{
+    background-color: #ECECED;
+}
+.kyc-form-page .form-box input::placeholder{
+    font-family: 'Plus Jakarta Sans Medium';
+    font-weight: 500;
+    color: var(--text-color);
+}
+.kyc-form-page .form-box .form-group{
+    padding-bottom: 10px;
+}
+
+.kyc-form-page .file-upload-design {
+    border: 1px dashed #00AEEF;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+.kyc-form-page .file-upload-design .upload-part input {
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 11;
+    cursor: pointer;
+    margin: 0;
+}
+.kyc-form-page .file-upload-design .upload-part {
+    min-height: 106px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(0 174 239 / 10%);
+    position: relative;
+    z-index: 1;
+}
+.kyc-form-page .upload-img{
+    width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+}
+.kyc-form-page .image-upload-div{
+    display: flex;
+}
+.kyc-form-page .image-upload-div .view-id {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    line-height: 21px;
+    color: var(--white-color);
+    z-index: 1;
+    font-family: 'Plus Jakarta Sans Medium';
+    font-weight: 500;
+}
+.kyc-form-page .image-upload-div::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.4;
+    z-index: 1;
+    border-radius: 8px;
+}
+.kyc-form-page .image-upload-div .view-id img {
+    margin-right: 10px;
+}
+.modal-content-body{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.kyc-form-page .box{
+    padding-left: 18px;
+    padding-right: 18px;
+}
+.kyc-form-page .file-upload-design .upload-text  {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    font-size: 14px;
+    color: #000;
+    line-height: 21px;
+    font-family: 'Plus Jakarta Sans Medium';
+    font-weight: 500;
+}
+.kyc-form-page .file-upload-design .upload-part img{
+    margin-right: 10px;
+}
+/* modal css start */
+
+.close {transition: .3s;-webkit-transition: .3s;-moz-transition: .3s;-o-transition: .3s;}
+.modal {display: none;position: fixed;z-index: 1;padding-top: 0px;left: 0;top: 0;width: 100%;height: 100%;overflow: hidden;background-color: rgba(0, 0, 0, 0.7);}
+#caption,
+.modal-content {margin: auto;display: block;width: 90%;max-width: 327px;}
+#caption {text-align: center;color: #ccc;padding: 10px 0;height: 150px}
+#caption,
+.modal-content {-webkit-animation-name: zoom;-webkit-animation-duration: .6s;animation-name: zoom;animation-duration: .6s}
+.close {position: absolute;top: 15px;right: 35px;color: #f1f1f1;font-size: 40px;font-weight: 300}
+.close:focus,
+.close:hover {color: #bbb;text-decoration: none;cursor: pointer}
+
+@-webkit-keyframes zoom {from {-webkit-transform: scale(0)}to {-webkit-transform: scale(1)}}
+@-moz-keyframes zoom {from {-moz-transform: scale(0)}to {-moz-transform: scale(1)}}
+@-o-keyframes zoom {from {-o-transform: scale(0)}to {-o-transform: scale(1)}}
+@-ms-keyframes zoom {from {-ms-transform: scale(0)}to {-ms-transform: scale(1)}}
+@keyframes zoom {from {transform: scale(0)}to {transform: scale(1)}}
+
+/* modal css end */
+
