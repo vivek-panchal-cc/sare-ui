@@ -10,9 +10,9 @@ function TermConditions() {
     const [cmsPages, setCmsPages] = useState({});
     const history = useHistory();
     const { cms_slug } = useParams();
-  
+
     useEffect(() => {
-      cmsPagesService.getCmsPage("term-conditions").then((res) => {
+      cmsPagesService.getCmsPage("terms").then((res) => {
         if (res.status === false) {
           history.push("/");
         } else {
