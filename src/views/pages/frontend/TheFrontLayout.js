@@ -22,10 +22,10 @@ function TheFrontLayout() {
 
   return (
     <>
-      <FrontNavbar />
-      <FrontPageHeader />
+      {/* <FrontNavbar /> */}
+      {/* <FrontPageHeader /> */}
       <TheFrontContent />
-      <FrontFooter />
+      {/* <FrontFooter /> */}
     </>
   );
 }

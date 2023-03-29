@@ -1,30 +1,65 @@
-import React from 'react'
-import { Container, Row, Col, Card, CardBody, CardTitle } from "reactstrap";
+import { useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
+import { Container, Row, CardBody, Button, Form } from "reactstrap";
+import logo from "../img/logo.svg";
+import kycComplete from "../img/complete.svg";
+import "../css/styles.css";
 
-function KycSuccess() {
+const KycSuccess = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [kycToken, setKycToken] = useState("");
+  const history = useHistory();
+  const { mobile } = useParams();
+
+  const handleButtonClick = () => {
+    setIsLoading(true);
+    if (kycToken.success && kycToken.data.proceed_to_otp === true) {
+      history.push("/kyc/kycValidate");
+    } else {
+      console.error("Unable to proceed to OTP. Try after sometime");
+    }
+  };
+
   return (
     <>
-      <div className="section text-center">
-        <Container>
-          <div className="text-center">
-            <Card className='col-md-6 offset-md-3'>
+      <Container>
+        <section className="main-section">
+          <div className="container">
+            <div className="logo-part text-center">
+              <img src={logo} alt="logo" className="mes-img"></img>
+            </div>
+            <Form className="box text-center">
               <CardBody>
-                <CardTitle>Kyc verified</CardTitle>
-                <CardBody>
-                  <br />
-                  <Row className='text-center'>
-                    <Col md="6" className='offset-md-3'>
-                      <p><strong>Your KYC process is complete, <br />Please contine with the SARE app/USSD service. </strong></p>
-                    </Col>
-                  </Row>
-                  <br />
-                </CardBody>
+                <div className="complete-part">
+                  <img
+                    src={kycComplete}
+                    alt="kycComplete"
+                    className="complete-img"
+                  />
+                </div>
+                <Row>
+                  <p
+                    className="complete-heading"
+                    style={{ marginBottom: "-10px" }}
+                  >
+                    Your KYC process is complete, Please continue with the SARE
+                    app/USSD service.
+                  </p>
+                </Row>
+                <Button
+                  className="btn-design"
+                  color="info"
+                  onClick={handleButtonClick}
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Loading..." : "Open"}
+                </Button>
               </CardBody>
-            </Card>
+            </Form>
           </div>
-        </Container>
-      </div>
+        </section>
+      </Container>
     </>
-  )
-}
+  );
+};
 export default KycSuccess;

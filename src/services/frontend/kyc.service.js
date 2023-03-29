@@ -1,5 +1,11 @@
-import { authHeader, notify, handleResponse, setLoading, authHeaderMutlipart, authHeaderMutlipartFile } from '../../_helpers/';
-require('dotenv').config();
+import {
+  notify,
+  handleResponse,
+  setLoading,
+  authHeaderMutlipart,
+  authHeaderMutlipartFile
+} from "../../_helpers/";
+require("dotenv").config();
 
 export const kycService = {
   checkStatus,
@@ -7,95 +13,119 @@ export const kycService = {
   resendOtp,
   getKycDetails,
   uploadFile,
-  store
+  store,
 };
 
 function checkStatus(postData) {
   setLoading(true);
   const requestOptions = {
-    method: 'POST',
+    method: "POST",
     headers: authHeaderMutlipart(),
     // body: postData,
     body: JSON.stringify(postData),
   };
 
-  return fetch(`${process.env.REACT_APP_KYC_URL}kyc/checkStatus`, requestOptions).catch((error) => {
-    notify.error('Something went wrong');
-    setLoading(false);
-  }).then(handleResponse);
+  return fetch(
+    `${process.env.REACT_APP_KYC_API}kyc/checkStatus`,
+    requestOptions
+  )
+    .catch(() => {
+      notify.error("Something went wrong");
+      setLoading(false);
+    })
+    .then(handleResponse);
 }
 
-function validateOtp(postData) {
+async function validateOtp(postData) {
   setLoading(true);
   const requestOptions = {
-    method: 'POST',
+    method: "POST",
     headers: authHeaderMutlipart(),
     // body: postData,
     body: JSON.stringify(postData),
   };
 
-  return fetch(`${process.env.REACT_APP_KYC_URL}kyc/validateOTP`, requestOptions).catch((error) => {
-    notify.error('Something went wrong');
+  let response;
+  try {
+    response = await fetch(
+      `${process.env.REACT_APP_KYC_API}kyc/validateOTP`,
+      requestOptions
+    );
+  } catch (error) {
+    notify.error("Something went wrong");
     setLoading(false);
-  }).then(handleResponse);
+  }
+  return handleResponse(response);
 }
 
 function resendOtp(postData) {
   setLoading(true);
   const requestOptions = {
-    method: 'POST',
+    method: "POST",
     headers: authHeaderMutlipart(),
     // body: postData,
     body: JSON.stringify(postData),
   };
 
-  return fetch(`${process.env.REACT_APP_KYC_URL}kyc/resendOTP`, requestOptions).catch((error) => {
-    notify.error('Something went wrong');
-    setLoading(false);
-  }).then(handleResponse);
+  return fetch(`${process.env.REACT_APP_KYC_API}kyc/resendOTP`, requestOptions)
+    .catch(() => {
+      notify.error("Something went wrong");
+      setLoading(false);
+    })
+    .then(handleResponse);
 }
 
 function getKycDetails(postData) {
   setLoading(true);
   const requestOptions = {
-    method: 'POST',
+    method: "POST",
     headers: authHeaderMutlipart(),
     // body: postData,
     body: JSON.stringify(postData),
   };
 
-  return fetch(`${process.env.REACT_APP_KYC_URL}kyc/getKycDetails`, requestOptions).catch((error) => {
-    notify.error('Something went wrong');
-    setLoading(false);
-  }).then(handleResponse);
+  return fetch(
+    `${process.env.REACT_APP_KYC_API}kyc/getKycDetails`,
+    requestOptions
+  )
+    .catch(() => {
+      notify.error("Something went wrong");
+      setLoading(false);
+    })
+    .then(handleResponse);
 }
 
 function uploadFile(postData) {
-
   setLoading(true);
   const requestOptions = {
-    method: 'POST',
+    method: "POST",
     headers: authHeaderMutlipartFile(),
-    body: postData
+    body: postData,
   };
 
-  return fetch(`${process.env.REACT_APP_KYC_URL}kyc/uploadFile`, requestOptions).catch((error) => {
-    notify.error('Something went wrong');
-    setLoading(false);
-  }).then(handleResponse);
+  return fetch(`${process.env.REACT_APP_KYC_API}kyc/uploadFile`, requestOptions)
+    .catch(() => {
+      notify.error("Something went wrong");
+      setLoading(false);
+    })
+    .then(handleResponse);
 }
 
-function store(postData) {
+async function store(postData) {
   setLoading(true);
   const requestOptions = {
-    method: 'POST',
-    headers: authHeaderMutlipart(),
-    // body: postData,
-    body: JSON.stringify(postData),
+    method: "POST",
+    // headers: authHeaderMutlipartFile(),
+    body: postData,
   };
 
-  return fetch(`${process.env.REACT_APP_KYC_URL}kyc/store`, requestOptions).catch((error) => {
-    notify.error('Something went wrong');
+  let response;
+  try {
+    console.log("Req", requestOptions)
+    response = await fetch(`${process.env.REACT_APP_KYC_API}kyc/store`, requestOptions);
+  } catch (error) {
+    notify.error("Something went wrong");
     setLoading(false);
-  }).then(handleResponse);
+  }
+  return handleResponse(response);
 }

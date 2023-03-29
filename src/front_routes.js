@@ -6,6 +6,12 @@ const KycIndex = React.lazy(() => import('./views/pages/frontend/kyc/KycIndex'))
 const KycUpload = React.lazy(() => import('./views/pages/frontend/kyc/KycUpload'));
 const KycFailure = React.lazy(() => import('./views/pages/frontend/kyc/KycFailure'));
 const KycRecieved = React.lazy(() => import('./views/pages/frontend/kyc/KycRecieved'));
+const KycChecking = React.lazy(() => import('./views/pages/frontend/kyc/KycChecking'));
+const KycSuccess = React.lazy(() => import('./views/pages/frontend/kyc/KycSuccess'));
+const KycForm = React.lazy(() => import('./views/pages/frontend/kyc/KycForm'));
+const KycConfirmationForm = React.lazy(() => import('./views/pages/frontend/kyc/KycConfirmationForm'));
+const KycValidate = React.lazy(() => import('./views/pages/frontend/kyc/KycValidate'));
+const TermsConditions = React.lazy(() => import('./views/pages/frontend/kyc/Terms-Conditions'))
 
 const routes = [
   // { path: '/', exact: true, name: 'Home' },
@@ -13,8 +19,14 @@ const routes = [
   { path: '/info/:cms_slug', exact: true, name: 'Cms Pages', component: Cms_pages },
   { path: '/kyc/failure', exact: true, name: 'KycFailure', component: KycFailure },
   { path: '/kyc/recieved', exact: true, name: 'KycRecieved', component: KycRecieved },
+  // { path: '/kyc/checking', exact: true, name: 'KycChecking', component: KycChecking},
+  { path: '/kyc/success', exact: true, name: 'KycSuccess', component: KycSuccess},
+  { path: '/term-conditions', exact: true, name: 'TermConditions', component: TermsConditions},
+  { path: '/kyc/:mobile/:secret_key', exact: true, name: 'KycChecking', component: KycChecking },
+  // { path: '/kyc/:mobile/:secret_key', exact: true, name: 'KycForm', component: KycForm},
+  { path: '/kyc/kycconfirmationform', exact: true, name: 'KycConfirmationForm', component: KycConfirmationForm},
+  { path: '/kyc/kycValidate', exact: true, name: 'KycValidate', component: KycValidate},
   { path: '/kyc/:mobile', exact: true, name: 'Kyc', component: KycIndex },
-  { path: '/kyc/:mobile/:secret_key', exact: true, name: 'KycUpload', component: KycUpload },
 ];
 
 export default routes;
