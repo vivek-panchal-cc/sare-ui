@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouteMatch } from "react-router-dom";
 
 // reactstrap components
@@ -14,7 +14,7 @@ import {
   Table,
 } from "reactstrap";
 import { kycService } from "../../../../services/frontend/kyc.service";
-import { notify, history, _canAccess } from "../../../../_helpers/index";
+import { notify, history } from "../../../../_helpers/index";
 
 function KycUpload() {
   const [comment, setComment] = useState("");

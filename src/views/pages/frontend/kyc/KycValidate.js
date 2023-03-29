@@ -1,25 +1,22 @@
-import React, { useState, useEffect } from "react";
-import OTPInput, { ResendOTP } from "otp-input-react";
+import { useState, useEffect } from "react";
+import OTPInput from "otp-input-react";
 import successImage from "../img/check_circle.png";
 import errorImage from "../img/error.png";
 import logo from "../img/logo.svg";
 import "../css/styles.css";
 
-// reactstrap components
 import {
   Button,
   Container,
   Row,
-  Col,
-  Card,
-  CardBody,
+  Col, CardBody,
   CardTitle,
-  Form,
+  Form
 } from "reactstrap";
 import KycChecking from "./KycChecking";
 import { useRouteMatch, useParams } from "react-router-dom";
 import { kycService } from "../../../../services/frontend/kyc.service";
-import { notify, history, _canAccess } from "../../../../_helpers/index";
+import { notify, history } from "../../../../_helpers/index";
 
 function KycValidate() {
   const [otp, setOTP] = useState("");
@@ -77,8 +74,8 @@ function KycValidate() {
 
   function resendOtp() {
     const postData = { kyc_token: mobile };
-    setCountdown(120); // set countdown to 120 seconds
-    setIsResendDisabled(true); // disable the resend button
+    setCountdown(120);
+    setIsResendDisabled(true);
     kycService
       .resendOtp(postData)
       .then((res) => {
@@ -88,18 +85,11 @@ function KycValidate() {
           notify.success(res.message);
         }
       })
-      .catch((error) => {
+      .catch(() => {
         notify.error("Something went wrong");
       });
   }
 
-  const countdownToString = (seconds) => {
-    const min = Math.floor(seconds / 60);
-    const sec = seconds % 60;
-    return `${min.toString().padStart(2, "0")}:${sec
-      .toString()
-      .padStart(2, "0")}`;
-  };
 
   return (
     <>

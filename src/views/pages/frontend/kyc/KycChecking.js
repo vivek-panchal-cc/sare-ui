@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { CardBody, CardTitle, Container } from "reactstrap";
 import { kycService } from "../../../../services/frontend/kyc.service";
-import { history, notify, setLoading } from "../../../../_helpers/index";
+import { history, notify } from "../../../../_helpers/index";
 import "../css/styles.css";
 import kycStatus from "../img/kyc-status.svg";
 import logo from "../img/logo.svg";
@@ -42,7 +42,6 @@ function KycChecking() {
           history.push("/kyc/failure");
         } else {
         }
-        // setIsLoading(false);
       });
   }
 
@@ -50,7 +49,6 @@ function KycChecking() {
     <>
       <Container>
         {isLoading && !kycFormLoading ? (
-          // Render loader if isLoading is true
           <form>
             <section className="main-section">
               <div className="container">

@@ -1,23 +1,11 @@
-import React from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  CardBody,
-  CardTitle,
-  Button,
-} from "reactstrap";
-import { kycService } from "../../../../services/frontend/kyc.service";
-import { useParams, useHistory } from "react-router-dom";
-import { notify, setLoading } from "../../../../_helpers/index";
+import { Container, Row, CardBody, CardTitle, Button } from "reactstrap";
+import { useParams } from "react-router-dom";
 import logo from "../img/logo.svg";
 import review from "../img/reviewe.svg";
 import "../css/styles.css";
 
 function KycRecieved() {
   const { mobile, secret_key } = useParams();
-  const history = useHistory();
 
   return (
     <>

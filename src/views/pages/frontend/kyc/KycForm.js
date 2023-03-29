@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
 import {
   Container,
@@ -101,18 +102,9 @@ const KycForm = () => {
     setIdExpirationDate(e.target.value);
   };
 
-  // const handleIdFileChange = (event) => {
-  //   const file = event.target.files[0];
-  //   if (file && file.type === "application/pdf") {
-  //     setIdFile(file);
-  //     formData.append("file", file, "test.pdf");
-  //     setFormData(file);
-  //   } else {
-  //     console.log("Invalid file format.");
-  //   }
-  // };
-
   const handleDownloadPdf = (event) => {
+    setLoading(true);
+    event.preventDefault();
     event.stopPropagation();
     if (idFile && idFile.type === "application/pdf") {
       const url = URL.createObjectURL(idFile);
@@ -123,6 +115,20 @@ const KycForm = () => {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+      setLoading(false);
+    } else if (
+      idFile &&
+      (idFile.type === "image/jpeg" || idFile.type === "image/png")
+    ) {
+      const url = URL.createObjectURL(idFile);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "file.jpeg";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      setLoading(false);
     } else {
       console.log("Invalid file format.");
     }
@@ -150,6 +156,10 @@ const KycForm = () => {
     setShowModal(true);
   };
 
+  const clearImage = () => {
+    setIdFile("");
+  };
+
   const handleSubmit = () => {
     // submitKYCDetails();
     console.clear();
@@ -170,7 +180,7 @@ const KycForm = () => {
       setError(7);
     } else if (!phoneNumber) {
       setError(8);
-    } else if (!formData1) {
+    } else if (!idFile) {
       setError(9);
     } else if (!idNumber) {
       setError(10);
@@ -201,7 +211,7 @@ const KycForm = () => {
       setError(7);
     } else if (!phoneNumber) {
       setError(8);
-    } else if (!formData1) {
+    } else if (!idFile) {
       setError(9);
     } else if (!idNumber) {
       setError(10);
@@ -221,7 +231,7 @@ const KycForm = () => {
       formData.append("city", homeAddress.city);
       formData.append("pincode", homeAddress.pincode);
       formData.append("phone_number", phoneNumber);
-      formData.append("file", formData1);
+      formData.append("file", idFile);
       formData.append("id_number", idNumber);
       formData.append("id_expiration_date", idExpirationDate);
 
@@ -239,7 +249,6 @@ const KycForm = () => {
         id_number: idNumber,
         id_expiration_date: idExpirationDate,
       };
-      console.log("ReqData", formData);
       kycService.store(formData).then((res) => {
         if (res.success === false) {
           setLoading(true);
@@ -253,24 +262,10 @@ const KycForm = () => {
             history.push("/kyc/recieved");
             setLoading(false);
           } else {
-            // notify.warning(res.message);
           }
         }
         setLoading(false);
       });
-
-      /* let response = await fetch(
-        "http://192.168.1.32/SARE/customer-onboard/public/kyc/store",
-        {
-          method: "POST",
-          body: formData,
-          // headers: {
-          //   "Content Type": "multipart/form-data",
-          // },
-        }
-      );
-      console.log("response", response);
-      return response; */
     }
   };
 
@@ -480,30 +475,7 @@ const KycForm = () => {
                       <Label for="idFile">Copy of ID</Label>
                       <div className="file-upload-design position-relative">
                         <div className="upload-part">
-                          {idFile ? (
-                            <div>
-                              {typeof idFile === "string" ? (
-                                <>
-                                  {/* <p alt="view" className="view-img">
-                                    <img
-                                      onClick={handleFileClick}
-                                      src={view}
-                                      alt="view"
-                                    ></img>
-                                  </p> */}
-                                  <img
-                                    src={idFile}
-                                    alt="uploaded id"
-                                    style={{ cursor: "pointer" }}
-                                  />
-                                </>
-                              ) : (
-                                <a href="#" onClick={(event) => handleDownloadPdf(event)}                                >
-                                  <strong>PDF Uploaded</strong>
-                                </a>
-                              )}
-                            </div>
-                          ) : (
+                          {!idFile ? (
                             <>
                               <img
                                 src={uploadKYC}
@@ -511,16 +483,85 @@ const KycForm = () => {
                                 className="upload-svg"
                               />
                               <strong>Upload</strong>
+                              <Input
+                                type="file"
+                                name="idFile"
+                                id="idFile"
+                                accept="image/*, application/pdf"
+                                onChange={handleIdFileChange}
+                                disabled={editing}
+                              />
+                            </>
+                          ) : typeof idFile === "string" ? (
+                            <>
+                              {/* <p alt="view" className="view-img">
+                                <img
+                                  onClick={handleFileClick}
+                                  src={view}
+                                  alt="view"
+                                ></img>
+                              </p> */}
+                              <img
+                                src={idFile}
+                                alt="uploaded id"
+                                style={{ cursor: "pointer" }}
+                              />
+                              {/* <span>
+                                <a className="view-img">
+                                  <img
+                                    onClick={handleFileClick}
+                                    src={view}
+                                    alt="view"
+                                    style={{ cursor: "pointer" }}
+                                  ></img>
+                                </a>
+                              </span> */}
+                              <span>
+                                <a
+                                  className="view-tag"
+                                  onClick={clearImage}
+                                  disabled={!editing}
+                                  style={{
+                                    marginBottom: "100px",
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  {!editing ? "Remove Image" : ""}
+                                </a>
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              <span>
+                                <a
+                                  className="view-pdf"
+                                  href="#"
+                                  onClick={(event) => handleDownloadPdf(event)}
+                                  disabled={editing}
+                                >
+                                  <strong>
+                                    {!editing ? "Download PDF" : ""}
+                                  </strong>
+                                </a>
+                              </span>
+                              <span>
+                                <strong>{editing ? "PDF Uploaded" : ""}</strong>
+                              </span>
+                              <span>
+                                <a
+                                  className="view-tag"
+                                  onClick={clearImage}
+                                  disabled={editing}
+                                  style={{
+                                    marginBottom: "100px",
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  {!editing ? "Remove PDF" : ""}
+                                </a>
+                              </span>
                             </>
                           )}
-                          <Input
-                            type="file"
-                            name="idFile"
-                            id="idFile"
-                            accept="image/*, application/pdf"
-                            onChange={handleIdFileChange}
-                            disabled={editing}
-                          />
                           {error == 9 ? (
                             <div className="error-message">
                               <span

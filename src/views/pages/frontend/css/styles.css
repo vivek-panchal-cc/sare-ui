@@ -482,6 +482,22 @@ body {
     font-weight: 500;
 }
 
+.view-tag{
+  position: absolute;
+  top: 75%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  line-height: 21px;
+  color: black;
+  z-index: 1;
+  font-family: 'Plus Jakarta Sans Medium';
+  font-weight: 800;
+  z-index: 9999;
+}
+
 .view-pdf{
   z-index:9999
 }
