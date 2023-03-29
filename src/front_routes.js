@@ -21,7 +21,7 @@ const routes = [
   { path: '/kyc/recieved', exact: true, name: 'KycRecieved', component: KycRecieved },
   // { path: '/kyc/checking', exact: true, name: 'KycChecking', component: KycChecking},
   { path: '/kyc/success', exact: true, name: 'KycSuccess', component: KycSuccess},
-  { path: '/term-conditions', exact: true, name: 'TermConditions', component: TermsConditions},
+  { path: '/terms', exact: true, name: 'TermConditions', component: TermsConditions},
   { path: '/kyc/:mobile/:secret_key', exact: true, name: 'KycChecking', component: KycChecking },
   // { path: '/kyc/:mobile/:secret_key', exact: true, name: 'KycForm', component: KycForm},
   { path: '/kyc/kycconfirmationform', exact: true, name: 'KycConfirmationForm', component: KycConfirmationForm},
