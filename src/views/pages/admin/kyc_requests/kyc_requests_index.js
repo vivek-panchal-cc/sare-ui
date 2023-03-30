@@ -265,7 +265,7 @@ class KycRequest_list extends React.Component {
         <CCol xl={12}>
           <CCard>
             <CCardHeader>
-              Kyc Requests
+              KYC Requests
             </CCardHeader>
             <CCardBody>
               <div className="position-relative table-responsive">

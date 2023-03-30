@@ -77,7 +77,7 @@ const TheHeader = () => {
         onClick={toggleSidebar}
       />
       <CHeaderBrand className="mx-auto d-lg-none" to="/">
-        <img src={require('assets/img/white-cc-logo-fw.png').default} className='cc-logo-styles-mobile' />
+        <img src={require('assets/img/logo.svg').default} className='cc-logo-styles-mobile' />
       </CHeaderBrand>
 
       <CHeaderNav className="d-md-down-none mr-auto">

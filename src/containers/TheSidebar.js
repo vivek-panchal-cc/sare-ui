@@ -34,7 +34,7 @@ const TheSidebar = (props) => {
       onShowChange={(val) => dispatch({type: 'set', sidebarShow: val })}
     >
       <CSidebarBrand className="d-md-down-none" to="/">
-        <img src={require('assets/img/white-cc-logo-fw.png').default} className='cc-logo-styles'/>
+        <img src={require('assets/img/logo.svg').default} className='cc-logo-styles'/>
         {/* <CIcon
           className="c-sidebar-brand-full"
           name="logo-negative"
