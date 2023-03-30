@@ -47,13 +47,13 @@ const _nav = [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Kyc Requests',
+    name: 'KYC Requests',
     to: '/admin/kyc_requests',
     icon: <FontAwesomeIcon icon={faFileAlt} className="c-sidebar-nav-icon" />,
     module_name: 'kyc_requests',
     id: 'kyc_requests_sidebar_id'
   },
-  {
+  /* {
     _tag: 'CSidebarNavItem',
     name: 'Pages',
     to: '/admin/cms_pages',
@@ -84,7 +84,7 @@ const _nav = [
     icon: <FontAwesomeIcon icon={faCog} className="c-sidebar-nav-icon" />,
     module_name: 'theme_setting',
     id: 'theme_setting_sidebar_id'
-  }
+  } */
 ]
 
 export default _nav
