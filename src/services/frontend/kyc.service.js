@@ -2,6 +2,7 @@ import {
   notify,
   handleResponse,
   setLoading,
+  frontHeader,
   authHeaderMutlipart,
   authHeaderMutlipartFile
 } from "../../_helpers/";
@@ -20,7 +21,7 @@ function checkStatus(postData) {
   setLoading(true);
   const requestOptions = {
     method: "POST",
-    headers: authHeaderMutlipart(),
+    headers: frontHeader(),
     // body: postData,
     body: JSON.stringify(postData),
   };
@@ -40,7 +41,7 @@ async function validateOtp(postData) {
   setLoading(true);
   const requestOptions = {
     method: "POST",
-    headers: authHeaderMutlipart(),
+    headers: frontHeader(),
     // body: postData,
     body: JSON.stringify(postData),
   };

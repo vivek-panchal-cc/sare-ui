@@ -8,6 +8,7 @@ const KycFailure = React.lazy(() => import('./views/pages/frontend/kyc/KycFailur
 const KycRecieved = React.lazy(() => import('./views/pages/frontend/kyc/KycRecieved'));
 const KycChecking = React.lazy(() => import('./views/pages/frontend/kyc/KycChecking'));
 const KycSuccess = React.lazy(() => import('./views/pages/frontend/kyc/KycSuccess'));
+const KycFail = React.lazy(() => import('./views/pages/frontend/kyc/KycFail'));
 const KycForm = React.lazy(() => import('./views/pages/frontend/kyc/KycForm'));
 const KycConfirmationForm = React.lazy(() => import('./views/pages/frontend/kyc/KycConfirmationForm'));
 const KycValidate = React.lazy(() => import('./views/pages/frontend/kyc/KycValidate'));
@@ -21,6 +22,7 @@ const routes = [
   { path: '/kyc/recieved', exact: true, name: 'KycRecieved', component: KycRecieved },
   // { path: '/kyc/checking', exact: true, name: 'KycChecking', component: KycChecking},
   { path: '/kyc/success', exact: true, name: 'KycSuccess', component: KycSuccess},
+  { path: '/kyc/failed', exact: true, name: 'KycFail', component: KycFail},
   { path: '/terms', exact: true, name: 'TermConditions', component: TermsConditions},
   { path: '/kyc/:mobile/:secret_key', exact: true, name: 'KycChecking', component: KycChecking },
   // { path: '/kyc/:mobile/:secret_key', exact: true, name: 'KycForm', component: KycForm},

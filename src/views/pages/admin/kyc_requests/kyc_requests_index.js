@@ -56,23 +56,23 @@ class KycRequest_list extends React.Component {
       } else {
 
         this.setState({
-          totalRecords: res.totalRecords,
+          totalRecords: res.data.totalRecords,
           fields: {
             ...this.state.fields,
-            totalPage: res.totalPage
+            totalPage: res.data.totalPage
           },
-          page_list: res.result
+          page_list: res.data.result
         });
 
         /*multi delete cms pages */
-        if (res.result.length > 0) {
-          let pages = res.result;
+        if (res.data.result.length > 0) {
+          let pages = res.data.result;
           let multiaction = [];
           for (var key in pages) {
             multiaction[pages[key]._id] = false;
           }
           this.setState({ multiaction: multiaction });
-        } else if (res.result.length === 0) {
+        } else if (res.data.result.length === 0) {
           this.setState({ multiaction: [] });
         }
 
@@ -305,7 +305,7 @@ class KycRequest_list extends React.Component {
                           {/* <td>  {_canAccess('cms_pages', 'view') && <CLink to={`/admin/cms_pages/detailview/${u._id}`}>{u.title}</CLink>}</td> */}
                           <td>{u.account_number}</td>
                           <td>{u.name}</td>
-                          <td>{capitalize(u.status)}</td>
+                          <td>{capitalize(u.status.replaceAll('_', ' '))}</td>
                           {(_canAccess('cms_pages', 'update')) && <>
                             <td>
                               {_canAccess('cms_pages', 'update') && <CTooltip content={globalConstants.Details_BTN}>

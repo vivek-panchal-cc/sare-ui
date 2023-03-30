@@ -55,8 +55,7 @@ function KycValidate() {
       otp: otp,
     };
 
-    kycService.validateOtp(postData).then((res) => {
-      console.log("res", res);
+    kycService.validateOtp(postData).then((res) => {      
       if (res.status === false) {
         notify.error(res.message);
         setIsOtpValid(true);
@@ -126,13 +125,13 @@ function KycValidate() {
                       <Row className="message-form">
                         {otp.length !== 4 ? (
                           <>
-                            <p className="error-mes red-color">
-                              <img
+                            <p className="otp-mes">
+                              {/* <img
                                 src={errorImage}
                                 alt="check_circle"
                                 className="mes-img"
-                              />
-                              Please enter a valid OTP
+                              /> */}
+                              Please enter an OTP
                             </p>
                           </>
                         ) : (

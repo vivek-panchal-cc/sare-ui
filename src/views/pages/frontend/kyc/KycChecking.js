@@ -79,7 +79,7 @@ function KycChecking() {
               </div>
             </section>
           </form>
-        ) : !isLoading && kycFormLoading ? (
+        ) : isLoading && kycFormLoading ? (
           <>
             <KycForm />
           </>
