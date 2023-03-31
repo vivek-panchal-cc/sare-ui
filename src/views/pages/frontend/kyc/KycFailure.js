@@ -17,24 +17,30 @@ import "../css/styles.css";
 import { setLoading } from "_helpers";
 import KycForm from "./KycForm";
 
-function KycFailure() {
+function KycFailure({ props }) {
   const history = useHistory();
   const { mobile, secret_key } = useParams();
-  const [kycFormLoading, setKycFormLoading] = useState(false);
+  const [kycFormLoading, setKycFormLoading] = useState(true);
+  // const [res, setRes] = useState({});  
+  let res = props.kycReasons;
+  console.log("props F", props);
+  let comments = props.kycReasons.kyc_reasons;
 
   const handleButtonClick = () => {
     setLoading(true);
     const mobileNo = mobile;
     const key = secret_key;
-    setKycFormLoading(true);
+    setKycFormLoading(false);
     // history.push(`/kyc/${mobileNo}/${key}`);
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   };
-
+  console.log("LOg", kycFormLoading )
   return (
     <>
       <Container>
-        {!kycFormLoading ? (
+        {kycFormLoading ? (
           <form>
             <section className="main-section">
               <div className="container">
@@ -85,10 +91,16 @@ function KycFailure() {
                         </p>
                       </div>
                       <br />
-                      <p className="heading-error-mes">
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry.
-                      </p>
+                      <ul
+                        className="heading-error-mes"
+                        style={{ marginLeft: "15px" }}
+                      >
+                        {comments
+                          .filter((reason) => reason.comment_type === "admin")
+                          .map((reason) => (
+                            <li key={reason.id}>{reason.comment}</li>
+                          ))}
+                      </ul>
                     </div>
                     {/* <Row className="kyc-received-img">
                     <img src={review} alt="review" className="reviewe-img" />
@@ -107,7 +119,7 @@ function KycFailure() {
           </form>
         ) : (
           <>
-            <KycForm />
+            <KycForm props={{ res }} />
           </>
         )}
       </Container>

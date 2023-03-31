@@ -27,7 +27,7 @@ import uploadKYC from "../img/upload.svg";
 import "../css/styles.css";
 import { flagSet } from "@coreui/icons";
 
-const KycForm = () => {
+const KycForm = ({ props }) => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [homeAddress, setHomeAddress] = useState({
@@ -50,7 +50,8 @@ const KycForm = () => {
   const [selectedImageFile, setSelectedImageFile] = useState(null);
   const { mobile, secret_key } = useParams();
   const history = useHistory();
-
+  console.log("Props Form", props)
+  let mobileNo = props?.res?.mobile_number;
   let formData = new FormData();
 
   const handleFullNameChange = (e) => {
@@ -66,9 +67,9 @@ const KycForm = () => {
     const emailValue = e.target.value;
     setEmail(emailValue);
     if (!validateEmail(emailValue)) {
-      setError(2);
-    } else {
       setError(0);
+    } else {
+      // setError(0);
     }
   };
 
@@ -166,7 +167,7 @@ const KycForm = () => {
       !homeAddress.landmark ||
       !homeAddress.city ||
       !homeAddress.pincode ||
-      !phoneNumber ||
+      // !phoneNumber ||
       !idFile ||
       !idNumber ||
       !idExpirationDate
@@ -194,11 +195,14 @@ const KycForm = () => {
       setError(6);
     } else if (!homeAddress.pincode) {
       setError(7);
-    } else if (!phoneNumber) {
-      setError(8);
-    } else if (phoneNumber.length !== 9) {
-      setError(8);
-    } else if (!idFile) {
+    }
+    //  else if (!phoneNumber) {
+    //   setError(8);
+    // }
+    // else if (phoneNumber.length !== 9) {
+    //   setError(8);
+    // }
+    else if (!idFile) {
       setError(9);
     } else if (!idNumber) {
       setError(10);
@@ -217,25 +221,11 @@ const KycForm = () => {
       formData.append("landmark", homeAddress.landmark);
       formData.append("city", homeAddress.city);
       formData.append("pincode", homeAddress.pincode);
-      formData.append("phone_number", phoneNumber);
+      formData.append("phone_number", mobileNo);
       formData.append("file", idFile);
       formData.append("id_number", idNumber);
       formData.append("id_expiration_date", idExpirationDate);
-
-      const obj = {
-        kyc_token: mobile,
-        mobile_key: secret_key,
-        name: fullName,
-        email: email,
-        house_number: homeAddress.houseNumber,
-        street_name: homeAddress.streetName,
-        landmark: homeAddress.landmark,
-        city: homeAddress.city,
-        pincode: homeAddress.pincode,
-        phone_number: phoneNumber,
-        id_number: idNumber,
-        id_expiration_date: idExpirationDate,
-      };
+      
       kycService.store(formData).then((res) => {
         if (res.success === false) {
           setLoading(true);
@@ -281,7 +271,7 @@ const KycForm = () => {
                         placeholder="Full Name"
                         disabled={editing}
                       />
-                      {error == 0 && !fullName ? (
+                      {error === 0 && !fullName ? (
                         <span
                           className="font-recia"
                           style={{
@@ -305,7 +295,7 @@ const KycForm = () => {
                         placeholder="Email"
                         disabled={editing}
                       />
-                      {error == 0 && !email ? (
+                      {error === 0 && !email ? (
                         <span
                           className="font-recia"
                           style={{
@@ -330,7 +320,7 @@ const KycForm = () => {
                         placeholder="House Number"
                         disabled={editing}
                       />
-                      {error == 0 && !homeAddress.houseNumber ? (
+                      {error === 0 && !homeAddress.houseNumber ? (
                         <span
                           className="font-recia"
                           style={{
@@ -352,7 +342,7 @@ const KycForm = () => {
                         placeholder="Street Name"
                         disabled={editing}
                       />
-                      {error == 0 && !homeAddress.streetName ? (
+                      {error === 0 && !homeAddress.streetName ? (
                         <span
                           className="font-recia"
                           style={{
@@ -374,7 +364,7 @@ const KycForm = () => {
                         placeholder="Landmark"
                         disabled={editing}
                       />
-                      {error == 0 && !homeAddress.landmark ? (
+                      {error === 0 && !homeAddress.landmark ? (
                         <span
                           className="font-recia"
                           style={{
@@ -396,7 +386,7 @@ const KycForm = () => {
                         placeholder="City"
                         disabled={editing}
                       />
-                      {error == 0 && !homeAddress.city ? (
+                      {error === 0 && !homeAddress.city ? (
                         <span
                           className="font-recia"
                           style={{
@@ -418,7 +408,7 @@ const KycForm = () => {
                         disabled={editing}
                         min={1}
                       />
-                      {error == 0 && !homeAddress.pincode ? (
+                      {error === 0 && !homeAddress.pincode ? (
                         <span
                           className="font-recia"
                           style={{
@@ -437,12 +427,12 @@ const KycForm = () => {
                       <Input
                         type="text"
                         name="phone_number"
-                        value={phoneNumber}
+                        value={mobileNo}
                         onChange={handlePhoneNumberChange}
                         placeholder="Phone Number"
-                        disabled={editing}
+                        disabled={true}
                       />
-                      {phoneNumberError && (
+                      {/* {phoneNumberError && (
                         <span
                           className="font-recia"
                           style={{
@@ -455,7 +445,7 @@ const KycForm = () => {
                           {phoneNumberError}
                         </span>
                       )}
-                      {error == 0 && !phoneNumber ? (
+                      {error === 0 && !phoneNumber && !phoneNumberError ? (
                         <span
                           className="font-recia"
                           style={{
@@ -464,8 +454,10 @@ const KycForm = () => {
                             marginTop: "6px",
                             display: "block",
                           }}
-                        ></span>
-                      ) : null}
+                        >
+                          Phone number is required
+                        </span>
+                      ) : null} */}
                     </FormGroup>
                     <FormGroup>
                       <Label for="idFile">Copy of ID</Label>
@@ -558,7 +550,7 @@ const KycForm = () => {
                               </span>
                             </>
                           )}
-                          {error == 0 && !idFile ? (
+                          {error === 0 && !idFile ? (
                             <div className="error-message">
                               <span
                                 className="font-recia"
@@ -601,7 +593,7 @@ const KycForm = () => {
                         onChange={handleIdNumberChange}
                         disabled={editing}
                       />
-                      {error == 0 && !idNumber ? (
+                      {error === 0 && !idNumber ? (
                         <span
                           className="font-recia"
                           style={{
@@ -625,8 +617,12 @@ const KycForm = () => {
                         onChange={handleIdExpirationDateChange}
                         style={{ cursor: "pointer" }}
                         disabled={editing}
+                        min={new Date().toISOString().split("T")[0]}
+                        onClick={(e) => {
+                          e.target.focus();
+                        }}
                       />
-                      {error == 0 && !idExpirationDate ? (
+                      {error === 0 && !idExpirationDate ? (
                         <span
                           className="font-recia"
                           style={{

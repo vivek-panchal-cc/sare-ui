@@ -80,10 +80,10 @@ function getKycDetails(postData) {
   setLoading(true);
   const requestOptions = {
     method: "POST",
-    headers: authHeaderMutlipart(),
+    headers: frontHeader(),
     // body: postData,
     body: JSON.stringify(postData),
-  };
+  };  
 
   return fetch(
     `${process.env.REACT_APP_KYC_API}kyc/getKycDetails`,
@@ -121,8 +121,7 @@ async function store(postData) {
   };
 
   let response;
-  try {
-    console.log("Req", requestOptions)
+  try {    
     response = await fetch(`${process.env.REACT_APP_KYC_API}kyc/store`, requestOptions);
   } catch (error) {
     notify.error("Something went wrong");

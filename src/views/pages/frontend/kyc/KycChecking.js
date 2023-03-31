@@ -17,11 +17,12 @@ function KycChecking() {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const { mobile, secret_key } = useParams();
   const [kycFormLoading, setKycFormLoading] = useState(false);
+  const [kycReasons, setKycReasons] = useState([]);
+  const [res, setRes] = useState({});
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       getKycDetails();
-      setKycFormLoading(true);
     }, 3000);
 
     return () => {
@@ -37,10 +38,18 @@ function KycChecking() {
         mobile_key: secret_key,
       })
       .then((res) => {
-        if (res.status === false) {
+        setRes(res.data);
+        if (res.success === false) {
           notify.error(res.message);
-          history.push("/kyc/failure");
-        } else {
+          // setIsLoading(false);
+          // history.push("/kyc/failure");
+        } else if (res.success === true && res.data.kyc_status === "pending") {
+          notify.success(res.message);
+          setKycFormLoading(true);
+        } else if (res.success === true && res.data.kyc_status === "rejected") {          
+          notify.success(res.message);
+          setKycReasons(res.data);
+          setIsLoading(false);
         }
       });
   }
@@ -81,13 +90,13 @@ function KycChecking() {
           </form>
         ) : isLoading && kycFormLoading ? (
           <>
-            <KycForm />
+            <KycForm props={{ res }} />
           </>
-        ) : (
+        ) : !isLoading ? (
           <>
-            <KycFailure />
+            <KycFailure props={{ kycReasons }} />
           </>
-        )}
+        ) : null}
       </Container>
     </>
   );
