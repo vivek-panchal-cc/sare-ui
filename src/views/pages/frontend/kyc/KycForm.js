@@ -158,30 +158,20 @@ const KycForm = () => {
   };
 
   const handleSubmit = () => {
-    if (!fullName) {
-      setError(1);
-    } else if (!email) {
-      setError(2);
-    } else if (!homeAddress.houseNumber) {
-      setError(3);
-    } else if (!homeAddress.streetName) {
-      setError(4);
-    } else if (!homeAddress.landmark) {
-      setError(5);
-    } else if (!homeAddress.city) {
-      setError(6);
-    } else if (!homeAddress.pincode) {
-      setError(7);
-    } else if (!phoneNumber) {
-      setError(8);
-    } else if (phoneNumber.length !== 9) {
-      setError(8);
-    } else if (!idFile) {
-      setError(9);
-    } else if (!idNumber) {
-      setError(10);
-    } else if (!idExpirationDate) {
-      setError(11);
+    if (
+      !fullName ||
+      !email ||
+      !homeAddress.houseNumber ||
+      !homeAddress.streetName ||
+      !homeAddress.landmark ||
+      !homeAddress.city ||
+      !homeAddress.pincode ||
+      !phoneNumber ||
+      !idFile ||
+      !idNumber ||
+      !idExpirationDate
+    ) {
+      setError(0);
     } else {
       setLoading(false);
       setEditing(true);
@@ -291,7 +281,7 @@ const KycForm = () => {
                         placeholder="Full Name"
                         disabled={editing}
                       />
-                      {error == 1 && !fullName ? (
+                      {error == 0 && !fullName ? (
                         <span
                           className="font-recia"
                           style={{
@@ -315,7 +305,7 @@ const KycForm = () => {
                         placeholder="Email"
                         disabled={editing}
                       />
-                      {error === 2 && !email ? (
+                      {error == 0 && !email ? (
                         <span
                           className="font-recia"
                           style={{
@@ -340,7 +330,7 @@ const KycForm = () => {
                         placeholder="House Number"
                         disabled={editing}
                       />
-                      {error == 3 && !homeAddress.houseNumber ? (
+                      {error == 0 && !homeAddress.houseNumber ? (
                         <span
                           className="font-recia"
                           style={{
@@ -362,7 +352,7 @@ const KycForm = () => {
                         placeholder="Street Name"
                         disabled={editing}
                       />
-                      {error == 4 && !homeAddress.streetName ? (
+                      {error == 0 && !homeAddress.streetName ? (
                         <span
                           className="font-recia"
                           style={{
@@ -384,7 +374,7 @@ const KycForm = () => {
                         placeholder="Landmark"
                         disabled={editing}
                       />
-                      {error == 5 && !homeAddress.landmark ? (
+                      {error == 0 && !homeAddress.landmark ? (
                         <span
                           className="font-recia"
                           style={{
@@ -406,7 +396,7 @@ const KycForm = () => {
                         placeholder="City"
                         disabled={editing}
                       />
-                      {error == 6 && !homeAddress.city ? (
+                      {error == 0 && !homeAddress.city ? (
                         <span
                           className="font-recia"
                           style={{
@@ -428,7 +418,7 @@ const KycForm = () => {
                         disabled={editing}
                         min={1}
                       />
-                      {error == 7 && !homeAddress.pincode ? (
+                      {error == 0 && !homeAddress.pincode ? (
                         <span
                           className="font-recia"
                           style={{
@@ -453,9 +443,19 @@ const KycForm = () => {
                         disabled={editing}
                       />
                       {phoneNumberError && (
-                        <span className="text-danger">{phoneNumberError}</span>
+                        <span
+                          className="font-recia"
+                          style={{
+                            color: "#f00",
+                            fontSize: "14px",
+                            marginTop: "6px",
+                            display: "block",
+                          }}
+                        >
+                          {phoneNumberError}
+                        </span>
                       )}
-                      {error == 8 && phoneNumber.length !== 9 ? (
+                      {error == 0 && !phoneNumber ? (
                         <span
                           className="font-recia"
                           style={{
@@ -558,7 +558,7 @@ const KycForm = () => {
                               </span>
                             </>
                           )}
-                          {error == 9 && !idFile ? (
+                          {error == 0 && !idFile ? (
                             <div className="error-message">
                               <span
                                 className="font-recia"
@@ -601,7 +601,7 @@ const KycForm = () => {
                         onChange={handleIdNumberChange}
                         disabled={editing}
                       />
-                      {error == 10 && !idNumber ? (
+                      {error == 0 && !idNumber ? (
                         <span
                           className="font-recia"
                           style={{
@@ -626,7 +626,7 @@ const KycForm = () => {
                         style={{ cursor: "pointer" }}
                         disabled={editing}
                       />
-                      {error == 11 && !idExpirationDate ? (
+                      {error == 0 && !idExpirationDate ? (
                         <span
                           className="font-recia"
                           style={{
