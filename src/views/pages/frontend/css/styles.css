@@ -507,5 +507,25 @@ body {
   padding: 33px 28px 23px;
   border-radius: 8px;
   margin-bottom: 30px;
-  width: 100%
+  width: 100%;
+  color: black;
+}
+
+.terms p {
+  margin-bottom: 30px;
+  width: 100%;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.complete-heading p {
+  text-align: center;
+  display: block;
+  width: 100%;
+  font-weight: 1000;
+  color: red;
+}
+
+.otp-mes {
+  font-weight: 1000;
+  color: var(--text-color)
 }

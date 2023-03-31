@@ -27,3 +27,7 @@ export function authHeaderMutlipartFile (module_name = '',action = '') {
       return {'Content-Type': 'multipart/form-data'};
   }
 }
+
+export function frontHeader (module_name = '',action = '') {
+    return {'Content-Type': 'application/json'};
+}

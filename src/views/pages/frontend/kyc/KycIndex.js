@@ -3,6 +3,7 @@ import { kycService } from "../../../../services/frontend/kyc.service";
 import { notify } from "../../../../_helpers/index";
 import { useParams, useHistory } from "react-router-dom";
 import KycSuccess from "./KycSuccess";
+import KycFail from "./KycFail";
 import KycValidate from "./KycValidate";
 
 function KycIndex() {
@@ -32,6 +33,6 @@ function KycIndex() {
       });
   }, []);
 
-  return <>{showKycSuccess ? <KycValidate /> : <KycSuccess />}</>;
+  return <>{showKycSuccess ? <KycValidate /> : <KycFail />}</>;
 }
 export default KycIndex;

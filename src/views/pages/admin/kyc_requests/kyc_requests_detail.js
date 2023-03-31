@@ -25,7 +25,7 @@ class Kyc_Requests_Detail extends React.Component {
       if (res.status === false) {
         notify.error(res.message);
       } else {
-        this.setState({ kycDetail: [res.result], });
+        this.setState({ kycDetail: res.data });
       }
     });
   }
@@ -35,9 +35,10 @@ class Kyc_Requests_Detail extends React.Component {
     return (
       <div>
         {
-          this.state.kycDetail.map(kycDetail => {
-            return <KycDetailComponent kycDetail={kycDetail} />
-          })
+          <KycDetailComponent kycDetail={this.state.kycDetail} />
+          // this.state.kycDetail.map(kycDetail => {
+          //   return <KycDetailComponent kycDetail={kycDetail} />
+          // })
         }
       </div>
     )

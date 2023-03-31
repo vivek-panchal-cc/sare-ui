@@ -80,7 +80,7 @@ const KycForm = () => {
   };
 
   const validatePhoneNumber = (phoneNumber) => {
-    const regex = /^(\+254|0)[1-9]\d{8}$/;
+    const regex = /^\d{9}$/;
     return regex.test(phoneNumber);
   };
 
@@ -130,7 +130,6 @@ const KycForm = () => {
       URL.revokeObjectURL(url);
       setLoading(false);
     } else {
-      console.log("Invalid file format.");
     }
   };
 
@@ -145,12 +144,10 @@ const KycForm = () => {
       formData.append("file", file, "test.pdf");
       setFormData(file);
     } else {
-      console.log("Invalid file format.");
     }
   };
 
   const handleFileClick = (e) => {
-    console.log("Clicked");
     const imgSrc = e.target.getAttribute("src");
     setSelectedImageFile(imgSrc);
     setShowModal(true);
@@ -161,31 +158,20 @@ const KycForm = () => {
   };
 
   const handleSubmit = () => {
-    // submitKYCDetails();
-    console.clear();
-    console.log("handleSubmit");
-    if (!fullName) {
-      setError(1);
-    } else if (!email) {
-      setError(2);
-    } else if (!homeAddress.houseNumber) {
-      setError(3);
-    } else if (!homeAddress.streetName) {
-      setError(4);
-    } else if (!homeAddress.landmark) {
-      setError(5);
-    } else if (!homeAddress.city) {
-      setError(6);
-    } else if (!homeAddress.pincode) {
-      setError(7);
-    } else if (!phoneNumber) {
-      setError(8);
-    } else if (!idFile) {
-      setError(9);
-    } else if (!idNumber) {
-      setError(10);
-    } else if (!idExpirationDate) {
-      setError(11);
+    if (
+      !fullName ||
+      !email ||
+      !homeAddress.houseNumber ||
+      !homeAddress.streetName ||
+      !homeAddress.landmark ||
+      !homeAddress.city ||
+      !homeAddress.pincode ||
+      !phoneNumber ||
+      !idFile ||
+      !idNumber ||
+      !idExpirationDate
+    ) {
+      setError(0);
     } else {
       setLoading(false);
       setEditing(true);
@@ -193,7 +179,6 @@ const KycForm = () => {
   };
 
   const submitKYCDetails = async () => {
-    console.log("submitKYCDetails");
     setLoading(true);
     if (!fullName) {
       setError(1);
@@ -210,6 +195,8 @@ const KycForm = () => {
     } else if (!homeAddress.pincode) {
       setError(7);
     } else if (!phoneNumber) {
+      setError(8);
+    } else if (phoneNumber.length !== 9) {
       setError(8);
     } else if (!idFile) {
       setError(9);
@@ -294,7 +281,7 @@ const KycForm = () => {
                         placeholder="Full Name"
                         disabled={editing}
                       />
-                      {error == 1 ? (
+                      {error == 0 && !fullName ? (
                         <span
                           className="font-recia"
                           style={{
@@ -318,7 +305,7 @@ const KycForm = () => {
                         placeholder="Email"
                         disabled={editing}
                       />
-                      {error === 2 ? (
+                      {error == 0 && !email ? (
                         <span
                           className="font-recia"
                           style={{
@@ -343,7 +330,7 @@ const KycForm = () => {
                         placeholder="House Number"
                         disabled={editing}
                       />
-                      {error == 3 ? (
+                      {error == 0 && !homeAddress.houseNumber ? (
                         <span
                           className="font-recia"
                           style={{
@@ -365,7 +352,7 @@ const KycForm = () => {
                         placeholder="Street Name"
                         disabled={editing}
                       />
-                      {error == 4 ? (
+                      {error == 0 && !homeAddress.streetName ? (
                         <span
                           className="font-recia"
                           style={{
@@ -387,7 +374,7 @@ const KycForm = () => {
                         placeholder="Landmark"
                         disabled={editing}
                       />
-                      {error == 5 ? (
+                      {error == 0 && !homeAddress.landmark ? (
                         <span
                           className="font-recia"
                           style={{
@@ -409,7 +396,7 @@ const KycForm = () => {
                         placeholder="City"
                         disabled={editing}
                       />
-                      {error == 6 ? (
+                      {error == 0 && !homeAddress.city ? (
                         <span
                           className="font-recia"
                           style={{
@@ -429,8 +416,9 @@ const KycForm = () => {
                         onChange={handleHomeAddressChange}
                         placeholder="Pincode"
                         disabled={editing}
+                        min={1}
                       />
-                      {error == 7 ? (
+                      {error == 0 && !homeAddress.pincode ? (
                         <span
                           className="font-recia"
                           style={{
@@ -455,9 +443,6 @@ const KycForm = () => {
                         disabled={editing}
                       />
                       {phoneNumberError && (
-                        <span className="text-danger">{phoneNumberError}</span>
-                      )}
-                      {error == 8 ? (
                         <span
                           className="font-recia"
                           style={{
@@ -467,8 +452,19 @@ const KycForm = () => {
                             display: "block",
                           }}
                         >
-                          Phone Number is required
+                          {phoneNumberError}
                         </span>
+                      )}
+                      {error == 0 && !phoneNumber ? (
+                        <span
+                          className="font-recia"
+                          style={{
+                            color: "#f00",
+                            fontSize: "14px",
+                            marginTop: "6px",
+                            display: "block",
+                          }}
+                        ></span>
                       ) : null}
                     </FormGroup>
                     <FormGroup>
@@ -562,7 +558,7 @@ const KycForm = () => {
                               </span>
                             </>
                           )}
-                          {error == 9 ? (
+                          {error == 0 && !idFile ? (
                             <div className="error-message">
                               <span
                                 className="font-recia"
@@ -605,7 +601,7 @@ const KycForm = () => {
                         onChange={handleIdNumberChange}
                         disabled={editing}
                       />
-                      {error == 10 ? (
+                      {error == 0 && !idNumber ? (
                         <span
                           className="font-recia"
                           style={{
@@ -627,9 +623,10 @@ const KycForm = () => {
                         id="idExpirationDate"
                         value={idExpirationDate}
                         onChange={handleIdExpirationDateChange}
+                        style={{ cursor: "pointer" }}
                         disabled={editing}
                       />
-                      {error == 11 ? (
+                      {error == 0 && !idExpirationDate ? (
                         <span
                           className="font-recia"
                           style={{

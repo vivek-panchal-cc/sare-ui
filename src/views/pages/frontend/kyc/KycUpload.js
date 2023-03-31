@@ -59,8 +59,7 @@ function KycUpload() {
     formData.append("otp_key", urlData.params.secretId);
     formData.append("file", event.target.files[0], "test.pdf");
 
-    kycService.uploadFile(formData).then((res) => {
-      console.log("res", res);
+    kycService.uploadFile(formData).then((res) => {      
       if (res.status === false) {
         notify.error(res.message);
       } else {
@@ -77,8 +76,7 @@ function KycUpload() {
     formData.append("file_id", file_id);
     formData.append("file", event.target.files[0], "test.pdf");
 
-    kycService.uploadFile(formData).then((res) => {
-      console.log("res", res);
+    kycService.uploadFile(formData).then((res) => {      
       if (res.status === false) {
         notify.error(res.message);
       } else {
