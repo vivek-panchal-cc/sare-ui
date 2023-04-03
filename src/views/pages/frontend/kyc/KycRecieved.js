@@ -1,4 +1,4 @@
-import { Container, Row, CardBody, CardTitle, Button } from "reactstrap";
+import { Container, Row, CardBody, CardTitle, Button, Form } from "reactstrap";
 import { useParams } from "react-router-dom";
 import logo from "../img/logo.svg";
 import review from "../img/reviewe.svg";
@@ -7,10 +7,15 @@ import "../css/styles.css";
 function KycRecieved() {
   const { mobile, secret_key } = useParams();
 
+  const handleSubmit = () => {
+    const link = process.env.ANDROID_APP_URL;
+    window.open(link, "_blank");
+  };
+
   return (
     <>
       <Container>
-        <form>
+        <Form>
           <section className="main-section">
             <div className="container">
               <div className="logo-part text-center">
@@ -29,14 +34,18 @@ function KycRecieved() {
                       Please come back later to check KYC status.
                     </p>
                   </Row>
-                  <Button className="btn-design" color="info">
+                  <Button
+                    onClick={handleSubmit}
+                    className="btn-design"
+                    color="info"
+                  >
                     Open
                   </Button>
                 </CardBody>
               </div>
             </div>
           </section>
-        </form>
+        </Form>
       </Container>
     </>
   );

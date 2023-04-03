@@ -280,6 +280,7 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
+                            margin: "0 0 8px -10px"
                           }}
                         >
                           Full Name is required
@@ -304,9 +305,10 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
+                            margin: "0 0 8px -10px"
                           }}
                         >
-                          Email is not in the correct format (eg. abc@abc.com)
+                          Email is not in the correct format<br/>(eg. abc@abc.com)
                         </span>
                       ) : null}
                     </FormGroup>
@@ -329,6 +331,7 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
+                            margin: "-10px 0 8px -10px"
                           }}
                         >
                           House Number is required
@@ -351,6 +354,7 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
+                            margin: "-10px 0 8px -10px"
                           }}
                         >
                           Street Name is required
@@ -373,6 +377,7 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
+                            margin: "-10px 0 8px -10px"
                           }}
                         >
                           Landmark is required
@@ -395,6 +400,7 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
+                            margin: "-10px 0 8px -10px"
                           }}
                         >
                           City is required
@@ -417,6 +423,7 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
+                            margin: "0 0 8px -10px"
                           }}
                         >
                           PinCode is required
@@ -441,6 +448,7 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
+                            margin: "0 0 8px -10px"
                           }}
                         >
                           {phoneNumberError}
@@ -454,6 +462,7 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
+                            margin: "0 0 8px -10px"
                           }}
                         >
                           Phone number is required
@@ -548,7 +557,7 @@ const KycForm = ({ props }) => {
                             <div className="error-message">
                               <span
                                 className="font-recia"
-                                style={{ color: "#f00", fontSize: "14px" }}
+                                style={{ color: "#f00", fontSize: "14px", margin: "0 0 8px -10px" }}
                               >
                                 File is required
                               </span>
@@ -595,6 +604,7 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
+                            margin: "0 0 8px -10px"
                           }}
                         >
                           ID Number is required
@@ -624,6 +634,7 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
+                            margin: "0 0 8px -10px"
                           }}
                         >
                           ID Expiration Date is required
