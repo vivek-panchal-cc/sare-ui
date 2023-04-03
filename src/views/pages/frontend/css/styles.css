@@ -1,3 +1,4 @@
+/* Font changing in SARE KYC App by Vivek */
 @font-face {
   font-family: "Plus Jakarta Sans Medium";
   src: url("../fonts/PlusJakartaSans-Medium.woff2") format("woff2"),
@@ -7,16 +8,87 @@
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+  font-family: "Plus Jakarta Sans Light";
+  src: url("../fonts/PlusJakartaSans-Light.woff2") format("woff2"),
+    url("../fonts/PlusJakartaSans-Light.woff") format("woff"),
+    url("../fonts/PlusJakartaSans-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Plus Jakarta Sans ExtraLight";
+  src: url("../fonts/PlusJakartaSans-ExtraLight.woff2") format("woff2"),
+    url("../fonts/PlusJakartaSans-ExtraLight.woff") format("woff"),
+    url("../fonts/PlusJakartaSans-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Plus Jakarta Sans Medium";
+  src: url("../fonts/PlusJakartaSans-Medium.woff2") format("woff2"),
+    url("../fonts/PlusJakartaSans-Medium.woff") format("woff"),
+    url("../fonts/PlusJakartaSans-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Plus Jakarta Sans Bold";
+  src: url("../fonts/PlusJakartaSans-Bold.woff2") format("woff2"),
+    url("../fonts/PlusJakartaSans-Bold.woff") format("woff"),
+    url("../fonts/PlusJakartaSans-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Plus Jakarta Sans ExtraBold";
+  src: url("../fonts/PlusJakartaSans-ExtraBold.woff2") format("woff2"),
+    url("../fonts/PlusJakartaSans-ExtraBold.woff") format("woff"),
+    url("../fonts/PlusJakartaSans-ExtraBold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("../fonts/PlusJakartaSans-Regular.woff2") format("woff2"),
+    url("../fonts/PlusJakartaSans-Regular.woff") format("woff"),
+    url("../fonts/PlusJakartaSans-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Plus Jakarta Sans SemiBold";
+  src: url("../fonts/PlusJakartaSans-SemiBold.woff2") format("woff2"),
+    url("../fonts/PlusJakartaSans-SemiBold.woff") format("woff"),
+    url("../fonts/PlusJakartaSans-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Urbanist Bold";
+  src: url("../fonts/Urbanist-Bold.woff2") format("woff2"),
+    url("../fonts/Urbanist-Bold.woff") format("woff"),
+    url("../fonts/Urbanist-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
 
 .sub-heading {
-  /* margin-top: -20px; */
-  font-size: 20px;
+  font-family: "Plus Jakarta Sans SemiBold";
+  font-weight: 600px;
+  font-size: 22px;
   line-height: 30.8px;
-  /* margin-bottom: -20px;
-  margin-right: -25px;
-  margin-left: -25px; */
-  margin: -20px -25px -20px -25px;
+  margin: -20px -25px -27px -30px;
 }
+
 .text-center {
   text-align: center;
 }
@@ -177,18 +249,20 @@ body {
   border: none;
   font-weight: 600;
   cursor: pointer;
+  font-family: "Plus Jakarta Sans SemiBold";
 }
 
 .edit-btn-design {
   margin: 30px 0 -20px 0;
-  background-color: var(--white-color);
-  color: var(--button-color);
+  background-color: var(--white-color) !important;
+  color: var(--button-color) !important;
   padding: 12px;
   display: block;
   border-radius: 12px;
   width: 100%;
   font-weight: 600;
   cursor: pointer;
+  font-family: "Plus Jakarta Sans SemiBold";
 }
 
 .kyc-error-page .error-list > li {
@@ -315,7 +389,7 @@ body {
   font-weight: 400;
 }
 
-.heading-error-mes > li{  
+.heading-error-mes > li {
   text-align: justify;
   /* padding-left: 25px; */
   font-size: 15px;
@@ -376,18 +450,55 @@ body {
 }
 
 .kyc-form-sub-heading {
-  font-size: 20px;
+  font-family: "Plus Jakarta Sans SemiBold";
+  font-weight: 600px;
+  font-size: 22px;
   line-height: 30.8px;
   text-align: left;
-  margin: -20px -25px 20px -20px;
+  margin: -20px -25px 27px -30px;
 }
 
 .form-group {
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--text-color);
+  margin-bottom: 8px;
   margin: auto -10px;
+  display: block;
   padding-bottom: 10px;
   text-align: left;
   font-family: "Plus Jakarta Sans SemiBold";
-  font-weight: 1000;
+  font-weight: 500;
+}
+
+.form-group label {
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--text-color);
+  /* margin-bottom: 8px; */
+  margin: auto auto 8px -10px;
+  display: block;
+  font-family: "Plus Jakarta Sans Medium";
+  font-weight: 500;
+}
+
+.form-group input {
+  border: 1px solid #ececed;
+  padding: 10px 24px;
+  display: block;
+  width: 100%;
+  margin: auto -10px;
+  font-size: 14px;
+  line-height: 21px;
+  height: 42px;
+  font-family: "Plus Jakarta Sans Medium";
+  font-weight: 500;
+  color: var(--text-color);
+  border-radius: 8px;
+}
+
+.form-group input[type="file"] {
+  margin: -20px -25px -27px -30px;
 }
 
 .file-upload-design {
@@ -537,5 +648,5 @@ body {
 
 .otp-mes {
   font-weight: 1000;
-  color: var(--text-color)
+  color: var(--text-color);
 }

@@ -50,14 +50,15 @@ function KycValidate() {
     return () => clearInterval(intervalId);
   }, [countdown]);
 
-  function checkOtp() {
+  function checkOtp(event) {
+    event.preventDefault();
     const postData = {
       kyc_token: mobile,
       otp: otp,
     };
 
     kycService.validateOtp(postData).then((res) => {
-      if (res.status === false) {
+      if (res.success === false) {
         notify.error(res.message);
         setIsOtpValid(true);
         setOtpAttempted(true);
@@ -70,6 +71,10 @@ function KycValidate() {
         }
       }
     });
+  }
+
+  function handleCancel() {
+    setOTP("");
   }
 
   function resendOtp() {
@@ -93,10 +98,10 @@ function KycValidate() {
   return (
     <>
       <Container>
-        {isOtpValid ? (
+        {isOtpValid && !otpAttempted ? (
           <KycChecking />
         ) : (
-          <Form>
+          <Form onSubmit={checkOtp}>
             <section className="main-section enter-otp-page">
               <div className="container">
                 <div className="logo-part text-center">
@@ -136,14 +141,14 @@ function KycValidate() {
                           </>
                         ) : (
                           <>
-                            {isOtpValid ? (
+                            {isOtpValid && !otpAttempted ? (
                               <p className="sucess-mes sucess-color">
                                 <img
                                   src={successImage}
                                   alt="check_circle"
                                   className="mes-img"
                                 />
-                                Success Message
+                                Success
                               </p>
                             ) : (
                               otpAttempted && (
@@ -178,24 +183,29 @@ function KycValidate() {
                         Resend Code
                       </Button>
 
-                      <Row className="text-center">
-                        {otp.length === 4 && !otpAttempted && (
+                      <div className="text-center">
+                        {otp.length === 4 && (
                           <Col>
                             <Button
                               className="btn-design"
                               color="info"
-                              onClick={() => checkOtp()}
+                              type="submit"
+                              // onClick={(event) => checkOtp(event)}
                             >
                               Submit
                             </Button>
                           </Col>
                         )}
                         <Col>
-                          <Button className="btn-design" color="info">
+                          <Button
+                            className="edit-btn-design"
+                            color="info"
+                            onClick={handleCancel}
+                          >
                             Cancel
                           </Button>
                         </Col>
-                      </Row>
+                      </div>
                     </CardBody>
                   </CardBody>
                 </div>
