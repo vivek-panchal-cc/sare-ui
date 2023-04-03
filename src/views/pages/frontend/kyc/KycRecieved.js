@@ -26,8 +26,7 @@ function KycRecieved() {
                   </Row>
                   <Row>
                     <p className="light-blue">
-                      Please come back later to check status of KYC. It will
-                      take about XX amount of time to complete.
+                      Please come back later to check KYC status.
                     </p>
                   </Row>
                   <Button className="btn-design" color="info">

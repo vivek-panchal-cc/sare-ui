@@ -9,9 +9,10 @@ import {
   Button,
   Container,
   Row,
-  Col, CardBody,
+  Col,
+  CardBody,
   CardTitle,
-  Form
+  Form,
 } from "reactstrap";
 import KycChecking from "./KycChecking";
 import { useRouteMatch, useParams } from "react-router-dom";
@@ -55,7 +56,7 @@ function KycValidate() {
       otp: otp,
     };
 
-    kycService.validateOtp(postData).then((res) => {      
+    kycService.validateOtp(postData).then((res) => {
       if (res.status === false) {
         notify.error(res.message);
         setIsOtpValid(true);
@@ -88,7 +89,6 @@ function KycValidate() {
         notify.error("Something went wrong");
       });
   }
-
 
   return (
     <>

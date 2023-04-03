@@ -27,7 +27,7 @@ import uploadKYC from "../img/upload.svg";
 import "../css/styles.css";
 import { flagSet } from "@coreui/icons";
 
-const KycForm = () => {
+const KycForm = ({ props }) => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [homeAddress, setHomeAddress] = useState({
@@ -50,7 +50,8 @@ const KycForm = () => {
   const [selectedImageFile, setSelectedImageFile] = useState(null);
   const { mobile, secret_key } = useParams();
   const history = useHistory();
-
+  console.log("Props Form", props);
+  let mobileNo = props?.res?.mobile_number;
   let formData = new FormData();
 
   const handleFullNameChange = (e) => {
@@ -66,9 +67,9 @@ const KycForm = () => {
     const emailValue = e.target.value;
     setEmail(emailValue);
     if (!validateEmail(emailValue)) {
-      setError(2);
-    } else {
       setError(0);
+    } else {
+      // setError(0);
     }
   };
 
@@ -135,8 +136,13 @@ const KycForm = () => {
 
   const handleIdFileChange = (event) => {
     const file = event.target.files[0];
-    if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
-      setIdFile(URL.createObjectURL(file));
+    if (
+      file &&
+      (file.type === "image/jpeg" ||
+        file.type === "image/png" ||
+        file.type === "image/jpg")
+    ) {
+      setIdFile(file);
       formData.append("file", file, "test.jpeg");
       setFormData(file);
     } else if (file && file.type === "application/pdf") {
@@ -166,7 +172,7 @@ const KycForm = () => {
       !homeAddress.landmark ||
       !homeAddress.city ||
       !homeAddress.pincode ||
-      !phoneNumber ||
+      // !phoneNumber ||
       !idFile ||
       !idNumber ||
       !idExpirationDate
@@ -194,11 +200,14 @@ const KycForm = () => {
       setError(6);
     } else if (!homeAddress.pincode) {
       setError(7);
-    } else if (!phoneNumber) {
-      setError(8);
-    } else if (phoneNumber.length !== 9) {
-      setError(8);
-    } else if (!idFile) {
+    }
+    //  else if (!phoneNumber) {
+    //   setError(8);
+    // }
+    // else if (phoneNumber.length !== 9) {
+    //   setError(8);
+    // }
+    else if (!idFile) {
       setError(9);
     } else if (!idNumber) {
       setError(10);
@@ -207,7 +216,6 @@ const KycForm = () => {
     } else {
       setLoading(true);
       setEditing(true);
-      // let formData = new FormData();
       formData.append("kyc_token", mobile);
       formData.append("mobile_key", secret_key);
       formData.append("name", fullName);
@@ -217,42 +225,25 @@ const KycForm = () => {
       formData.append("landmark", homeAddress.landmark);
       formData.append("city", homeAddress.city);
       formData.append("pincode", homeAddress.pincode);
-      formData.append("phone_number", phoneNumber);
+      formData.append("phone_number", mobileNo);
       formData.append("file", idFile);
       formData.append("id_number", idNumber);
       formData.append("id_expiration_date", idExpirationDate);
 
-      const obj = {
-        kyc_token: mobile,
-        mobile_key: secret_key,
-        name: fullName,
-        email: email,
-        house_number: homeAddress.houseNumber,
-        street_name: homeAddress.streetName,
-        landmark: homeAddress.landmark,
-        city: homeAddress.city,
-        pincode: homeAddress.pincode,
-        phone_number: phoneNumber,
-        id_number: idNumber,
-        id_expiration_date: idExpirationDate,
-      };
-      kycService.store(formData).then((res) => {
+      try {
+        setLoading(true);
+        const res = await kycService.store(formData);
         if (res.success === false) {
-          setLoading(true);
-          // history.push("/kyc/failure");
           notify.error(res.message);
-          setLoading(false);
-        } else {
-          if (res.success) {
-            setLoading(true);
-            notify.success(res.message);
-            history.push("/kyc/recieved");
-            setLoading(false);
-          } else {
-          }
+        } else if (res.success === true) {
+          notify.success(res.message);
+          history.push("/kyc/recieved");
         }
+      } catch (error) {
+        notify.error("An error occurred while submitting KYC information.");
+      } finally {
         setLoading(false);
-      });
+      }
     }
   };
 
@@ -281,7 +272,7 @@ const KycForm = () => {
                         placeholder="Full Name"
                         disabled={editing}
                       />
-                      {error == 0 && !fullName ? (
+                      {error === 0 && !fullName ? (
                         <span
                           className="font-recia"
                           style={{
@@ -305,7 +296,7 @@ const KycForm = () => {
                         placeholder="Email"
                         disabled={editing}
                       />
-                      {error == 0 && !email ? (
+                      {error === 0 && !email ? (
                         <span
                           className="font-recia"
                           style={{
@@ -330,7 +321,7 @@ const KycForm = () => {
                         placeholder="House Number"
                         disabled={editing}
                       />
-                      {error == 0 && !homeAddress.houseNumber ? (
+                      {error === 0 && !homeAddress.houseNumber ? (
                         <span
                           className="font-recia"
                           style={{
@@ -352,7 +343,7 @@ const KycForm = () => {
                         placeholder="Street Name"
                         disabled={editing}
                       />
-                      {error == 0 && !homeAddress.streetName ? (
+                      {error === 0 && !homeAddress.streetName ? (
                         <span
                           className="font-recia"
                           style={{
@@ -374,7 +365,7 @@ const KycForm = () => {
                         placeholder="Landmark"
                         disabled={editing}
                       />
-                      {error == 0 && !homeAddress.landmark ? (
+                      {error === 0 && !homeAddress.landmark ? (
                         <span
                           className="font-recia"
                           style={{
@@ -396,7 +387,7 @@ const KycForm = () => {
                         placeholder="City"
                         disabled={editing}
                       />
-                      {error == 0 && !homeAddress.city ? (
+                      {error === 0 && !homeAddress.city ? (
                         <span
                           className="font-recia"
                           style={{
@@ -418,7 +409,7 @@ const KycForm = () => {
                         disabled={editing}
                         min={1}
                       />
-                      {error == 0 && !homeAddress.pincode ? (
+                      {error === 0 && !homeAddress.pincode ? (
                         <span
                           className="font-recia"
                           style={{
@@ -437,12 +428,12 @@ const KycForm = () => {
                       <Input
                         type="text"
                         name="phone_number"
-                        value={phoneNumber}
+                        value={mobileNo}
                         onChange={handlePhoneNumberChange}
                         placeholder="Phone Number"
-                        disabled={editing}
+                        disabled={true}
                       />
-                      {phoneNumberError && (
+                      {/* {phoneNumberError && (
                         <span
                           className="font-recia"
                           style={{
@@ -455,7 +446,7 @@ const KycForm = () => {
                           {phoneNumberError}
                         </span>
                       )}
-                      {error == 0 && !phoneNumber ? (
+                      {error === 0 && !phoneNumber && !phoneNumberError ? (
                         <span
                           className="font-recia"
                           style={{
@@ -464,8 +455,10 @@ const KycForm = () => {
                             marginTop: "6px",
                             display: "block",
                           }}
-                        ></span>
-                      ) : null}
+                        >
+                          Phone number is required
+                        </span>
+                      ) : null} */}
                     </FormGroup>
                     <FormGroup>
                       <Label for="idFile">Copy of ID</Label>
@@ -473,11 +466,13 @@ const KycForm = () => {
                         <div className="upload-part">
                           {!idFile ? (
                             <>
-                              <img
-                                src={uploadKYC}
-                                alt="upload"
-                                className="upload-svg"
-                              />
+                              <div style={{ marginRight: "10px" }}>
+                                <img
+                                  src={uploadKYC}
+                                  alt="upload"
+                                  className="upload-svg"
+                                />
+                              </div>
                               <strong>Upload</strong>
                               <Input
                                 type="file"
@@ -488,77 +483,68 @@ const KycForm = () => {
                                 disabled={editing}
                               />
                             </>
-                          ) : typeof idFile === "string" ? (
+                          ) : idFile instanceof File ? (
                             <>
-                              {/* <p alt="view" className="view-img">
-                                <img
-                                  onClick={handleFileClick}
-                                  src={view}
-                                  alt="view"
-                                ></img>
-                              </p> */}
-                              <img
-                                src={idFile}
-                                alt="uploaded id"
-                                style={{ cursor: "pointer" }}
-                              />
-                              {/* <span>
-                                <a className="view-img">
+                              {idFile.type.includes("image/") ? (
+                                <>
                                   <img
-                                    onClick={handleFileClick}
-                                    src={view}
-                                    alt="view"
+                                    src={URL.createObjectURL(idFile)}
+                                    alt="uploaded id"
                                     style={{ cursor: "pointer" }}
-                                  ></img>
-                                </a>
-                              </span> */}
-                              <span>
-                                <a
-                                  className="view-tag"
-                                  onClick={clearImage}
-                                  disabled={!editing}
-                                  style={{
-                                    marginBottom: "100px",
-                                    cursor: "pointer",
-                                  }}
-                                >
-                                  {!editing ? "Remove Image" : ""}
-                                </a>
-                              </span>
+                                  />
+                                  <span>
+                                    <a
+                                      className="view-tag"
+                                      onClick={clearImage}
+                                      disabled={!editing}
+                                      style={{
+                                        marginBottom: "100px",
+                                        cursor: "pointer",
+                                      }}
+                                    >
+                                      {!editing ? "Remove Image" : ""}
+                                    </a>
+                                  </span>
+                                </>
+                              ) : idFile.type === "application/pdf" ? (
+                                <>
+                                  <span>
+                                    <a
+                                      className="view-pdf"
+                                      href="#"
+                                      onClick={(event) =>
+                                        handleDownloadPdf(event)
+                                      }
+                                      disabled={editing}
+                                    >
+                                      <strong>
+                                        {!editing ? "Download PDF" : ""}
+                                      </strong>
+                                    </a>
+                                  </span>
+                                  <span>
+                                    <strong>
+                                      {editing ? "PDF Uploaded" : ""}
+                                    </strong>
+                                  </span>
+                                  <span>
+                                    <a
+                                      className="view-tag"
+                                      onClick={clearImage}
+                                      disabled={editing}
+                                      style={{
+                                        marginBottom: "100px",
+                                        cursor: "pointer",
+                                      }}
+                                    >
+                                      {!editing ? "Remove PDF" : ""}
+                                    </a>
+                                  </span>
+                                </>
+                              ) : null}
                             </>
-                          ) : (
-                            <>
-                              <span>
-                                <a
-                                  className="view-pdf"
-                                  href="#"
-                                  onClick={(event) => handleDownloadPdf(event)}
-                                  disabled={editing}
-                                >
-                                  <strong>
-                                    {!editing ? "Download PDF" : ""}
-                                  </strong>
-                                </a>
-                              </span>
-                              <span>
-                                <strong>{editing ? "PDF Uploaded" : ""}</strong>
-                              </span>
-                              <span>
-                                <a
-                                  className="view-tag"
-                                  onClick={clearImage}
-                                  disabled={editing}
-                                  style={{
-                                    marginBottom: "100px",
-                                    cursor: "pointer",
-                                  }}
-                                >
-                                  {!editing ? "Remove PDF" : ""}
-                                </a>
-                              </span>
-                            </>
-                          )}
-                          {error == 0 && !idFile ? (
+                          ) : null}
+                          {error === 0 && !idFile ? (
                             <div className="error-message">
                               <span
                                 className="font-recia"
@@ -601,7 +587,7 @@ const KycForm = () => {
                         onChange={handleIdNumberChange}
                         disabled={editing}
                       />
-                      {error == 0 && !idNumber ? (
+                      {error === 0 && !idNumber ? (
                         <span
                           className="font-recia"
                           style={{
@@ -625,8 +611,12 @@ const KycForm = () => {
                         onChange={handleIdExpirationDateChange}
                         style={{ cursor: "pointer" }}
                         disabled={editing}
+                        min={new Date().toISOString().split("T")[0]}
+                        onClick={(e) => {
+                          e.target.focus();
+                        }}
                       />
-                      {error == 0 && !idExpirationDate ? (
+                      {error === 0 && !idExpirationDate ? (
                         <span
                           className="font-recia"
                           style={{

@@ -315,6 +315,16 @@ body {
   font-weight: 400;
 }
 
+.heading-error-mes > li{  
+  text-align: justify;
+  /* padding-left: 25px; */
+  font-size: 15px;
+  line-height: 20px;
+  color: var(--text-color);
+  font-family: "Plus Jakarta Sans";
+  font-weight: 400;
+}
+
 @keyframes rotate {
   0% {
     transform: rotate(0deg);

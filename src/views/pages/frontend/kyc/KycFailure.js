@@ -1,40 +1,31 @@
-import React, { useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  CardBody,
-  CardTitle,
-  Button,
-} from "reactstrap";
-import logo from "../img/logo.svg";
-import review from "../img/reviewe.svg";
-import errorImage from "../img/error.png";
-import errorBlack from "../img/error-black.svg";
-import "../css/styles.css";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { Button, CardBody, CardTitle, Container, Row } from "reactstrap";
 import { setLoading } from "_helpers";
+import "../css/styles.css";
+import errorBlack from "../img/error-black.svg";
+import errorImage from "../img/error.png";
+import logo from "../img/logo.svg";
 import KycForm from "./KycForm";
 
-function KycFailure() {
-  const history = useHistory();
+function KycFailure({ props }) {
   const { mobile, secret_key } = useParams();
-  const [kycFormLoading, setKycFormLoading] = useState(false);
+  const [kycFormLoading, setKycFormLoading] = useState(true);
+  let res = props.kycReasons;
+  let comments = props.kycReasons.kyc_reasons;
 
   const handleButtonClick = () => {
     setLoading(true);
-    const mobileNo = mobile;
-    const key = secret_key;
-    setKycFormLoading(true);
-    // history.push(`/kyc/${mobileNo}/${key}`);
-    setLoading(false);
+    setKycFormLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   };
-
+  console.log("LOg", kycFormLoading);
   return (
     <>
       <Container>
-        {!kycFormLoading ? (
+        {kycFormLoading ? (
           <form>
             <section className="main-section">
               <div className="container">
@@ -85,14 +76,17 @@ function KycFailure() {
                         </p>
                       </div>
                       <br />
-                      <p className="heading-error-mes">
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry.
-                      </p>
+                      <ul
+                        className="heading-error-mes"
+                        style={{ marginLeft: "15px" }}
+                      >
+                        {comments
+                          .filter((reason) => reason.comment_type === "admin")
+                          .map((reason) => (
+                            <li key={reason.id}>{reason.comment}</li>
+                          ))}
+                      </ul>
                     </div>
-                    {/* <Row className="kyc-received-img">
-                    <img src={review} alt="review" className="reviewe-img" />
-                  </Row> */}
                     <Button
                       className="btn-design"
                       color="info"
@@ -107,7 +101,7 @@ function KycFailure() {
           </form>
         ) : (
           <>
-            <KycForm />
+            <KycForm props={{ res }} />
           </>
         )}
       </Container>
