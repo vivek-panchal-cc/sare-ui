@@ -50,7 +50,7 @@ const KycForm = ({ props }) => {
   const [selectedImageFile, setSelectedImageFile] = useState(null);
   const { mobile, secret_key } = useParams();
   const history = useHistory();
-  console.log("Props Form", props)
+  console.log("Props Form", props);
   let mobileNo = props?.res?.mobile_number;
   let formData = new FormData();
 
@@ -136,8 +136,13 @@ const KycForm = ({ props }) => {
 
   const handleIdFileChange = (event) => {
     const file = event.target.files[0];
-    if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
-      setIdFile(URL.createObjectURL(file));
+    if (
+      file &&
+      (file.type === "image/jpeg" ||
+        file.type === "image/png" ||
+        file.type === "image/jpg")
+    ) {
+      setIdFile(file);
       formData.append("file", file, "test.jpeg");
       setFormData(file);
     } else if (file && file.type === "application/pdf") {
@@ -211,7 +216,6 @@ const KycForm = ({ props }) => {
     } else {
       setLoading(true);
       setEditing(true);
-      // let formData = new FormData();
       formData.append("kyc_token", mobile);
       formData.append("mobile_key", secret_key);
       formData.append("name", fullName);
@@ -225,24 +229,21 @@ const KycForm = ({ props }) => {
       formData.append("file", idFile);
       formData.append("id_number", idNumber);
       formData.append("id_expiration_date", idExpirationDate);
-      
-      kycService.store(formData).then((res) => {
+
+      try {
+        setLoading(true);
+        const res = await kycService.store(formData);
         if (res.success === false) {
-          setLoading(true);
-          // history.push("/kyc/failure");
           notify.error(res.message);
-          setLoading(false);
-        } else {
-          if (res.success) {
-            setLoading(true);
-            notify.success(res.message);
-            history.push("/kyc/recieved");
-            setLoading(false);
-          } else {
-          }
+        } else if (res.success === true) {
+          notify.success(res.message);
+          history.push("/kyc/recieved");
         }
+      } catch (error) {
+        notify.error("An error occurred while submitting KYC information.");
+      } finally {
         setLoading(false);
-      });
+      }
     }
   };
 
@@ -465,11 +466,13 @@ const KycForm = ({ props }) => {
                         <div className="upload-part">
                           {!idFile ? (
                             <>
-                              <img
-                                src={uploadKYC}
-                                alt="upload"
-                                className="upload-svg"
-                              />
+                              <div style={{ marginRight: "10px" }}>
+                                <img
+                                  src={uploadKYC}
+                                  alt="upload"
+                                  className="upload-svg"
+                                />
+                              </div>
                               <strong>Upload</strong>
                               <Input
                                 type="file"
@@ -480,76 +483,67 @@ const KycForm = ({ props }) => {
                                 disabled={editing}
                               />
                             </>
-                          ) : typeof idFile === "string" ? (
+                          ) : idFile instanceof File ? (
                             <>
-                              {/* <p alt="view" className="view-img">
-                                <img
-                                  onClick={handleFileClick}
-                                  src={view}
-                                  alt="view"
-                                ></img>
-                              </p> */}
-                              <img
-                                src={idFile}
-                                alt="uploaded id"
-                                style={{ cursor: "pointer" }}
-                              />
-                              {/* <span>
-                                <a className="view-img">
+                              {idFile.type.includes("image/") ? (
+                                <>
                                   <img
-                                    onClick={handleFileClick}
-                                    src={view}
-                                    alt="view"
+                                    src={URL.createObjectURL(idFile)}
+                                    alt="uploaded id"
                                     style={{ cursor: "pointer" }}
-                                  ></img>
-                                </a>
-                              </span> */}
-                              <span>
-                                <a
-                                  className="view-tag"
-                                  onClick={clearImage}
-                                  disabled={!editing}
-                                  style={{
-                                    marginBottom: "100px",
-                                    cursor: "pointer",
-                                  }}
-                                >
-                                  {!editing ? "Remove Image" : ""}
-                                </a>
-                              </span>
+                                  />
+                                  <span>
+                                    <a
+                                      className="view-tag"
+                                      onClick={clearImage}
+                                      disabled={!editing}
+                                      style={{
+                                        marginBottom: "100px",
+                                        cursor: "pointer",
+                                      }}
+                                    >
+                                      {!editing ? "Remove Image" : ""}
+                                    </a>
+                                  </span>
+                                </>
+                              ) : idFile.type === "application/pdf" ? (
+                                <>
+                                  <span>
+                                    <a
+                                      className="view-pdf"
+                                      href="#"
+                                      onClick={(event) =>
+                                        handleDownloadPdf(event)
+                                      }
+                                      disabled={editing}
+                                    >
+                                      <strong>
+                                        {!editing ? "Download PDF" : ""}
+                                      </strong>
+                                    </a>
+                                  </span>
+                                  <span>
+                                    <strong>
+                                      {editing ? "PDF Uploaded" : ""}
+                                    </strong>
+                                  </span>
+                                  <span>
+                                    <a
+                                      className="view-tag"
+                                      onClick={clearImage}
+                                      disabled={editing}
+                                      style={{
+                                        marginBottom: "100px",
+                                        cursor: "pointer",
+                                      }}
+                                    >
+                                      {!editing ? "Remove PDF" : ""}
+                                    </a>
+                                  </span>
+                                </>
+                              ) : null}
                             </>
-                          ) : (
-                            <>
-                              <span>
-                                <a
-                                  className="view-pdf"
-                                  href="#"
-                                  onClick={(event) => handleDownloadPdf(event)}
-                                  disabled={editing}
-                                >
-                                  <strong>
-                                    {!editing ? "Download PDF" : ""}
-                                  </strong>
-                                </a>
-                              </span>
-                              <span>
-                                <strong>{editing ? "PDF Uploaded" : ""}</strong>
-                              </span>
-                              <span>
-                                <a
-                                  className="view-tag"
-                                  onClick={clearImage}
-                                  disabled={editing}
-                                  style={{
-                                    marginBottom: "100px",
-                                    cursor: "pointer",
-                                  }}
-                                >
-                                  {!editing ? "Remove PDF" : ""}
-                                </a>
-                              </span>
-                            </>
-                          )}
+                          ) : null}
                           {error === 0 && !idFile ? (
                             <div className="error-message">
                               <span

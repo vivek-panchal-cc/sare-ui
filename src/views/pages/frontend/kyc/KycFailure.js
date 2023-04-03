@@ -1,42 +1,27 @@
-import React, { useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  CardBody,
-  CardTitle,
-  Button,
-} from "reactstrap";
-import logo from "../img/logo.svg";
-import review from "../img/reviewe.svg";
-import errorImage from "../img/error.png";
-import errorBlack from "../img/error-black.svg";
-import "../css/styles.css";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { Button, CardBody, CardTitle, Container, Row } from "reactstrap";
 import { setLoading } from "_helpers";
+import "../css/styles.css";
+import errorBlack from "../img/error-black.svg";
+import errorImage from "../img/error.png";
+import logo from "../img/logo.svg";
 import KycForm from "./KycForm";
 
 function KycFailure({ props }) {
-  const history = useHistory();
   const { mobile, secret_key } = useParams();
   const [kycFormLoading, setKycFormLoading] = useState(true);
-  // const [res, setRes] = useState({});  
   let res = props.kycReasons;
-  console.log("props F", props);
   let comments = props.kycReasons.kyc_reasons;
 
   const handleButtonClick = () => {
     setLoading(true);
-    const mobileNo = mobile;
-    const key = secret_key;
     setKycFormLoading(false);
-    // history.push(`/kyc/${mobileNo}/${key}`);
     setTimeout(() => {
       setLoading(false);
     }, 1000);
   };
-  console.log("LOg", kycFormLoading )
+  console.log("LOg", kycFormLoading);
   return (
     <>
       <Container>
@@ -102,9 +87,6 @@ function KycFailure({ props }) {
                           ))}
                       </ul>
                     </div>
-                    {/* <Row className="kyc-received-img">
-                    <img src={review} alt="review" className="reviewe-img" />
-                  </Row> */}
                     <Button
                       className="btn-design"
                       color="info"
