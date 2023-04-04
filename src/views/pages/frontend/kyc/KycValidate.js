@@ -50,6 +50,7 @@ function KycValidate() {
     return () => clearInterval(intervalId);
   }, [countdown]);
 
+  // There are some bugs in state therefor changes state value and showing message in html according to OTP value (Changes made by Vivek Panchal)
   function checkOtp(event) {
     event.preventDefault();
     const postData = {
@@ -60,14 +61,16 @@ function KycValidate() {
     kycService.validateOtp(postData).then((res) => {
       if (res.success === false) {
         notify.error(res.message);
-        setIsOtpValid(true);
+        setIsOtpValid(false);
         setOtpAttempted(true);
       } else {
         notify.success(res.message);
-        setIsOtpValid(false);
+        setIsOtpValid(true);
         setOtpAttempted(true);
         if (res.data.otp_key) {
-          history.push(urlData.url + "/" + res.data.otp_key);
+          setTimeout(() => {
+            history.push(`${urlData.url}/${res.data.otp_key}`);
+          }, 2000); // wait for 2 seconds (2000 milliseconds) before redirecting
         }
       }
     });
@@ -77,6 +80,7 @@ function KycValidate() {
     setOTP("");
   }
 
+  //  While hitting on resendOTP it will throw an error so resolved it in API Call (Changes made by Vivek Panchal)
   function resendOtp() {
     const postData = { kyc_token: mobile };
     setCountdown(120);
@@ -84,7 +88,7 @@ function KycValidate() {
     kycService
       .resendOtp(postData)
       .then((res) => {
-        if (res.status === false) {
+        if (res.success === false) {
           notify.error(res.message);
         } else {
           notify.success(res.message);
@@ -101,7 +105,7 @@ function KycValidate() {
         {isOtpValid && !otpAttempted ? (
           <KycChecking />
         ) : (
-          <Form onSubmit={checkOtp}>
+          <Form onSubmit={checkOtp} onReset={handleCancel}>
             <section className="main-section enter-otp-page">
               <div className="container">
                 <div className="logo-part text-center">
@@ -141,7 +145,7 @@ function KycValidate() {
                           </>
                         ) : (
                           <>
-                            {isOtpValid && !otpAttempted ? (
+                            {isOtpValid ? (
                               <p className="sucess-mes sucess-color">
                                 <img
                                   src={successImage}
@@ -183,28 +187,32 @@ function KycValidate() {
                         Resend Code
                       </Button>
 
-                      <div className="text-center">
+                      <div>
                         {otp.length === 4 && (
-                          <Col>
-                            <Button
-                              className="btn-design"
-                              color="info"
-                              type="submit"
-                              // onClick={(event) => checkOtp(event)}
-                            >
-                              Submit
-                            </Button>
-                          </Col>
-                        )}
-                        <Col>
+                          // <Col>
                           <Button
-                            className="edit-btn-design"
+                            className="btn-design"
                             color="info"
-                            onClick={handleCancel}
+                            type="submit"
+                            disabled={isOtpValid}
+                            // onClick={(event) => checkOtp(event)}
                           >
-                            Cancel
+                            {isOtpValid ? "Loading..." : "Submit"}
                           </Button>
-                        </Col>
+                          // </Col>
+                        )}
+                        {/* <Col> */}
+                        <Button
+                          style={{ marginBottom: "-30px" }}
+                          className="edit-btn-design"
+                          color="info"
+                          type="reset"
+                          // onClick={handleCancel}
+                          disabled={isOtpValid}
+                        >
+                          Cancel
+                        </Button>
+                        {/* </Col> */}
                       </div>
                     </CardBody>
                   </CardBody>

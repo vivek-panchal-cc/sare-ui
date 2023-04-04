@@ -8,7 +8,7 @@ function KycRecieved() {
   const { mobile, secret_key } = useParams();
 
   const handleSubmit = () => {
-    const link = process.env.ANDROID_APP_URL;
+    const link = process.env.REACT_APP_ANDROID_APP_URL;    
     window.open(link, "_blank");
   };
 

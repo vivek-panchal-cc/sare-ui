@@ -63,7 +63,7 @@ function resendOtp(postData) {
   setLoading(true);
   const requestOptions = {
     method: "POST",
-    headers: authHeaderMutlipart(),
+    headers: frontHeader(),
     // body: postData,
     body: JSON.stringify(postData),
   };
