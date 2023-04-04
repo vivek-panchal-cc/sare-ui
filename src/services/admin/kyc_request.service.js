@@ -25,6 +25,7 @@ function getList(postData) {
     // return fetch(`${process.env.REACT_APP_KYC_URL}kyc/index`, requestOptions).catch((error) => {
     // return fetch(`http://sare.api/api/kyc/index`, requestOptions).catch((error) => {
     return fetch(`${process.env.REACT_APP_API_URL}api/kyc/index`, requestOptions).catch((error) => {
+        console.log('error', error);
         notify.error('Something went wrong');
         setLoading(true);
     }).then(handleResponse);

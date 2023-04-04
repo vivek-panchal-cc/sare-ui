@@ -28,6 +28,7 @@ function KycChecking() {
     return () => clearTimeout(timeoutId);
   }, []);
 
+  // notify.success message removed after Kyc Checking and redirecting to Kyc Form (Changes made by Vivek Panchal)
   function getKycDetails() {
     setIsLoading(true);
     kycService
@@ -40,10 +41,10 @@ function KycChecking() {
         if (!success) {
           notify.error(message);
         } else if (data.kyc_status === "pending") {
-          notify.success(message);
+          // notify.success(message);
           setKycFormLoading(true);
         } else if (data.kyc_status === "rejected") {
-          notify.success(message);
+          // notify.success(message);
           setKycReasons(data);
           setIsLoading(false);
         }

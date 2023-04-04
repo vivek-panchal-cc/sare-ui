@@ -13,6 +13,8 @@ function KycFailure({ props }) {
   const [kycFormLoading, setKycFormLoading] = useState(true);
   let res = props.kycReasons;
   let comments = props.kycReasons.kyc_reasons;
+  console.log("Res", res);
+  console.log("Comments", comments);
 
   const handleButtonClick = () => {
     setLoading(true);
@@ -21,7 +23,8 @@ function KycFailure({ props }) {
       setLoading(false);
     }, 1000);
   };
-  console.log("LOg", kycFormLoading);
+
+  //  Design Changed in Below HTML (Changes made by Vivek Panchal)
   return (
     <>
       <Container>
@@ -77,8 +80,7 @@ function KycFailure({ props }) {
                       </div>
                       <br />
                       <ul
-                        className="heading-error-mes"
-                        style={{ marginLeft: "15px" }}
+                        className="heading-error-mes"                        
                       >
                         {comments
                           .filter((reason) => reason.comment_type === "admin")

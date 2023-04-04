@@ -58,6 +58,7 @@ const KycForm = ({ props }) => {
     setFullName(e.target.value);
   };
 
+  // Validation Changes in Email done as per QA team requirement. (Changes made by Vivek Panchal)
   const validateEmail = (email) => {
     const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return re.test(String(email).toLowerCase());
@@ -67,9 +68,9 @@ const KycForm = ({ props }) => {
     const emailValue = e.target.value;
     setEmail(emailValue);
     if (!validateEmail(emailValue)) {
-      setError(0);
+      setError(2);
     } else {
-      // setError(0);
+      setError(null);
     }
   };
 
@@ -178,6 +179,8 @@ const KycForm = ({ props }) => {
       !idExpirationDate
     ) {
       setError(0);
+    } else if (!validateEmail(email)) {
+      setError(2);
     } else {
       setLoading(false);
       setEditing(true);
@@ -280,7 +283,6 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
-                            margin: "0 0 8px -10px"
                           }}
                         >
                           Full Name is required
@@ -297,7 +299,7 @@ const KycForm = ({ props }) => {
                         placeholder="Email"
                         disabled={editing}
                       />
-                      {error === 0 && !email ? (
+                      {error === 0 && !validateEmail(email) && (
                         <span
                           className="font-recia"
                           style={{
@@ -305,12 +307,29 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
-                            margin: "0 0 8px -10px"
                           }}
                         >
-                          Email is not in the correct format<br/>(eg. abc@abc.com)
+                          Email field is required
                         </span>
-                      ) : null}
+                      )}
+                      {error === 2 &&
+                        error !== null &&
+                        email !== "" &&
+                        !validateEmail(email) && (
+                          <span
+                            className="font-recia"
+                            style={{
+                              color: "#f00",
+                              fontSize: "14px",
+                              marginTop: "6px",
+                              display: "block",
+                            }}
+                          >
+                            Email is not in the correct format
+                            <br />
+                            (eg. abc@abc.com)
+                          </span>
+                        )}
                     </FormGroup>
                     <FormGroup>
                       <Label>Home Address</Label>
@@ -331,7 +350,7 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
-                            margin: "-10px 0 8px -10px"
+                            margin: "-10px 0 8px 0",
                           }}
                         >
                           House Number is required
@@ -354,7 +373,7 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
-                            margin: "-10px 0 8px -10px"
+                            margin: "-10px 0 8px 0",
                           }}
                         >
                           Street Name is required
@@ -377,7 +396,7 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
-                            margin: "-10px 0 8px -10px"
+                            margin: "-10px 0 8px 0",
                           }}
                         >
                           Landmark is required
@@ -400,7 +419,7 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
-                            margin: "-10px 0 8px -10px"
+                            margin: "-10px 0 8px 0",
                           }}
                         >
                           City is required
@@ -423,7 +442,6 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
-                            margin: "0 0 8px -10px"
                           }}
                         >
                           PinCode is required
@@ -557,7 +575,10 @@ const KycForm = ({ props }) => {
                             <div className="error-message">
                               <span
                                 className="font-recia"
-                                style={{ color: "#f00", fontSize: "14px", margin: "0 0 8px -10px" }}
+                                style={{
+                                  color: "#f00",
+                                  fontSize: "14px",
+                                }}
                               >
                                 File is required
                               </span>
@@ -604,7 +625,6 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
-                            margin: "0 0 8px -10px"
                           }}
                         >
                           ID Number is required
@@ -634,7 +654,6 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
-                            margin: "0 0 8px -10px"
                           }}
                         >
                           ID Expiration Date is required
@@ -656,6 +675,7 @@ const KycForm = ({ props }) => {
                           Confirm Details
                         </Button>
                         <Button
+                          // style={{ marginBottom: "-20px" }}
                           className="edit-btn-design"
                           color="info"
                           onClick={() => setEditing(false)}
@@ -666,6 +686,7 @@ const KycForm = ({ props }) => {
                       </div>
                     ) : (
                       <Button
+                        // style={{ marginBottom: "-20px" }}
                         className="btn-design"
                         color="info"
                         onClick={() => handleSubmit()}
