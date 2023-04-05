@@ -21,6 +21,11 @@ function KycChecking() {
   const { mobile, secret_key } = useParams();
 
   useEffect(() => {
+    window.history.pushState(null, null, window.location.href);
+    window.history.replaceState({}, document.title, window.location.href);
+    window.onpopstate = () => {
+      window.history.pushState(null, null, window.location.href);
+    };
     const timeoutId = setTimeout(() => {
       getKycDetails();
     }, 3000);

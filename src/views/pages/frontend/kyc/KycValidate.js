@@ -65,7 +65,7 @@ function KycValidate() {
         setOtpAttempted(true);
         setTimeout(() => {
           setOTP("");
-        }, 1000); // wait for 2 seconds before showing the error message
+        }, 0); // wait for 0 seconds before showing the error message
       } else {
         notify.success(res.message);
         setIsOtpValid(true);
@@ -77,6 +77,11 @@ function KycValidate() {
         }
       }
     });
+    window.history.pushState(null, null, window.location.href);
+    window.history.replaceState({}, document.title, window.location.href);
+    window.onpopstate = () => {
+      window.history.pushState(null, null, window.location.href);
+    };
   }
 
   function handleClear() {
@@ -143,7 +148,7 @@ function KycValidate() {
                                 alt="check_circle"
                                 className="mes-img"
                               /> */}
-                              Please enter an OTP
+                              {/* Please enter an OTP */}
                             </p>
                           </>
                         ) : (
@@ -158,7 +163,8 @@ function KycValidate() {
                                 Success
                               </p>
                             ) : (
-                              otpAttempted && !isOtpValid && (
+                              otpAttempted &&
+                              !isOtpValid && (
                                 <p className="error-mes red-color">
                                   <img
                                     src={errorImage}
