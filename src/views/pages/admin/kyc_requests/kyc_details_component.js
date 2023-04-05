@@ -17,10 +17,12 @@ const KycDetailComponent = (props) => {
   // };
 
   const [comment, setComment] = useState('');
-  const [status, setStatus] = useState(props.kycDetail.status);
+  const [status, setStatus] = useState('');
+
+  const kycDetailId = props.kycDetail.id;
 
   function handleSubmit() {
-    kycRequestService.updateRequest(props.kycDetail.id, {
+    kycRequestService.updateRequest(kycDetailId, {
       admin_comment: comment,
       status: status
     }).then(res => {
@@ -32,6 +34,10 @@ const KycDetailComponent = (props) => {
         notify.error(res.message);
       }
     })
+  }
+
+  const handleStatusChange = (e) => {
+    setStatus(e.target.value);
   }
 
   return (
@@ -49,13 +55,13 @@ const KycDetailComponent = (props) => {
                     <h6>Account Number : {props.kycDetail.account_number}</h6>
                     <h6>Name : {props.kycDetail.name}</h6>
                   </CCol>
-				  <CCol sm="6">
+                  <CCol sm="6">
                     <h6>Email : {props.kycDetail.email}</h6>
                   </CCol>
-				  <CCol sm="6">
-                    <h6>Home Address : {props.kycDetail.house_number} +','+ {props.kycDetail.street_name}+','+{props.kycDetail.landmark}+','+{props.kycDetail.city}+','+{props.kycDetail.pincode}</h6>
+                  <CCol sm="6">
+                    <h6>Home Address : {props.kycDetail.house_number ? props.kycDetail.house_number + ',' : ''}{props.kycDetail.street_name ? props.kycDetail.street_name + ',' : ''}{props.kycDetail.landmark ? props.kycDetail.landmark + ',' : ''}{props.kycDetail.city ? props.kycDetail.city + ',' : ''}{props.kycDetail.pincode ? props.kycDetail.pincode + ',' : ''}</h6>
                   </CCol>
-				  <CCol sm="6">
+                  <CCol sm="6">
                     <h6>Phone Number : {props.kycDetail.phone_number}</h6>
                   </CCol>
                   <CCol sm="6">
@@ -86,7 +92,7 @@ const KycDetailComponent = (props) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {props.kycDetail.kyc_files.length > 0 &&
+                      {props.kycDetail.kyc_files?.length > 0 &&
                         props.kycDetail.kyc_files.map((file, index) => (
                           <tr key={index}>
                             <td>File name</td>
@@ -94,15 +100,15 @@ const KycDetailComponent = (props) => {
                               <CTooltip content={globalConstants.Download_BTN}>
                                 <CLink className="btn  btn-md btn-primary" aria-current="page" to={`${file.file}`} >
                                   <CIcon name="cil-cloud-download"></CIcon>
-									<h6>ID Number : {file.id_number}</h6>
-									<h6>Expiration Date : {file.id_expiration_date}</h6>
+                                  <h6>ID Number : {file.id_number}</h6>
+                                  <h6>Expiration Date : {file.id_expiration_date}</h6>
                                 </CLink>
                               </CTooltip>
                             </td>
                           </tr>
                         ))
                       }
-                      {props.kycDetail.kyc_files.length === 0 && <tr><td colSpan='3'>No records found</td></tr>}
+                      {props.kycDetail.kyc_files?.length === 0 && <tr><td colSpan='3'>No records found</td></tr>}
                     </tbody>
                   </table>
                 </div>
@@ -127,7 +133,7 @@ const KycDetailComponent = (props) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {props.kycDetail.kyc_reasons.length > 0 &&
+                      {props.kycDetail.kyc_reasons?.length > 0 &&
                         props.kycDetail.kyc_reasons.map((kyc_reason, index) => (
                           <tr key={index}>
                             <td>{kyc_reason.comment}</td>
@@ -136,7 +142,7 @@ const KycDetailComponent = (props) => {
                           </tr>
                         ))
                       }
-                      {props.kycDetail.kyc_reasons.length === 0 && <tr><td colSpan='3'>No records found</td></tr>}
+                      {props.kycDetail.kyc_reasons?.length === 0 && <tr><td colSpan='3'>No records found</td></tr>}
                     </tbody>
                   </table>
                 </div>
@@ -157,10 +163,12 @@ const KycDetailComponent = (props) => {
             <CCol md="12">
               <CFormGroup >
                 <CLabel htmlFor="menu_category">Status</CLabel>
-                <CSelect aria-label="Status" onChange={(e) => { setStatus(e.target.value) }} value={props.kycDetail.status}>
-                  <option value="pending">Pending</option>
-                  <option value="approved">Approved</option>
-                  <option value="rejected">Rejected</option>
+                {/* value={props.kycDetail.status} */}
+                <CSelect aria-label="Status" onChange={handleStatusChange } >
+                  {/* <option value="pending">Pending</option> */}
+                  <option>---</option>
+                  <option value="approved">Approve</option>
+                  <option value="rejected">Reject</option>
                 </CSelect>
               </CFormGroup>
               <CFormGroup >

@@ -50,15 +50,15 @@ function getDetail(id) {
 
 /***********************  Retrive Api For Update from server  *****************************/
 
-function updateRequest(postData) {
+function updateRequest(id, postData) {
     setLoading(true);
     const requestOptions = {
-        method: 'POST',
+        method: 'PUT',
         headers: authHeader('kyc_request', 'update'),
         body: JSON.stringify(postData)
     };
 
-    return fetch(`${process.env.REACT_APP_API_URL}api/kyc/edit`, requestOptions).catch((error) => {
+    return fetch(`${process.env.REACT_APP_API_URL}api/kyc/${id}`, requestOptions).catch((error) => {
         notify.error('Something went wrong');
         setLoading(false);
         return Promise.reject();
