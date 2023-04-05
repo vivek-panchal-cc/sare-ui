@@ -12,9 +12,7 @@ function KycFailure({ props }) {
   const { mobile, secret_key } = useParams();
   const [kycFormLoading, setKycFormLoading] = useState(true);
   let res = props.kycReasons;
-  let comments = props.kycReasons.kyc_reasons;
-  console.log("Res", res);
-  console.log("Comments", comments);
+  let comments = props.kycReasons.kyc_reasons;  
 
   const handleButtonClick = () => {
     setLoading(true);
