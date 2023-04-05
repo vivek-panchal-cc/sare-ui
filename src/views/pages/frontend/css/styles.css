@@ -600,10 +600,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 700;
   font-size: 14px;
   line-height: 21px;
   color: #fff;
-  background-color: rgba(0, 0, 0, 0.7);
+  /* background-color: rgba(0, 0, 0, 0.7); */
   padding: 5px 10px;
   border-radius: 5px;
   z-index: 2;
@@ -626,8 +627,11 @@ body {
 
 .file-upload-design .upload-part .view-img {
   position: absolute;
-  bottom: 10px;
-  left: 50%;
+  /* bottom: 10px; */
+  top: 50%;
+  /* left: 50%; */
+  bottom: 50%;
+  /* right: 50%; */
   transform: translateX(-50%);
   display: flex;
   align-items: center;
@@ -635,7 +639,7 @@ body {
   font-size: 14px;
   line-height: 21px;
   color: #fff;
-  background-color: rgba(0, 0, 0, 0.7);
+  /* background-color: rgba(0, 0, 0, 0.7); */
   padding: 5px 10px;
   border-radius: 5px;
   z-index: 2;

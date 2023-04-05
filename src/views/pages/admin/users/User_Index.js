@@ -49,7 +49,7 @@ class User_Index extends React.Component {
       sort_field: "name",
       search_name: "",
       search_email: "",
-      search_mobile_number: "",
+      mobile_number: "",
       user_group_id: "",
       _openPopup: false,
       multiaction: [],
@@ -105,7 +105,7 @@ class User_Index extends React.Component {
         sort_field: "name",
         search_name: "",
         search_email: "",
-        search_mobile_number: "",
+        mobile_number: "",
         user_group_id: ""
       }, () => { this.props.getUsersList(this.state) });
 
@@ -256,7 +256,7 @@ class User_Index extends React.Component {
                   <CFormGroup row>
                     <CCol xs="12">
                       <CLabel htmlFor="name">Mobile</CLabel>
-                      <CInput id="name" placeholder="Search Mobile" name="search_mobile_number" value={this.state.search_mobile_number} onChange={this.handleChange} />
+                      <CInput id="name" placeholder="Search Mobile" name="mobile_number" value={this.state.mobile_number} onChange={this.handleChange} />
                     </CCol>
                   </CFormGroup>
                 </CCol>

@@ -73,7 +73,7 @@ function KycValidate() {
         if (res.data.otp_key) {
           setTimeout(() => {
             history.push(`${urlData.url}/${res.data.otp_key}`);
-          }, 2000); // wait for 2 seconds (2000 milliseconds) before redirecting
+          }, 0); // wait for 0 seconds before redirecting
         }
       }
     });
