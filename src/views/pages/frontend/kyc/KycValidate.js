@@ -63,6 +63,9 @@ function KycValidate() {
         notify.error(res.message);
         setIsOtpValid(false);
         setOtpAttempted(true);
+        setTimeout(() => {
+          setOTP("");
+        }, 1000); // wait for 2 seconds before showing the error message
       } else {
         notify.success(res.message);
         setIsOtpValid(true);
@@ -76,7 +79,7 @@ function KycValidate() {
     });
   }
 
-  function handleCancel() {
+  function handleClear() {
     setOTP("");
   }
 
@@ -105,7 +108,7 @@ function KycValidate() {
         {isOtpValid && !otpAttempted ? (
           <KycChecking />
         ) : (
-          <Form onSubmit={checkOtp} onReset={handleCancel}>
+          <Form onSubmit={checkOtp} onReset={handleClear}>
             <section className="main-section enter-otp-page">
               <div className="container">
                 <div className="logo-part text-center">
@@ -155,7 +158,7 @@ function KycValidate() {
                                 Success
                               </p>
                             ) : (
-                              otpAttempted && (
+                              otpAttempted && !isOtpValid && (
                                 <p className="error-mes red-color">
                                   <img
                                     src={errorImage}
@@ -181,7 +184,7 @@ function KycValidate() {
                       <Button
                         type="button"
                         className="resend-btn"
-                        disabled={isResendDisabled}
+                        hidden={isResendDisabled}
                         onClick={() => resendOtp()}
                       >
                         Resend Code
@@ -210,7 +213,7 @@ function KycValidate() {
                           // onClick={handleCancel}
                           disabled={isOtpValid}
                         >
-                          Cancel
+                          Clear
                         </Button>
                         {/* </Col> */}
                       </div>

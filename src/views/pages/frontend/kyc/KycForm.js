@@ -50,7 +50,6 @@ const KycForm = ({ props }) => {
   const [selectedImageFile, setSelectedImageFile] = useState(null);
   const { mobile, secret_key } = useParams();
   const history = useHistory();
-  console.log("Props Form", props);
   let mobileNo = props?.res?.mobile_number;
   let formData = new FormData();
 

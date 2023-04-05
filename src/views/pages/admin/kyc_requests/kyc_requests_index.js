@@ -375,6 +375,30 @@ class KycRequest_list extends React.Component {
                               )}
                           </span>
                         </th>
+                        {/* Mobile Number added in column (Changes made by Vivek Panchal) */}
+                        <th
+                          onClick={() => this.handleColumnSort("mobile_number")}
+                        >
+                          <span className="sortCls">
+                            <span className="table-header-text-mrg">
+                              Mobile Number
+                            </span>
+                            {this.state.fields.sort_field !==
+                              "mobile_number" && (
+                              <FontAwesomeIcon icon={faSort} />
+                            )}
+                            {this.state.fields.sort_dir === "asc" &&
+                              this.state.fields.sort_field ===
+                                "mobile_number" && (
+                                <FontAwesomeIcon icon={faSortUp} />
+                              )}
+                            {this.state.fields.sort_dir === "desc" &&
+                              this.state.fields.sort_field ===
+                                "mobile_number" && (
+                                <FontAwesomeIcon icon={faSortDown} />
+                              )}
+                          </span>
+                        </th>
                         <th>Name</th>
                         <th onClick={() => this.handleColumnSort("status")}>
                           <span className="sortCls">
@@ -409,6 +433,7 @@ class KycRequest_list extends React.Component {
                             <td>{index + 1}</td>
                             {/* <td>  {_canAccess('cms_pages', 'view') && <CLink to={`/admin/cms_pages/detailview/${u._id}`}>{u.title}</CLink>}</td> */}
                             <td>{u.account_number}</td>
+                            <td>{u.mobile_number}</td>
                             <td>{u.name}</td>
                             <td>{capitalize(u.status.replaceAll("_", " "))}</td>
                             {_canAccess("cms_pages", "update") && (

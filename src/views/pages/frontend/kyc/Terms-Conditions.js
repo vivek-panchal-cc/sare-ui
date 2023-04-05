@@ -20,8 +20,7 @@ function TermConditions() {
   }, [history]);
 
   return (
-    <>
-      {console.log("cmsPages", cmsPages)}
+    <>      
       <Container>
         <form>
           <section>
