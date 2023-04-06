@@ -542,6 +542,7 @@ const KycForm = ({ props }) => {
                             <>
                               {idFile.type.includes("image/") ? (
                                 <>
+                                <div className="image-upload-div position-relative">
                                   <img
                                     src={URL.createObjectURL(idFile)}
                                     alt="uploaded id"
@@ -556,6 +557,7 @@ const KycForm = ({ props }) => {
                                       {!editing ? "Remove Image" : ""}
                                     </a>
                                   </span>
+                                  </div>
                                 </>
                               ) : idFile.type === "application/pdf" ? (
                                 <>

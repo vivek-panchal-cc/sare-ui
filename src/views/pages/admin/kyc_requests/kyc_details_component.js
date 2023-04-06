@@ -66,6 +66,7 @@ const KycDetailComponent = (props) => {
 
   return (
     <>
+      {/* Changes in design (By Vivek Panchal) */}
       <CContainer fluid>
         <CRow>
           <CCol sm="12">
@@ -86,71 +87,71 @@ const KycDetailComponent = (props) => {
                     <b>Phone Number :</b> {props.kycDetail.phone_number}
                   </CCol>
                   <CCol sm="6">
-                    <b>Home Address :</b>{" "}
-                    {props.kycDetail.house_number
-                      ? props.kycDetail.house_number + ", "
-                      : ""}
-                    {props.kycDetail.street_name
-                      ? props.kycDetail.street_name + ", "
-                      : ""}
-                    {props.kycDetail.landmark
-                      ? props.kycDetail.landmark + ", "
-                      : ""}
-                    {props.kycDetail.city ? props.kycDetail.city + ", " : ""}
-                    {props.kycDetail.pincode
-                      ? props.kycDetail.pincode + ""
-                      : ""}<br/>
-                    <b>Submission Date :</b>{" "}
-                    {moment(props.kycDetail.createdAt).format("LL")}
-                    <br />
-                    <b>Status:</b>{" "}
-                    {(() => {
-                      switch (props.kycDetail.status) {
-                        case "pending":
-                          return "Pending";
-                        case "inprogress":
-                          return "In Progress";
-                        case "rejected":
-                          return "Rejected";
-                        case "approved":
-                          return "Approved";
-                        case "pending_approval":
-                          return "Pending Approval";
-                        default:
-                          return "";
-                      }
-                    })()}
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <b>Home Address :</b>{" "}
+                      {props.kycDetail.house_number
+                        ? props.kycDetail.house_number + ", "
+                        : ""}
+                      {props.kycDetail.street_name
+                        ? props.kycDetail.street_name + ", "
+                        : ""}
+                      {props.kycDetail.landmark
+                        ? props.kycDetail.landmark + ", "
+                        : ""}
+                      {props.kycDetail.city ? props.kycDetail.city + ", " : ""}
+                      {props.kycDetail.pincode
+                        ? props.kycDetail.pincode + ""
+                        : ""}
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        // marginTop: "10px",
+                      }}
+                    >
+                      <b>Status :</b>{" "}
+                      {(() => {
+                        switch (props.kycDetail.status) {
+                          case "pending":
+                            return "Pending";
+                          case "inprogress":
+                            return "In Progress";
+                          case "rejected":
+                            return "Rejected";
+                          case "approved":
+                            return "Approved";
+                          case "pending_approval":
+                            return "Pending Approval";
+                          default:
+                            return "";
+                        }
+                      })()}
+                      <button
+                        style={{
+                          border: "none",
+                          backgroundColor: "transparent",
+                          padding: 0,
+                          margin: "0 0 0 10px",
+                          outline: "none"
+                        }}
+                        onClick={toggle}
+                      >
+                        <i className="fa fa-pencil"></i>
+                      </button>
+                    </div>
                   </CCol>
-                  {/* <CCol sm="6">
-                    <b>Phone Number :</b> {props.kycDetail.phone_number}
-                  </CCol> */}
-                  {/* <CCol sm="6">
-                    <b>Submission Date :</b>{" "}
-                    {moment(props.kycDetail.createdAt).format("LL")}<br/>
-                    <b>Status:</b>{" "}
-                    {(() => {
-                      switch (props.kycDetail.status) {
-                        case "pending":
-                          return "Pending";
-                        case "inprogress":
-                          return "In Progress";
-                        case "rejected":
-                          return "Rejected";
-                        case "approved":
-                          return "Approved";
-                        case "pending_approval":
-                          return "Pending Approval";
-                        default:
-                          return "";
-                      }
-                    })()}
-                  </CCol> */}
-                  <CCol sm="6">
+                </CRow>
+
+                {/* <CCol
+                    sm="6"
+                    className="d-flex justify-content-end align-items-center"
+                  >
                     <CButton color="success" onClick={toggle}>
                       <CIcon name="cil-pencil"></CIcon>
                     </CButton>
-                  </CCol>
-                </CRow>
+                  </CCol> */}
+                {/* </CRow> */}
               </CCardBody>
             </CCard>
           </CCol>
