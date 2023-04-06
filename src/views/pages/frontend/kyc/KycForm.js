@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Container,
   Row,
@@ -50,14 +50,31 @@ const KycForm = ({ props }) => {
   const [selectedImageFile, setSelectedImageFile] = useState(null);
   const { mobile, secret_key } = useParams();
   const history = useHistory();
+  const alreadyRedirected = useRef(false);
+
   let mobileNo = props?.res?.mobile_number;
   let formData = new FormData();
+
+  // Validation Changes in Email done as per QA team requirement.
+  // Multiple times OTP generated when user tap on back button so I've resolved this functionality by defining onpostate in useEffect()
+  // (Changes made by Vivek Panchal)
+  useEffect(() => {
+    const unListen = history.listen((location, action) => {
+      if (action === "POP" && !alreadyRedirected.current) {
+        alreadyRedirected.current = true;
+        // history.push("/kyc/404");
+      }
+    });
+
+    return () => {
+      unListen();
+    };
+  }, [history]);
 
   const handleFullNameChange = (e) => {
     setFullName(e.target.value);
   };
 
-  // Validation Changes in Email done as per QA team requirement. (Changes made by Vivek Panchal)
   const validateEmail = (email) => {
     const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return re.test(String(email).toLowerCase());
@@ -183,6 +200,18 @@ const KycForm = ({ props }) => {
     } else {
       setLoading(false);
       setEditing(true);
+      const overlay = document.querySelector(".view-img");
+      if (overlay?.style?.display) {
+        overlay.style.display = "none"; // Hide the overlay
+      }
+    }
+  };
+
+  const handleEditDetails = () => {
+    setEditing(false);
+    const overlay = document.querySelector(".view-img");
+    if (overlay?.style?.display) {
+      overlay.style.display = "none"; // Show the overlay
     }
   };
 
@@ -520,13 +549,9 @@ const KycForm = ({ props }) => {
                                   />
                                   <span>
                                     <a
-                                      className="view-tag"
+                                      className="view-img"
                                       onClick={clearImage}
                                       disabled={!editing}
-                                      style={{
-                                        marginBottom: "100px",
-                                        cursor: "pointer",
-                                      }}
                                     >
                                       {!editing ? "Remove Image" : ""}
                                     </a>
@@ -637,6 +662,7 @@ const KycForm = ({ props }) => {
                         name="idExpirationDate"
                         id="idExpirationDate"
                         value={idExpirationDate}
+                        placeholder="DD/MM/YYYY"
                         onChange={handleIdExpirationDateChange}
                         style={{ cursor: "pointer" }}
                         disabled={editing}
@@ -677,7 +703,7 @@ const KycForm = ({ props }) => {
                           // style={{ marginBottom: "-20px" }}
                           className="edit-btn-design"
                           color="info"
-                          onClick={() => setEditing(false)}
+                          onClick={() => handleEditDetails()}
                           disabled={loading}
                         >
                           Edit Details

@@ -18,6 +18,7 @@ import {
   CModalTitle,
   CButton,
   CTooltip,
+  CSelect,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -36,6 +37,9 @@ import {
   capitalize,
 } from "../../../../_helpers/index";
 import { globalConstants } from "../../../../constants/admin/global.constants";
+const UserGroups = React.lazy(() =>
+  import("../../../../components/admin/UserGroups")
+);
 const CheckBoxes = React.lazy(() =>
   import("../../../../components/admin/Checkboxes")
 );
@@ -56,9 +60,12 @@ class KycRequest_list extends React.Component {
     this.state = {
       fields: {
         pageNo: 1,
-        sort_dir: "asc",
+        sort_dir: "desc",
         sort_field: "account_number",
         search_account_number: "",
+        mobile_number: "",
+        name: "",
+        status: "",
         totalPage: 1,
       },
       _openPopup: false,
@@ -89,6 +96,7 @@ class KycRequest_list extends React.Component {
         return new Promise((resolve) => setTimeout(() => resolve(res), 0));
       })
       .then((res) => {
+        console.log("Res", res);
         this.setState({ loading: false }); // Set loading to false after the response is received
 
         if (!res.success) {
@@ -155,24 +163,31 @@ class KycRequest_list extends React.Component {
     this.setState({ fields: { ...this.state.fields, [name]: value } });
   }
 
+  handleFieldChange = (inputFieldId, inputFieldValue) => {
+    this.setState({ [inputFieldId]: inputFieldValue });
+  };
+
   handleSearch(type) {
     if (type === "reset") {
       this.setState(
         {
           fields: {
             pageNo: 1,
-            sort_dir: "asc",
+            sort_dir: "desc",
             sort_field: "account_number",
             search_account_number: "",
+            mobile_number: "",
+            name: "",
+            status: "",
             totalPage: 1,
-          },
+          }
         },
         () => {
-          this.getKycRequestList();
+          this.getKycRequestList(this.state.fields);
         }
       );
     } else {
-      this.getKycRequestList();
+      this.getKycRequestList(this.state.fields);
     }
   }
 
@@ -306,6 +321,57 @@ class KycRequest_list extends React.Component {
                       </CCol>
                     </CFormGroup>
                   </CCol>
+                  <CCol xl={3}>
+                    <CFormGroup row>
+                      <CCol xs="12">
+                        <CLabel htmlFor="name">Mobile Number</CLabel>
+                        <CInput
+                          id="name"
+                          placeholder="Search Mobile Number"
+                          name="mobile_number"
+                          value={this.state.fields.mobile_number}
+                          onChange={this.handleChange}
+                        />
+                      </CCol>
+                    </CFormGroup>
+                  </CCol>
+                  <CCol xl={3}>
+                    <CFormGroup row>
+                      <CCol xs="12">
+                        <CLabel htmlFor="name">Name</CLabel>
+                        <CInput
+                          id="name"
+                          placeholder="Search Name"
+                          name="name"
+                          value={this.state.fields.name}
+                          onChange={this.handleChange}
+                        />
+                      </CCol>
+                    </CFormGroup>
+                  </CCol>
+                  <CCol xl={3}>
+                    <CFormGroup row>
+                      <CCol xs="12">
+                        <CLabel htmlFor="name">Status</CLabel>
+                        <CSelect                          
+                          id="name"
+                          placeholder="Search Status"
+                          name="status"
+                          value={this.state.fields.status}
+                          onChange={this.handleChange}
+                        >
+                          <option value="">-- Select Status --</option>
+                          <option value="pending">Pending</option>
+                          <option value="inprogress">In Progress</option>
+                          <option value="rejected">Rejected</option>
+                          <option value="approved">Approved</option>
+                          <option value="pending_approval">
+                            Pending Approval
+                          </option>
+                        </CSelect>
+                      </CCol>
+                    </CFormGroup>
+                  </CCol>
                 </CRow>
                 <CRow>
                   <CCol xl={12}>
@@ -434,7 +500,7 @@ class KycRequest_list extends React.Component {
                             {/* <td>  {_canAccess('cms_pages', 'view') && <CLink to={`/admin/cms_pages/detailview/${u._id}`}>{u.title}</CLink>}</td> */}
                             <td>{u.account_number}</td>
                             <td>{u.mobile_number}</td>
-                            <td>{u.name}</td>
+                            <td>{u.name}</td>                            
                             <td>{capitalize(u.status.replaceAll("_", " "))}</td>
                             {_canAccess("cms_pages", "update") && (
                               <>

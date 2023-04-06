@@ -40,11 +40,12 @@ function KycFailure({ props }) {
                     </CardTitle>
                     <Row>
                       <p className="light-blue margin-failure">
-                        Please upload all the following documents and fulfill
-                        details provided in comments
+                        {/* Please upload all the following documents and fulfill
+                        details provided in comments */}
+                        Please check the below details provide by SARE
                       </p>
                     </Row>
-                    <div className="error-mes-box overlay-1">
+                    {/* <div className="error-mes-box overlay-1">
                       <div className="heading-error text-red">
                         <img
                           src={errorImage}
@@ -62,7 +63,7 @@ function KycFailure({ props }) {
                         <li>ID Proof</li>
                         <li>Lorem Ipsum</li>
                       </ul>
-                    </div>
+                    </div> */}
 
                     <div className="error-mes-box overlay-2">
                       <div className="heading-error text-black">
