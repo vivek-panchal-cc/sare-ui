@@ -148,6 +148,7 @@
   padding: 15px 10px 23px;
   border-radius: 8px;
   margin-bottom: 30px;
+  max-width: 100%;
 }
 
 .kyc-error-page .box {
@@ -162,18 +163,24 @@
   padding-left: 18px;
   padding-right: 18px;
 }
-
+.c-main > .container-fluid > div > .container > .container > .container ,
+.c-main > .container-fluid > div > .container > .container,
+.c-main > .container-fluid > div > .container,
+.c-main .main-section.kyc-form-page .box > .card-body,
+.c-main > .container-fluid{
+  padding: 0;
+}
 .main-section > .container {
-  max-width: 357px;
+  max-width: 480px;
   margin: 0 auto;
   width: 100%;
-  padding: 0 10px;
+  padding: 0 24px;
 }
 .main-section.enter-otp-page .input-design {
   padding: 40px 0 28px;
 }
 .main-section.enter-otp-page .otp-input {
-  margin: 10px;
+  margin: 10px 0px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -189,7 +196,23 @@
   font-weight: 700;
   color: black;
 }
-
+.main-section.enter-otp-page .card-header{
+  background: transparent;
+  border: none;
+  margin-top: 30px;
+}
+.main-section.enter-otp-page .card-body{
+  padding: 1.25rem 0px;
+}
+.main-section.enter-otp-page .card-body .otp-input input{
+    width: 60px !important;
+    height: 52px !important;
+    border: 1px solid #ECECED;
+    padding: 13px 24px;
+    border-radius: 8px;
+    font-family: 'Urbanist Bold';
+    font-weight: 700;
+}
 .main-section.enter-otp-page .resend-btn {
   color: var(--button-color);
   background-color: transparent;
@@ -695,4 +718,24 @@ body {
 .otp-mes {
   font-weight: 1000;
   color: var(--text-color);
+}
+
+
+.main-section.enter-otp-page .otp-input > div {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.main-section.enter-otp-page .card-body .otp-input input:last-child{
+  margin: 0px !important;
+}
+.main-section.enter-otp-page .card-body .otp-input input {
+  padding: 0;
+  max-width: 60px !important;
+  width: 100% !important;
+}
+@media(max-width: 360px){
+  .main-section.enter-otp-page .card-body .otp-input input {
+      height: 50px !important;
+  }
 }

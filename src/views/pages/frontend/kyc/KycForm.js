@@ -282,7 +282,7 @@ const KycForm = ({ props }) => {
     <>
       <Container>
         <Form>
-          <section className="main-section">
+          <section className="main-section kyc-form-page">
             <div className="container">
               <div className="logo-part text-center">
                 <img src={logo} alt="logo" className="mes-img"></img>

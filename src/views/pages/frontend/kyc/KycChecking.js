@@ -65,7 +65,7 @@ function KycChecking() {
     <Container>
       {isLoading && !kycFormLoading ? (
         <form>
-          <section className="main-section">
+          <section className="main-section kyc-status-page">
             <div className="container">
               <div className="logo-part text-center">
                 <img src={logo} alt="logo" className="mes-img" />
@@ -86,7 +86,7 @@ function KycChecking() {
                       className="status-img"
                     />
                   </div>
-                  <p className="light-blue" style={{ marginBottom: "-10px" }}>
+                  <p className="light-blue">
                     Please wait...
                   </p>
                 </CardBody>

@@ -42,7 +42,7 @@ function KycFailure({ props }) {
                       <p className="light-blue margin-failure">
                         {/* Please upload all the following documents and fulfill
                         details provided in comments */}
-                        Please check the below details provide by SARE
+                        Please check the below details provided by SARE
                       </p>
                     </Row>
                     {/* <div className="error-mes-box overlay-1">

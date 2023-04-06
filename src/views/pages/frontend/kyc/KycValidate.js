@@ -13,6 +13,7 @@ import {
   CardBody,
   CardTitle,
   Form,
+  CardHeader,
 } from "reactstrap";
 import KycChecking from "./KycChecking";
 import { useRouteMatch, useParams } from "react-router-dom";
@@ -23,7 +24,7 @@ function KycValidate() {
   const [otp, setOTP] = useState("");
   const [isOtpValid, setIsOtpValid] = useState(false);
   const [otpAttempted, setOtpAttempted] = useState(false);
-  const [countdown, setCountdown] = useState(120); // in seconds
+  const [countdown, setCountdown] = useState(60); // in seconds
   const [resendDisabled, setResendDisabled] = useState(false);
   const [isResendDisabled, setIsResendDisabled] = useState(false);
   const { mobile } = useParams();
@@ -91,7 +92,7 @@ function KycValidate() {
   //  While hitting on resendOTP it will throw an error so resolved it in API Call (Changes made by Vivek Panchal)
   function resendOtp() {
     const postData = { kyc_token: mobile };
-    setCountdown(120);
+    setCountdown(60);
     setIsResendDisabled(true);
     kycService
       .resendOtp(postData)
@@ -120,14 +121,14 @@ function KycValidate() {
                   <img src={logo} alt="logo" className="mes-img" />
                 </div>
                 <div className="box text-center">
-                  <CardBody>
+                  <CardHeader>
                     <CardTitle className="sub-heading text-center text-color">
                       <b>Please enter OTP sent to registered phone number</b>
                     </CardTitle>
+                  </CardHeader>
                     <CardBody>
                       <br />
-                      <Row className="otp-input">
-                        <Col md="6" className="common-size">
+                      <div className="otp-input">
                           <OTPInput
                             value={otp}
                             onChange={setOTP}
@@ -136,8 +137,7 @@ function KycValidate() {
                             otpType="number"
                             disabled={false}
                           />
-                        </Col>
-                      </Row>
+                      </div>
                       <br />
                       <Row className="message-form">
                         {otp.length !== 4 ? (
@@ -200,6 +200,7 @@ function KycValidate() {
                         {otp.length === 4 && (
                           // <Col>
                           <Button
+                          style={{marginTop: "20px"}}
                             className="btn-design"
                             color="info"
                             type="submit"
@@ -211,8 +212,7 @@ function KycValidate() {
                           // </Col>
                         )}
                         {/* <Col> */}
-                        <Button
-                          style={{ marginBottom: "-30px" }}
+                        <Button                          
                           className="edit-btn-design"
                           color="info"
                           type="reset"
@@ -224,7 +224,6 @@ function KycValidate() {
                         {/* </Col> */}
                       </div>
                     </CardBody>
-                  </CardBody>
                 </div>
               </div>
             </section>
