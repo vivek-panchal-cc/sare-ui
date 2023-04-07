@@ -107,9 +107,9 @@ class KycRequest_list extends React.Component {
           const multiaction =
             result.length > 0
               ? result.reduce(
-                  (acc, page) => ({ ...acc, [page._id]: false }),
-                  {}
-                )
+                (acc, page) => ({ ...acc, [page._id]: false }),
+                {}
+              )
               : {};
 
           this.setState({
@@ -317,6 +317,7 @@ class KycRequest_list extends React.Component {
                           name="search_account_number"
                           value={this.state.fields.search_account_number}
                           onChange={this.handleChange}
+                          onKeyPress={(e) => { if (e.key === "Enter") { this.handleSearch(); }}}
                         />
                       </CCol>
                     </CFormGroup>
@@ -331,6 +332,7 @@ class KycRequest_list extends React.Component {
                           name="mobile_number"
                           value={this.state.fields.mobile_number}
                           onChange={this.handleChange}
+                          onKeyPress={(e) => { if (e.key === "Enter") { this.handleSearch(); }}}
                         />
                       </CCol>
                     </CFormGroup>
@@ -345,6 +347,7 @@ class KycRequest_list extends React.Component {
                           name="name"
                           value={this.state.fields.name}
                           onChange={this.handleChange}
+                          onKeyPress={(e) => { if (e.key === "Enter") { this.handleSearch(); }}}
                         />
                       </CCol>
                     </CFormGroup>
@@ -353,7 +356,7 @@ class KycRequest_list extends React.Component {
                     <CFormGroup row>
                       <CCol xs="12">
                         <CLabel htmlFor="name">Status</CLabel>
-                        <CSelect                          
+                        <CSelect
                           id="name"
                           placeholder="Search Status"
                           name="status"
@@ -361,13 +364,9 @@ class KycRequest_list extends React.Component {
                           onChange={this.handleChange}
                         >
                           <option value="">-- Select Status --</option>
-                          <option value="pending">Pending</option>
-                          <option value="inprogress">In Progress</option>
-                          <option value="rejected">Rejected</option>
+                          <option value="pending_approval">Pending Approval</option>
                           <option value="approved">Approved</option>
-                          <option value="pending_approval">
-                            Pending Approval
-                          </option>
+                          <option value="rejected">Rejected</option>
                         </CSelect>
                       </CCol>
                     </CFormGroup>
@@ -427,16 +426,16 @@ class KycRequest_list extends React.Component {
                             </span>
                             {this.state.fields.sort_field !==
                               "account_number" && (
-                              <FontAwesomeIcon icon={faSort} />
-                            )}
+                                <FontAwesomeIcon icon={faSort} />
+                              )}
                             {this.state.fields.sort_dir === "asc" &&
                               this.state.fields.sort_field ===
-                                "account_number" && (
+                              "account_number" && (
                                 <FontAwesomeIcon icon={faSortUp} />
                               )}
                             {this.state.fields.sort_dir === "desc" &&
                               this.state.fields.sort_field ===
-                                "account_number" && (
+                              "account_number" && (
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
@@ -451,16 +450,16 @@ class KycRequest_list extends React.Component {
                             </span>
                             {this.state.fields.sort_field !==
                               "mobile_number" && (
-                              <FontAwesomeIcon icon={faSort} />
-                            )}
+                                <FontAwesomeIcon icon={faSort} />
+                              )}
                             {this.state.fields.sort_dir === "asc" &&
                               this.state.fields.sort_field ===
-                                "mobile_number" && (
+                              "mobile_number" && (
                                 <FontAwesomeIcon icon={faSortUp} />
                               )}
                             {this.state.fields.sort_dir === "desc" &&
                               this.state.fields.sort_field ===
-                                "mobile_number" && (
+                              "mobile_number" && (
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
@@ -486,10 +485,10 @@ class KycRequest_list extends React.Component {
                         </th>
                         {(_canAccess("cms_pages", "update") ||
                           _canAccess("cms_pages", "delete")) && (
-                          <>
-                            <th>Action</th>
-                          </>
-                        )}
+                            <>
+                              <th>Action</th>
+                            </>
+                          )}
                       </tr>
                     </thead>
                     <tbody>
@@ -500,7 +499,7 @@ class KycRequest_list extends React.Component {
                             {/* <td>  {_canAccess('cms_pages', 'view') && <CLink to={`/admin/cms_pages/detailview/${u._id}`}>{u.title}</CLink>}</td> */}
                             <td>{u.account_number}</td>
                             <td>{u.mobile_number}</td>
-                            <td>{u.name}</td>                            
+                            <td>{u.name}</td>
                             <td>{capitalize(u.status.replaceAll("_", " "))}</td>
                             {_canAccess("cms_pages", "update") && (
                               <>
