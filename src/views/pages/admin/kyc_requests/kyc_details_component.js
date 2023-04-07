@@ -31,6 +31,7 @@ import { globalConstants } from "../../../../constants/admin/global.constants";
 import { notify, history } from "../../../../_helpers/index";
 import CIcon from "@coreui/icons-react";
 import { kycRequestService } from "../../../../services/admin/kyc_request.service";
+import FileSaver, { saveAs } from 'file-saver';
 
 const KycDetailComponent = (props) => {
   const [isKycModalOpen, setKycModalOpen] = useState(false);
@@ -73,6 +74,14 @@ const KycDetailComponent = (props) => {
   const handleStatusChange = (e) => {
     setStatus(e.target.value);
   };
+
+  function downloadFile(url) {
+    if (url) {
+      const urlArray = url.split("/");
+      const fileName = urlArray[urlArray.length - 1];
+      FileSaver.saveAs(url, fileName);
+    }
+  }
 
   return (
     <>
@@ -161,33 +170,33 @@ const KycDetailComponent = (props) => {
                       )}
                       {(props.kycDetail.status === "pending" ||
                         props.kycDetail.status === "inprogress") && (
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                          }}
-                        >
-                          <b>Status :&nbsp;</b>{" "}
-                          {(() => {
-                            switch (props.kycDetail.status) {
-                              case "pending":
-                                return "Pending";
-                              case "inprogress":
-                                return "In Progress";
-                              case "rejected":
-                                return "Rejected";
-                              case "approved":
-                                return "Approved";
-                              case "pending_approval":
-                                return "Pending Approval";
-                              default:
-                                return "";
-                            }
-                          })()}
-                        </div>
-                      )}
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                            }}
+                          >
+                            <b>Status :&nbsp;</b>{" "}
+                            {(() => {
+                              switch (props.kycDetail.status) {
+                                case "pending":
+                                  return "Pending";
+                                case "inprogress":
+                                  return "In Progress";
+                                case "rejected":
+                                  return "Rejected";
+                                case "approved":
+                                  return "Approved";
+                                case "pending_approval":
+                                  return "Pending Approval";
+                                default:
+                                  return "";
+                              }
+                            })()}
+                          </div>
+                        )}
                       {props.kycDetail.status === "approved" ||
-                      props.kycDetail.status === "rejected" ? (
+                        props.kycDetail.status === "rejected" ? (
                         <div
                           style={{
                             display: "flex",
@@ -282,7 +291,8 @@ const KycDetailComponent = (props) => {
                                   <CLink
                                     className="btn  btn-md btn-primary"
                                     aria-current="page"
-                                    href={`${file.file}`}
+                                    // href={`${file.file}`}
+                                    onClick={() => downloadFile(file.file)}
                                   >
                                     <CIcon name="cil-cloud-download"></CIcon>
                                     <h6>ID Number : {file.id_number}</h6>
