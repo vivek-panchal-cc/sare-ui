@@ -176,8 +176,7 @@ class Login extends React.Component {
                       <p>
                         <img
                           src={
-                            require("../../../../assets/img/white-cc-logo-fw.png")
-                              .default
+                            require('assets/img/logo.svg').default
                           }
                           alt="Logo"
                           className="login-cc-logo-style"
