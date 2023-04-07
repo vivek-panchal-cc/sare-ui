@@ -95,8 +95,7 @@ class KycRequest_list extends React.Component {
         // Add a short delay before resolving the promise
         return new Promise((resolve) => setTimeout(() => resolve(res), 0));
       })
-      .then((res) => {
-        console.log("Res", res);
+      .then((res) => {        
         this.setState({ loading: false }); // Set loading to false after the response is received
 
         if (!res.success) {

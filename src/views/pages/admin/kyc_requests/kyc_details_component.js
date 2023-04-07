@@ -31,7 +31,7 @@ import { globalConstants } from "../../../../constants/admin/global.constants";
 import { notify, history } from "../../../../_helpers/index";
 import CIcon from "@coreui/icons-react";
 import { kycRequestService } from "../../../../services/admin/kyc_request.service";
-import FileSaver, { saveAs } from 'file-saver';
+import FileSaver, { saveAs } from "file-saver";
 
 const KycDetailComponent = (props) => {
   const [isKycModalOpen, setKycModalOpen] = useState(false);
@@ -170,33 +170,33 @@ const KycDetailComponent = (props) => {
                       )}
                       {(props.kycDetail.status === "pending" ||
                         props.kycDetail.status === "inprogress") && (
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                            }}
-                          >
-                            <b>Status :&nbsp;</b>{" "}
-                            {(() => {
-                              switch (props.kycDetail.status) {
-                                case "pending":
-                                  return "Pending";
-                                case "inprogress":
-                                  return "In Progress";
-                                case "rejected":
-                                  return "Rejected";
-                                case "approved":
-                                  return "Approved";
-                                case "pending_approval":
-                                  return "Pending Approval";
-                                default:
-                                  return "";
-                              }
-                            })()}
-                          </div>
-                        )}
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <b>Status :&nbsp;</b>{" "}
+                          {(() => {
+                            switch (props.kycDetail.status) {
+                              case "pending":
+                                return "Pending";
+                              case "inprogress":
+                                return "In Progress";
+                              case "rejected":
+                                return "Rejected";
+                              case "approved":
+                                return "Approved";
+                              case "pending_approval":
+                                return "Pending Approval";
+                              default:
+                                return "";
+                            }
+                          })()}
+                        </div>
+                      )}
                       {props.kycDetail.status === "approved" ||
-                        props.kycDetail.status === "rejected" ? (
+                      props.kycDetail.status === "rejected" ? (
                         <div
                           style={{
                             display: "flex",
@@ -347,9 +347,7 @@ const KycDetailComponent = (props) => {
                               <tr key={index}>
                                 <td>{kyc_reason.comment}</td>
                                 <td>{capitalize(kyc_reason.comment_type)}</td>
-                                <td>
-                                  {moment(kyc_reason.created_at).format("LL")}
-                                </td>
+                                <td>{kyc_reason.created_at}</td>
                               </tr>
                             )
                           )}
