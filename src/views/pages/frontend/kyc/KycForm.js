@@ -31,19 +31,19 @@ import "../css/styles.css";
 import { flagSet } from "@coreui/icons";
 
 const KycForm = ({ props }) => {
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState(props?.res?.name);
+  const [email, setEmail] = useState(props?.res?.email);
   const [homeAddress, setHomeAddress] = useState({
-    houseNumber: "",
-    streetName: "",
-    landmark: "",
-    city: "",
-    pincode: "",
+    houseNumber: props?.res?.house_number,
+    streetName: props?.res?.street_name,
+    landmark: props?.res?.landmark,
+    city: props?.res?.city,
+    pincode: props?.res?.pincode,
   });
   const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneNumberError, setPhoneNumberError] = useState("");
-  const [idNumber, setIdNumber] = useState("");
-  const [idExpirationDate, setIdExpirationDate] = useState("");
+  const [idNumber, setIdNumber] = useState(props?.res?.kyc_files[0]?.id_number);
+  const [idExpirationDate, setIdExpirationDate] = useState(props?.res?.kyc_files[0]?.id_expiration_date);
   const [idFile, setIdFile] = useState(null);
   const [error, setError] = useState(null);
   const [editing, setEditing] = useState(false);
@@ -54,6 +54,8 @@ const KycForm = ({ props }) => {
   const { mobile, secret_key } = useParams();
   const history = useHistory();
   const alreadyRedirected = useRef(false);
+
+  console.log("idFile", idFile);
 
   let mobileNo = props?.res?.mobile_number;
   let formData = new FormData();
@@ -503,12 +505,12 @@ const KycForm = ({ props }) => {
                             fontSize: "14px",
                             fontSize: "14px",
                             marginTop: "6px",
-                            fontSize: "14px",                         
-                            marginTop: "6px",
-                            fontSize: "14px",                                                                                
                             fontSize: "14px",
                             marginTop: "6px",
-                            fontSize: "14px",                         
+                            fontSize: "14px",
+                            fontSize: "14px",
+                            marginTop: "6px",
+                            fontSize: "14px",
                             marginTop: "6px",
                             display: "block",
                             margin: "0 0 8px -10px"
