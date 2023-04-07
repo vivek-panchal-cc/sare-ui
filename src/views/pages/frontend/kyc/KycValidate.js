@@ -111,9 +111,9 @@ function KycValidate() {
   return (
     <>
       <Container>
-        {isOtpValid && !otpAttempted ? (
+        {isOtpValid && !otpAttempted ?
           <KycChecking />
-        ) : (
+         : (
           <Form onSubmit={checkOtp} onReset={handleClear}>
             <section className="main-section enter-otp-page">
               <div className="container">

@@ -19,8 +19,9 @@ function KycIndex() {
         kyc_token: mobile,
       })
       .then((res) => {
-        if (res.status === false) {
-          history.push("/kyc/failure");
+        if (res.success === false) {
+          // history.push("/kyc/failure");
+          setKycSuccess(false);
           // notify.error(res.message);
         } else {
           if (res.data.proceed_to_otp === true && res.success) {

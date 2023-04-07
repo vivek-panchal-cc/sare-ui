@@ -17,6 +17,9 @@ import {
   ModalHeader,
   ModalFooter,
 } from "reactstrap";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { format } from "date-fns";
 import { kycService } from "../../../../services/frontend/kyc.service";
 import { useParams, useHistory } from "react-router-dom";
 import { notify, setLoading } from "../../../../_helpers/index";
@@ -309,7 +312,6 @@ const KycForm = ({ props }) => {
                           style={{
                             color: "#f00",
                             fontSize: "14px",
-                            marginTop: "6px",
                             display: "block",
                           }}
                         >
@@ -333,7 +335,6 @@ const KycForm = ({ props }) => {
                           style={{
                             color: "#f00",
                             fontSize: "14px",
-                            marginTop: "6px",
                             display: "block",
                           }}
                         >
@@ -349,7 +350,6 @@ const KycForm = ({ props }) => {
                             style={{
                               color: "#f00",
                               fontSize: "14px",
-                              marginTop: "6px",
                               display: "block",
                             }}
                           >
@@ -376,7 +376,6 @@ const KycForm = ({ props }) => {
                           style={{
                             color: "#f00",
                             fontSize: "14px",
-                            marginTop: "6px",
                             display: "block",
                             margin: "-10px 0 8px 0",
                           }}
@@ -399,7 +398,6 @@ const KycForm = ({ props }) => {
                           style={{
                             color: "#f00",
                             fontSize: "14px",
-                            marginTop: "6px",
                             display: "block",
                             margin: "-10px 0 8px 0",
                           }}
@@ -422,7 +420,6 @@ const KycForm = ({ props }) => {
                           style={{
                             color: "#f00",
                             fontSize: "14px",
-                            marginTop: "6px",
                             display: "block",
                             margin: "-10px 0 8px 0",
                           }}
@@ -445,7 +442,6 @@ const KycForm = ({ props }) => {
                           style={{
                             color: "#f00",
                             fontSize: "14px",
-                            marginTop: "6px",
                             display: "block",
                             margin: "-10px 0 8px 0",
                           }}
@@ -468,7 +464,6 @@ const KycForm = ({ props }) => {
                           style={{
                             color: "#f00",
                             fontSize: "14px",
-                            marginTop: "6px",
                             display: "block",
                           }}
                         >
@@ -492,7 +487,7 @@ const KycForm = ({ props }) => {
                           style={{
                             color: "#f00",
                             fontSize: "14px",
-                            marginTop: "6px",
+                            
                             display: "block",
                             margin: "0 0 8px -10px"
                           }}
@@ -506,6 +501,9 @@ const KycForm = ({ props }) => {
                           style={{
                             color: "#f00",
                             fontSize: "14px",
+                            fontSize: "14px",
+                            marginTop: "6px",
+                            fontSize: "14px",                         
                             marginTop: "6px",
                             display: "block",
                             margin: "0 0 8px -10px"
@@ -542,21 +540,21 @@ const KycForm = ({ props }) => {
                             <>
                               {idFile.type.includes("image/") ? (
                                 <>
-                                <div className="image-upload-div position-relative">
-                                  <img
-                                    src={URL.createObjectURL(idFile)}
-                                    alt="uploaded id"
-                                    style={{ cursor: "pointer" }}
-                                  />
-                                  <span>
-                                    <a
-                                      className="view-img"
-                                      onClick={clearImage}
-                                      disabled={!editing}
-                                    >
-                                      {!editing ? "Remove Image" : ""}
-                                    </a>
-                                  </span>
+                                  <div className="image-upload-div position-relative">
+                                    <img
+                                      src={URL.createObjectURL(idFile)}
+                                      alt="uploaded id"
+                                      style={{ cursor: "pointer" }}
+                                    />
+                                    <span>
+                                      <a
+                                        className="view-img"
+                                        onClick={clearImage}
+                                        disabled={!editing}
+                                      >
+                                        {!editing ? "Remove Image" : ""}
+                                      </a>
+                                    </span>
                                   </div>
                                 </>
                               ) : idFile.type === "application/pdf" ? (
@@ -649,7 +647,6 @@ const KycForm = ({ props }) => {
                           style={{
                             color: "#f00",
                             fontSize: "14px",
-                            marginTop: "6px",
                             display: "block",
                           }}
                         >
@@ -657,7 +654,7 @@ const KycForm = ({ props }) => {
                         </span>
                       ) : null}
                     </FormGroup>
-                    <FormGroup>
+                    <div className="form-group col-xs-12">
                       <Label for="idExpirationDate">ID Expiration Date</Label>
                       <Input
                         type="date"
@@ -679,14 +676,13 @@ const KycForm = ({ props }) => {
                           style={{
                             color: "#f00",
                             fontSize: "14px",
-                            marginTop: "6px",
                             display: "block",
                           }}
                         >
                           ID Expiration Date is required
                         </span>
                       ) : null}
-                    </FormGroup>
+                    </div>
                     {editing ? (
                       <div>
                         <Button
