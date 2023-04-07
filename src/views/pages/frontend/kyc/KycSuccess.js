@@ -37,23 +37,20 @@ const KycSuccess = () => {
                     className="complete-img"
                   />
                 </div>
-                <Row>
-                  <p
-                    className="complete-heading"
-                    style={{ marginBottom: "-10px" }}
-                  >
-                    Your KYC process is complete, Please continue with the SARE
-                    app/USSD service.
+                <Row className="complete-heading text-color">
+                  <p>
+                    Your KYC process is yet to be approved.<br/>
+                    Please check later.
                   </p>
                 </Row>
-                <Button
+                {/* <Button
                   className="btn-design"
                   color="info"
                   onClick={handleButtonClick}
                   disabled={isLoading}
                 >
                   {isLoading ? "Loading..." : "Open"}
-                </Button>
+                </Button> */}
               </CardBody>
             </Form>
           </div>

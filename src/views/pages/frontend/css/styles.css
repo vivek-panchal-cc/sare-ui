@@ -466,7 +466,7 @@ body {
 }
 
 .complete-heading {
-  padding-bottom: 53px;
+  /* padding-bottom: 53px; */
   color: var(--text-color);
   margin-bottom: 10px;
   text-align: center;
@@ -712,8 +712,8 @@ body {
   text-align: center;
   display: block;
   width: 100%;
-  font-weight: 1000;
-  color: red;
+  font-weight: 600;  
+  font-family: "Plus Jakarta Sans Medium";
 }
 
 .otp-mes {

@@ -81,7 +81,7 @@ function KycFailure({ props }) {
                       <ul
                         className="heading-error-mes"                        
                       >
-                        {comments
+                        {comments && comments
                           .filter((reason) => reason.comment_type === "admin")
                           .map((reason) => (
                             <li key={reason.id}>{reason.comment}</li>

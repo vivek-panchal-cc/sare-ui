@@ -180,7 +180,7 @@ class KycRequest_list extends React.Component {
             name: "",
             status: "",
             totalPage: 1,
-          }
+          },
         },
         () => {
           this.getKycRequestList(this.state.fields);
@@ -317,7 +317,11 @@ class KycRequest_list extends React.Component {
                           name="search_account_number"
                           value={this.state.fields.search_account_number}
                           onChange={this.handleChange}
-                          onKeyPress={(e) => { if (e.key === "Enter") { this.handleSearch(); }}}
+                          onKeyPress={(event) => {
+                            if (event.key === "Enter") {
+                              this.handleSearch();
+                            }
+                          }}
                         />
                       </CCol>
                     </CFormGroup>
@@ -332,7 +336,11 @@ class KycRequest_list extends React.Component {
                           name="mobile_number"
                           value={this.state.fields.mobile_number}
                           onChange={this.handleChange}
-                          onKeyPress={(e) => { if (e.key === "Enter") { this.handleSearch(); }}}
+                          onKeyPress={(event) => {
+                            if (event.key === "Enter") {
+                              this.handleSearch();
+                            }
+                          }}
                         />
                       </CCol>
                     </CFormGroup>
@@ -347,7 +355,11 @@ class KycRequest_list extends React.Component {
                           name="name"
                           value={this.state.fields.name}
                           onChange={this.handleChange}
-                          onKeyPress={(e) => { if (e.key === "Enter") { this.handleSearch(); }}}
+                          onKeyPress={(event) => {
+                            if (event.key === "Enter") {
+                              this.handleSearch();
+                            }
+                          }}
                         />
                       </CCol>
                     </CFormGroup>
@@ -362,6 +374,11 @@ class KycRequest_list extends React.Component {
                           name="status"
                           value={this.state.fields.status}
                           onChange={this.handleChange}
+                          onKeyPress={(event) => {
+                            if (event.key === "Enter") {
+                              this.handleSearch();
+                            }
+                          }}
                         >
                           <option value="">-- Select Status --</option>
                           <option value="pending_approval">Pending Approval</option>

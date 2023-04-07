@@ -24,12 +24,7 @@ const KycFail = () => {
                   <img src={kycfail} alt="kycfail" className="complete-img" />
                 </div>
                 <Row className="complete-heading">
-                  <p
-                    // className="complete-heading"
-                    style={{ marginBottom: "-50px" }}
-                  >
-                    Invalid Access
-                  </p>
+                  <p style={{ color: "red" }}>Invalid Access</p>
                 </Row>
                 {/* <Button
                   className="btn-design"

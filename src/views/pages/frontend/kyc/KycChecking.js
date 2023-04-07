@@ -8,6 +8,7 @@ import kycStatus from "../img/kyc-status.svg";
 import logo from "../img/logo.svg";
 import KycFailure from "./KycFailure";
 import KycForm from "./KycForm";
+import KycSuccess from "./KycSuccess";
 
 function KycChecking() {
   const [isLoading, setIsLoading] = useState(true);
@@ -16,7 +17,9 @@ function KycChecking() {
   const [remainingUploadFiles, setRemainingUploadFiles] = useState(0);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [kycFormLoading, setKycFormLoading] = useState(false);
+  const [isKycFailure, setIsKycFailure] = useState(false);
   const [kycReasons, setKycReasons] = useState([]);
+  const [statusPendingApproval, setStatusPendingApproval] = useState(false);
   const [res, setRes] = useState({});
   const { mobile, secret_key } = useParams();
 
@@ -34,6 +37,7 @@ function KycChecking() {
   }, []);
 
   // notify.success message removed after Kyc Checking and redirecting to Kyc Form (Changes made by Vivek Panchal)
+  // set state for KycSuccess form when status == pending_approval
   function getKycDetails() {
     setIsLoading(true);
     kycService
@@ -46,12 +50,15 @@ function KycChecking() {
         if (!success) {
           notify.error(message);
         } else if (data.kyc_status === "pending") {
-          // notify.success(message);
           setKycFormLoading(true);
         } else if (data.kyc_status === "rejected") {
-          // notify.success(message);
           setKycReasons(data);
+          setIsKycFailure(true);
           setIsLoading(false);
+        } else if (data.kyc_status === "pending_approval") {          
+          setIsLoading(false);
+          setKycFormLoading(true);
+          setStatusPendingApproval(true);
         }
         setRes(data);
       })
@@ -60,6 +67,49 @@ function KycChecking() {
         setIsLoading(false);
       });
   }
+
+  // if( isLoading && !kycFormLoading ){
+  //   return (<form>
+  //     <section className="main-section kyc-status-page">
+  //       <div className="container">
+  //         <div className="logo-part text-center">
+  //           <img src={logo} alt="logo" className="mes-img" />
+  //         </div>
+  //         <div className="box text-center">
+  //           <CardBody>
+  //             <CardTitle className="sub-heading">
+  //               <b>
+  //                 Checking KYC <br />
+  //                 Status
+  //               </b>
+  //             </CardTitle>
+  //             <div className="loader-main">
+  //               <div className="sub-loader" />
+  //               <img
+  //                 src={kycStatus}
+  //                 alt="kycStatus"
+  //                 className="status-img"
+  //               />
+  //             </div>
+  //             <p className="light-blue">Please wait...</p>
+  //           </CardBody>
+  //         </div>
+  //       </div>
+  //     </section>
+  //   </form>)
+  // }
+
+  // if (isLoading && kycFormLoading) {
+  //   return (<KycForm props={{ res }} />)
+  // }
+
+  // if (!isLoading && isKycFailure) {    
+  //   return (<KycFailure props={{ kycReasons }} />)
+  // }
+
+  // if (statusPendingApproval) {
+  //    return (<KycSuccess />)
+  // }
 
   return (
     <Container>
@@ -86,9 +136,7 @@ function KycChecking() {
                       className="status-img"
                     />
                   </div>
-                  <p className="light-blue">
-                    Please wait...
-                  </p>
+                  <p className="light-blue">Please wait...</p>
                 </CardBody>
               </div>
             </div>
@@ -96,8 +144,10 @@ function KycChecking() {
         </form>
       ) : isLoading && kycFormLoading ? (
         <KycForm props={{ res }} />
-      ) : !isLoading ? (
+      ) : !isLoading && isKycFailure ? (
         <KycFailure props={{ kycReasons }} />
+      ) : statusPendingApproval ? (
+        <KycSuccess />
       ) : null}
     </Container>
   );
