@@ -487,7 +487,6 @@ const KycForm = ({ props }) => {
                           style={{
                             color: "#f00",
                             fontSize: "14px",
-                            
                             display: "block",
                             margin: "0 0 8px -10px"
                           }}
@@ -501,6 +500,12 @@ const KycForm = ({ props }) => {
                           style={{
                             color: "#f00",
                             fontSize: "14px",
+                            fontSize: "14px",
+                            fontSize: "14px",
+                            marginTop: "6px",
+                            fontSize: "14px",                         
+                            marginTop: "6px",
+                            fontSize: "14px",                                                                                
                             fontSize: "14px",
                             marginTop: "6px",
                             fontSize: "14px",                         
@@ -661,7 +666,6 @@ const KycForm = ({ props }) => {
                         name="idExpirationDate"
                         id="idExpirationDate"
                         value={idExpirationDate}
-                        placeholder="DD/MM/YYYY"
                         onChange={handleIdExpirationDateChange}
                         style={{ cursor: "pointer" }}
                         disabled={editing}
