@@ -32,7 +32,6 @@ class Dashboard extends React.Component {
 
   getDashboardDetails() {
     dashboardService.getDetails().then(res => {
-      console.log("dashboard", res);
       if (res.status === false) {
         notify.error(res.message);
       } else {
