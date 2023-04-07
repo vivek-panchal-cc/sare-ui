@@ -48,11 +48,11 @@ const KycDetailComponent = (props) => {
 
   const kycDetailId = props.kycDetail.id;
 
-  useEffect(() => {
+ /*  useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
     }, 2000);
-  }, []);
+  }, []); */
 
   function handleSubmit() {
     kycRequestService
@@ -93,25 +93,19 @@ const KycDetailComponent = (props) => {
               <CCardHeader>
                 <h5>Kyc Details</h5>
               </CCardHeader>
-              {isLoading ? (
-                <CCol sm="6">
-                  <b>&nbsp;Loading...</b>
-                  <br />
-                </CCol>
-              ) : (
                 <CCardBody>
                   <CRow>
-                    <CCol sm="6">
+                    <CCol sm="12">
                       <b>Account Number :</b> {props.kycDetail.account_number}
                       <br />
                       <b>Name :</b> {props.kycDetail.name}
                     </CCol>
-                    <CCol sm="6">
+                    <CCol sm="12">
                       <b>Email :</b> {props.kycDetail.email}
                       <br />
                       <b>Phone Number :</b> {props.kycDetail.mobile_number}
                     </CCol>
-                    <CCol sm="6">
+                    <CCol sm="12">
                       <div style={{ display: "flex", alignItems: "center" }}>
                         <b>Home Address :&nbsp;</b>{" "}
                         {props.kycDetail.house_number
@@ -253,7 +247,6 @@ const KycDetailComponent = (props) => {
                   </CCol> */}
                   {/* </CRow> */}
                 </CCardBody>
-              )}
             </CCard>
           </CCol>
         </CRow>
@@ -264,12 +257,6 @@ const KycDetailComponent = (props) => {
               <CCardHeader>
                 <h5>Kyc Files</h5>
               </CCardHeader>
-              {isLoading ? (
-                <CCol sm="6">
-                  <b>&nbsp;Loading...</b>
-                  <br />
-                </CCol>
-              ) : (
                 <CCardBody>
                   <div className="position-relative table-responsive">
                     <table className="table">
@@ -314,7 +301,6 @@ const KycDetailComponent = (props) => {
                     </table>
                   </div>
                 </CCardBody>
-              )}
             </CCard>
           </CCol>
         </CRow>
@@ -324,12 +310,6 @@ const KycDetailComponent = (props) => {
               <CCardHeader>
                 <h5>Kyc Reasons</h5>
               </CCardHeader>
-              {isLoading ? (
-                <CCol sm="6">
-                  <b>&nbsp;Loading...</b>
-                  <br />
-                </CCol>
-              ) : (
                 <CCardBody>
                   <div className="position-relative table-responsive">
                     <table className="table">
@@ -362,7 +342,6 @@ const KycDetailComponent = (props) => {
                     </table>
                   </div>
                 </CCardBody>
-              )}
             </CCard>
           </CCol>
         </CRow>

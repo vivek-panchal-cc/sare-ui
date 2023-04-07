@@ -4,6 +4,7 @@ import React from 'react'
 import { notify } from '../../../../_helpers';
 import { kycRequestService } from '../../../../services/admin'
 import KycDetailComponent from './kyc_details_component';
+import './Draft.css'
 class Kyc_Requests_Detail extends React.Component {
 
   /*********** Define Initial Satte ****************/
