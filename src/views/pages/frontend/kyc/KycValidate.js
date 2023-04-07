@@ -166,12 +166,12 @@ function KycValidate() {
                               otpAttempted &&
                               !isOtpValid && (
                                 <p className="error-mes red-color">
-                                  <img
+                                  {/* <img
                                     src={errorImage}
                                     alt="check_circle"
                                     className="mes-img"
                                   />
-                                  Incorrect OTP. Please try again.
+                                  Incorrect OTP. Please try again. */}
                                 </p>
                               )
                             )}

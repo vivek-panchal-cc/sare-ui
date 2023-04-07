@@ -712,7 +712,7 @@ body {
   text-align: center;
   display: block;
   width: 100%;
-  font-weight: 600;  
+  font-weight: 500;  
   font-family: "Plus Jakarta Sans Medium";
 }
 
@@ -760,6 +760,14 @@ body {
 
 .pencil-btn:hover {
   cursor: pointer;
+}
+
+.eye-icon svg {
+  color: #666;
+}
+
+.eye-icon:hover svg{
+  color: #444;
 }
 
 @media(max-width: 360px){
