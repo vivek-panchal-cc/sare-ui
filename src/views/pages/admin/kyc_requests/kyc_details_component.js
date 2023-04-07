@@ -282,7 +282,7 @@ const KycDetailComponent = (props) => {
                                   <CLink
                                     className="btn  btn-md btn-primary"
                                     aria-current="page"
-                                    to={`${file.file}`}
+                                    href={`${file.file}`}
                                   >
                                     <CIcon name="cil-cloud-download"></CIcon>
                                     <h6>ID Number : {file.id_number}</h6>
