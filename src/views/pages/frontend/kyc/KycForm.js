@@ -40,11 +40,15 @@ const KycForm = ({ props }) => {
     city: props?.res?.city,
     pincode: props?.res?.pincode,
   });
+
   const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneNumberError, setPhoneNumberError] = useState("");
   const [idNumber, setIdNumber] = useState(props?.res?.kyc_files[0]?.id_number);
-  const [idExpirationDate, setIdExpirationDate] = useState(props?.res?.kyc_files[0]?.id_expiration_date);
-  const [idFile, setIdFile] = useState(null);
+  const [idExpirationDate, setIdExpirationDate] = useState(
+    props?.res?.kyc_files[0]?.id_expiration_date
+  );
+  const [idFile, setIdFile] = useState(props?.res?.kyc_files[0]?.file);
+  const [isImg, setIsImg] = useState(false);
   const [error, setError] = useState(null);
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -156,6 +160,21 @@ const KycForm = ({ props }) => {
     }
   };
 
+  const handleUploadedPdf = (url, event) => {
+    setLoading(true);
+    event.preventDefault();
+    if (url) {
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_blank';
+      link.download = url.substring(url.lastIndexOf('/') + 1);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setLoading(false);
+    }
+  };
+
   const handleIdFileChange = (event) => {
     const file = event.target.files[0];
     if (
@@ -262,10 +281,15 @@ const KycForm = ({ props }) => {
       formData.append("city", homeAddress.city);
       formData.append("pincode", homeAddress.pincode);
       formData.append("phone_number", mobileNo);
-      formData.append("file", idFile);
+      // formData.append("file", idFile);
       formData.append("id_number", idNumber);
       formData.append("id_expiration_date", idExpirationDate);
-
+      if (typeof idFile === 'string'){
+        // formData.delete('file');
+        formData.append("file", null);
+      } else {
+        formData.append("file", idFile);
+      }      
       try {
         setLoading(true);
         const res = await kycService.store(formData);
@@ -282,33 +306,75 @@ const KycForm = ({ props }) => {
       }
     }
   };
+  let imgType;
+  if (typeof idFile == "string") {    
+    let img = idFile?.split(".");
+    imgType = img?.includes("jpeg", "jpg", "png");
+  }
 
   return (
     <>
       <Container>
-        <Form>
-          <section className="main-section kyc-form-page">
-            <div className="container">
-              <div className="logo-part text-center">
-                <img src={logo} alt="logo" className="mes-img"></img>
-              </div>
-              <div className="box text-center">
-                <CardBody>
-                  <CardTitle className="kyc-form-sub-heading">
-                    <b>Enter KYC Details</b>
-                  </CardTitle>
-                  <Form className="form-group">
-                    <FormGroup>
-                      <Label>Full Name</Label>
-                      <Input
-                        type="text"
-                        name="full_name"
-                        value={fullName}
-                        onChange={handleFullNameChange}
-                        placeholder="Full Name"
-                        disabled={editing}
-                      />
-                      {error === 0 && !fullName ? (
+        <section className="main-section kyc-form-page">
+          <div className="container">
+            <div className="logo-part text-center">
+              <img src={logo} alt="logo" className="mes-img"></img>
+            </div>
+            <div className="box text-center">
+              <CardBody>
+                <CardTitle className="kyc-form-sub-heading">
+                  <b>Enter KYC Details</b>
+                </CardTitle>
+                <Form className="form-group">
+                  <FormGroup>
+                    <Label>Full Name</Label>
+                    <Input
+                      type="text"
+                      name="full_name"
+                      value={fullName}
+                      onChange={handleFullNameChange}
+                      placeholder="Full Name"
+                      disabled={editing}
+                    />
+                    {error === 0 && !fullName ? (
+                      <span
+                        className="font-recia"
+                        style={{
+                          color: "#f00",
+                          fontSize: "14px",
+                          display: "block",
+                        }}
+                      >
+                        Full Name is required
+                      </span>
+                    ) : null}
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>Email</Label>
+                    <Input
+                      type="email"
+                      name="email"
+                      value={email}
+                      onChange={handleEmailChange}
+                      placeholder="Email"
+                      disabled={editing}
+                    />
+                    {error === 0 && !validateEmail(email) && (
+                      <span
+                        className="font-recia"
+                        style={{
+                          color: "#f00",
+                          fontSize: "14px",
+                          display: "block",
+                        }}
+                      >
+                        Email field is required
+                      </span>
+                    )}
+                    {error === 2 &&
+                      error !== null &&
+                      email !== "" &&
+                      !validateEmail(email) && (
                         <span
                           className="font-recia"
                           style={{
@@ -317,173 +383,135 @@ const KycForm = ({ props }) => {
                             display: "block",
                           }}
                         >
-                          Full Name is required
-                        </span>
-                      ) : null}
-                    </FormGroup>
-                    <FormGroup>
-                      <Label>Email</Label>
-                      <Input
-                        type="email"
-                        name="email"
-                        value={email}
-                        onChange={handleEmailChange}
-                        placeholder="Email"
-                        disabled={editing}
-                      />
-                      {error === 0 && !validateEmail(email) && (
-                        <span
-                          className="font-recia"
-                          style={{
-                            color: "#f00",
-                            fontSize: "14px",
-                            display: "block",
-                          }}
-                        >
-                          Email field is required
+                          Email is not in the correct format
+                          <br />
+                          (eg. abc@abc.com)
                         </span>
                       )}
-                      {error === 2 &&
-                        error !== null &&
-                        email !== "" &&
-                        !validateEmail(email) && (
-                          <span
-                            className="font-recia"
-                            style={{
-                              color: "#f00",
-                              fontSize: "14px",
-                              display: "block",
-                            }}
-                          >
-                            Email is not in the correct format
-                            <br />
-                            (eg. abc@abc.com)
-                          </span>
-                        )}
-                    </FormGroup>
-                    <FormGroup>
-                      <Label>Home Address</Label>
-                      <Input
-                        style={{ marginBottom: "10px" }}
-                        type="text"
-                        name="houseNumber"
-                        value={homeAddress.houseNumber}
-                        onChange={handleHomeAddressChange}
-                        placeholder="House Number"
-                        disabled={editing}
-                      />
-                      {error === 0 && !homeAddress.houseNumber ? (
-                        <span
-                          className="font-recia"
-                          style={{
-                            color: "#f00",
-                            fontSize: "14px",
-                            display: "block",
-                            margin: "-10px 0 8px 0",
-                          }}
-                        >
-                          House Number is required
-                        </span>
-                      ) : null}
-                      <Input
-                        style={{ marginBottom: "10px" }}
-                        type="text"
-                        name="streetName"
-                        value={homeAddress.streetName}
-                        onChange={handleHomeAddressChange}
-                        placeholder="Street Name"
-                        disabled={editing}
-                      />
-                      {error === 0 && !homeAddress.streetName ? (
-                        <span
-                          className="font-recia"
-                          style={{
-                            color: "#f00",
-                            fontSize: "14px",
-                            display: "block",
-                            margin: "-10px 0 8px 0",
-                          }}
-                        >
-                          Street Name is required
-                        </span>
-                      ) : null}
-                      <Input
-                        style={{ marginBottom: "10px" }}
-                        type="text"
-                        name="landmark"
-                        value={homeAddress.landmark}
-                        onChange={handleHomeAddressChange}
-                        placeholder="Landmark"
-                        disabled={editing}
-                      />
-                      {error === 0 && !homeAddress.landmark ? (
-                        <span
-                          className="font-recia"
-                          style={{
-                            color: "#f00",
-                            fontSize: "14px",
-                            display: "block",
-                            margin: "-10px 0 8px 0",
-                          }}
-                        >
-                          Landmark is required
-                        </span>
-                      ) : null}
-                      <Input
-                        style={{ marginBottom: "10px" }}
-                        type="text"
-                        name="city"
-                        value={homeAddress.city}
-                        onChange={handleHomeAddressChange}
-                        placeholder="City"
-                        disabled={editing}
-                      />
-                      {error === 0 && !homeAddress.city ? (
-                        <span
-                          className="font-recia"
-                          style={{
-                            color: "#f00",
-                            fontSize: "14px",
-                            display: "block",
-                            margin: "-10px 0 8px 0",
-                          }}
-                        >
-                          City is required
-                        </span>
-                      ) : null}
-                      <Input
-                        type="number"
-                        name="pincode"
-                        value={homeAddress.pincode}
-                        onChange={handleHomeAddressChange}
-                        placeholder="Pincode"
-                        disabled={editing}
-                        min={1}
-                      />
-                      {error === 0 && !homeAddress.pincode ? (
-                        <span
-                          className="font-recia"
-                          style={{
-                            color: "#f00",
-                            fontSize: "14px",
-                            display: "block",
-                          }}
-                        >
-                          PinCode is required
-                        </span>
-                      ) : null}
-                    </FormGroup>
-                    <FormGroup>
-                      <Label>Phone Number</Label>
-                      <Input
-                        type="text"
-                        name="phone_number"
-                        value={mobileNo}
-                        onChange={handlePhoneNumberChange}
-                        placeholder="Phone Number"
-                        disabled={true}
-                      />
-                      {/* {phoneNumberError && (
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>Home Address</Label>
+                    <Input
+                      style={{ marginBottom: "10px" }}
+                      type="text"
+                      name="houseNumber"
+                      value={homeAddress.houseNumber}
+                      onChange={handleHomeAddressChange}
+                      placeholder="House Number"
+                      disabled={editing}
+                    />
+                    {error === 0 && !homeAddress.houseNumber ? (
+                      <span
+                        className="font-recia"
+                        style={{
+                          color: "#f00",
+                          fontSize: "14px",
+                          display: "block",
+                          margin: "-10px 0 8px 0",
+                        }}
+                      >
+                        House Number is required
+                      </span>
+                    ) : null}
+                    <Input
+                      style={{ marginBottom: "10px" }}
+                      type="text"
+                      name="streetName"
+                      value={homeAddress.streetName}
+                      onChange={handleHomeAddressChange}
+                      placeholder="Street Name"
+                      disabled={editing}
+                    />
+                    {error === 0 && !homeAddress.streetName ? (
+                      <span
+                        className="font-recia"
+                        style={{
+                          color: "#f00",
+                          fontSize: "14px",
+                          display: "block",
+                          margin: "-10px 0 8px 0",
+                        }}
+                      >
+                        Street Name is required
+                      </span>
+                    ) : null}
+                    <Input
+                      style={{ marginBottom: "10px" }}
+                      type="text"
+                      name="landmark"
+                      value={homeAddress.landmark}
+                      onChange={handleHomeAddressChange}
+                      placeholder="Landmark"
+                      disabled={editing}
+                    />
+                    {error === 0 && !homeAddress.landmark ? (
+                      <span
+                        className="font-recia"
+                        style={{
+                          color: "#f00",
+                          fontSize: "14px",
+                          display: "block",
+                          margin: "-10px 0 8px 0",
+                        }}
+                      >
+                        Landmark is required
+                      </span>
+                    ) : null}
+                    <Input
+                      style={{ marginBottom: "10px" }}
+                      type="text"
+                      name="city"
+                      value={homeAddress.city}
+                      onChange={handleHomeAddressChange}
+                      placeholder="City"
+                      disabled={editing}
+                    />
+                    {error === 0 && !homeAddress.city ? (
+                      <span
+                        className="font-recia"
+                        style={{
+                          color: "#f00",
+                          fontSize: "14px",
+                          display: "block",
+                          margin: "-10px 0 8px 0",
+                        }}
+                      >
+                        City is required
+                      </span>
+                    ) : null}
+                    <Input
+                      type="number"
+                      name="pincode"
+                      value={homeAddress.pincode}
+                      onChange={handleHomeAddressChange}
+                      placeholder="Pincode"
+                      disabled={editing}
+                      min={1}
+                    />
+                    {error === 0 && !homeAddress.pincode ? (
+                      <span
+                        className="font-recia"
+                        style={{
+                          color: "#f00",
+                          fontSize: "14px",
+                          display: "block",
+                        }}
+                      >
+                        PinCode is required
+                      </span>
+                    ) : null}
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>Phone Number</Label>
+                    <Input
+                      type="text"
+                      name="phone_number"
+                      value={mobileNo}
+                      onChange={handlePhoneNumberChange}
+                      placeholder="Phone Number"
+                      disabled={true}
+                    />
+                    {/* {phoneNumberError && (
                         <span
                           className="font-recia"
                           style={{
@@ -501,17 +529,7 @@ const KycForm = ({ props }) => {
                           className="font-recia"
                           style={{
                             color: "#f00",
-                            fontSize: "14px",
-                            fontSize: "14px",
-                            fontSize: "14px",
-                            marginTop: "6px",
-                            fontSize: "14px",
-                            marginTop: "6px",
-                            fontSize: "14px",
-                            fontSize: "14px",
-                            marginTop: "6px",
-                            fontSize: "14px",
-                            marginTop: "6px",
+                            fontSize: "14px",                            
                             display: "block",
                             margin: "0 0 8px -10px"
                           }}
@@ -519,217 +537,265 @@ const KycForm = ({ props }) => {
                           Phone number is required
                         </span>
                       ) : null} */}
-                    </FormGroup>
-                    <FormGroup>
-                      <Label for="idFile">Copy of ID</Label>
-                      <div className="file-upload-design position-relative">
-                        <div className="upload-part">
-                          {!idFile ? (
-                            <>
-                              <div style={{ marginRight: "10px" }}>
-                                <img
-                                  src={uploadKYC}
-                                  alt="upload"
-                                  className="upload-svg"
-                                />
-                              </div>
-                              <strong>Upload</strong>
-                              <Input
-                                type="file"
-                                name="idFile"
-                                id="idFile"
-                                accept="image/*, application/pdf"
-                                onChange={handleIdFileChange}
-                                disabled={editing}
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="idFile">Copy of ID</Label>
+                    <div className="file-upload-design position-relative">
+                      <div className="upload-part">
+                        {!idFile ? (
+                          <>
+                            <div style={{ marginRight: "10px" }}>
+                              <img
+                                src={uploadKYC}
+                                alt="upload"
+                                className="upload-svg"
                               />
-                            </>
-                          ) : idFile instanceof File ? (
-                            <>
-                              {idFile.type.includes("image/") ? (
-                                <>
-                                  <div className="image-upload-div position-relative">
-                                    <img
-                                      src={URL.createObjectURL(idFile)}
-                                      alt="uploaded id"
-                                      style={{ cursor: "pointer" }}
-                                    />
-                                    <span>
-                                      <a
-                                        className="view-img"
-                                        onClick={clearImage}
-                                        disabled={!editing}
-                                      >
-                                        {!editing ? "Remove Image" : ""}
-                                      </a>
-                                    </span>
-                                  </div>
-                                </>
-                              ) : idFile.type === "application/pdf" ? (
-                                <>
+                            </div>
+                            <strong>Upload</strong>
+                            <Input
+                              type="file"
+                              name="idFile"
+                              id="idFile"
+                              accept="image/*, application/pdf"
+                              onChange={handleIdFileChange}
+                              disabled={editing}
+                            />
+                          </>
+                        ) : idFile instanceof File ? (
+                          <>
+                            {idFile.type.includes("image/") ? (
+                              <>
+                                <div className="image-upload-div position-relative">
+                                  <img
+                                    src={URL.createObjectURL(idFile)}
+                                    alt="uploaded id"
+                                    style={{ cursor: "pointer" }}
+                                  />
                                   <span>
                                     <a
-                                      className="view-pdf"
-                                      href="#"
-                                      onClick={(event) =>
-                                        handleDownloadPdf(event)
-                                      }
-                                      disabled={editing}
-                                    >
-                                      <strong>
-                                        {!editing ? "Download PDF" : ""}
-                                      </strong>
-                                    </a>
-                                  </span>
-                                  <span>
-                                    <strong>
-                                      {editing ? "PDF Uploaded" : ""}
-                                    </strong>
-                                  </span>
-                                  <span>
-                                    <a
-                                      className="view-tag"
+                                      className="view-img"
                                       onClick={clearImage}
-                                      disabled={editing}
-                                      style={{
-                                        marginBottom: "100px",
-                                        cursor: "pointer",
-                                      }}
+                                      disabled={!editing}
                                     >
-                                      {!editing ? "Remove PDF" : ""}
+                                      {!editing ? "Remove Image" : ""}
                                     </a>
                                   </span>
-                                </>
-                              ) : null}
-                            </>
-                          ) : null}
-                          {error === 0 && !idFile ? (
-                            <div className="error-message">
-                              <span
-                                className="font-recia"
-                                style={{
-                                  color: "#f00",
-                                  fontSize: "14px",
-                                }}
-                              >
-                                File is required
+                                </div>
+                              </>
+                            ) : idFile.type === "application/pdf" ? (
+                              <>
+                                <span>
+                                  <a
+                                    className="view-pdf"
+                                    href="#"
+                                    onClick={(event) =>
+                                      handleDownloadPdf(event)
+                                    }
+                                    disabled={editing}
+                                  >
+                                    <strong>
+                                      {!editing ? "Download PDF" : ""}
+                                    </strong>
+                                  </a>
+                                </span>
+                                <span>
+                                  <strong>
+                                    {editing ? "PDF Uploaded" : ""}
+                                  </strong>
+                                </span>
+                                <span>
+                                  <a
+                                    className="view-tag"
+                                    onClick={clearImage}
+                                    disabled={editing}
+                                    style={{
+                                      marginBottom: "100px",
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    {!editing ? "Remove PDF" : ""}
+                                  </a>
+                                </span>
+                              </>
+                            ) : null}
+                          </>
+                        ) : imgType ? (
+                          <>
+                            <div className="image-upload-div position-relative">
+                              <img
+                                src={idFile}
+                                alt="uploaded id"
+                                style={{ cursor: "pointer" }}
+                              />
+                              <span>
+                                <a
+                                  className="view-img"
+                                  onClick={clearImage}
+                                  disabled={!editing}
+                                >
+                                  {!editing ? "Remove Image" : ""}
+                                </a>
                               </span>
                             </div>
-                          ) : null}
-                        </div>
+                          </>
+                        ) : (
+                          <>
+                            <span>
+                              <a
+                                className="view-pdf"
+                                href={idFile}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(event) => handleUploadedPdf(idFile, event)}
+                                disabled={editing}
+                              >
+                                <strong>
+                                  {!editing ? "Download PDF" : ""}
+                                </strong>
+                              </a>
+                            </span>
+                            <span>
+                              <strong>{editing ? "PDF Uploaded" : ""}</strong>
+                            </span>
+                            <span>
+                              <a
+                                className="view-tag"
+                                onClick={clearImage}
+                                disabled={editing}
+                                style={{
+                                  marginBottom: "100px",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                {!editing ? "Remove PDF" : ""}
+                              </a>
+                            </span>
+                          </>
+                        )}
+                        {error === 0 && !idFile ? (
+                          <div className="error-message">
+                            <span
+                              className="font-recia"
+                              style={{
+                                color: "#f00",
+                                fontSize: "14px",
+                              }}
+                            >
+                              File is required
+                            </span>
+                          </div>
+                        ) : null}
                       </div>
-                    </FormGroup>
-                    <Modal
-                      isOpen={showModal}
-                      toggle={() => setShowModal(false)}
-                    >
-                      <ModalHeader toggle={() => setShowModal(false)}>
-                        Image Preview
-                      </ModalHeader>
-                      <ModalBody>
-                        <img src={selectedImageFile} alt="uploaded id" />
-                      </ModalBody>
-                      <ModalFooter>
-                        <Button
-                          color="secondary"
-                          onClick={() => setShowModal(false)}
-                        >
-                          Close
-                        </Button>
-                      </ModalFooter>
-                    </Modal>
-                    <FormGroup>
-                      <Label for="idNumber">ID Number</Label>
-                      <Input
-                        type="text"
-                        name="idNumber"
-                        id="idNumber"
-                        value={idNumber}
-                        placeholder="ID Number"
-                        onChange={handleIdNumberChange}
-                        disabled={editing}
-                      />
-                      {error === 0 && !idNumber ? (
-                        <span
-                          className="font-recia"
-                          style={{
-                            color: "#f00",
-                            fontSize: "14px",
-                            display: "block",
-                          }}
-                        >
-                          ID Number is required
-                        </span>
-                      ) : null}
-                    </FormGroup>
-                    <div className="form-group col-xs-12">
-                      <Label for="idExpirationDate">ID Expiration Date</Label>
-                      <Input
-                        type="date"
-                        name="idExpirationDate"
-                        id="idExpirationDate"
-                        value={idExpirationDate}
-                        onChange={handleIdExpirationDateChange}
-                        style={{ cursor: "pointer" }}
-                        disabled={editing}
-                        min={new Date().toISOString().split("T")[0]}
-                        onClick={(e) => {
-                          e.target.focus();
-                        }}
-                      />
-                      {error === 0 && !idExpirationDate ? (
-                        <span
-                          className="font-recia"
-                          style={{
-                            color: "#f00",
-                            fontSize: "14px",
-                            display: "block",
-                          }}
-                        >
-                          ID Expiration Date is required
-                        </span>
-                      ) : null}
                     </div>
-                    {editing ? (
-                      <div>
-                        <Button
-                          className="btn-design"
-                          color="info"
-                          onClick={() => {
-                            setLoading(true);
-                            setEditing(false);
-                            submitKYCDetails();
-                          }}
-                          disabled={loading}
-                        >
-                          Confirm Details
-                        </Button>
-                        <Button
-                          // style={{ marginBottom: "-20px" }}
-                          className="edit-btn-design"
-                          color="info"
-                          onClick={() => handleEditDetails()}
-                          disabled={loading}
-                        >
-                          Edit Details
-                        </Button>
-                      </div>
-                    ) : (
+                  </FormGroup>
+                  <Modal isOpen={showModal} toggle={() => setShowModal(false)}>
+                    <ModalHeader toggle={() => setShowModal(false)}>
+                      Image Preview
+                    </ModalHeader>
+                    <ModalBody>
+                      <img src={selectedImageFile} alt="uploaded id" />
+                    </ModalBody>
+                    <ModalFooter>
                       <Button
-                        // style={{ marginBottom: "-20px" }}
+                        color="secondary"
+                        onClick={() => setShowModal(false)}
+                      >
+                        Close
+                      </Button>
+                    </ModalFooter>
+                  </Modal>
+                  <FormGroup>
+                    <Label for="idNumber">ID Number</Label>
+                    <Input
+                      type="text"
+                      name="idNumber"
+                      id="idNumber"
+                      value={idNumber}
+                      placeholder="ID Number"
+                      onChange={handleIdNumberChange}
+                      disabled={editing}
+                    />
+                    {error === 0 && !idNumber ? (
+                      <span
+                        className="font-recia"
+                        style={{
+                          color: "#f00",
+                          fontSize: "14px",
+                          display: "block",
+                        }}
+                      >
+                        ID Number is required
+                      </span>
+                    ) : null}
+                  </FormGroup>
+                  <div className="form-group col-xs-12">
+                    <Label for="idExpirationDate">ID Expiration Date</Label>
+                    <Input
+                      type="date"
+                      name="idExpirationDate"
+                      id="idExpirationDate"
+                      value={idExpirationDate}
+                      onChange={handleIdExpirationDateChange}
+                      style={{ cursor: "pointer" }}
+                      disabled={editing}
+                      min={new Date().toISOString().split("T")[0]}
+                      onClick={(e) => {
+                        e.target.focus();
+                      }}
+                    />
+                    {error === 0 && !idExpirationDate ? (
+                      <span
+                        className="font-recia"
+                        style={{
+                          color: "#f00",
+                          fontSize: "14px",
+                          display: "block",
+                        }}
+                      >
+                        ID Expiration Date is required
+                      </span>
+                    ) : null}
+                  </div>
+                  {editing ? (
+                    <div>
+                      <Button
                         className="btn-design"
                         color="info"
-                        onClick={() => handleSubmit()}
+                        onClick={() => {
+                          setLoading(true);
+                          setEditing(false);
+                          submitKYCDetails();
+                        }}
                         disabled={loading}
                       >
-                        Submit KYC Details
+                        Confirm Details
                       </Button>
-                    )}
-                  </Form>
-                </CardBody>
-              </div>
+                      <Button
+                        // style={{ marginBottom: "-20px" }}
+                        className="edit-btn-design"
+                        color="info"
+                        onClick={() => handleEditDetails()}
+                        disabled={loading}
+                      >
+                        Edit Details
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button
+                      // style={{ marginBottom: "-20px" }}
+                      className="btn-design"
+                      color="info"
+                      onClick={() => handleSubmit()}
+                      disabled={loading}
+                    >
+                      Submit KYC Details
+                    </Button>
+                  )}
+                </Form>
+              </CardBody>
             </div>
-          </section>
-        </Form>
+          </div>
+        </section>
       </Container>
     </>
   );

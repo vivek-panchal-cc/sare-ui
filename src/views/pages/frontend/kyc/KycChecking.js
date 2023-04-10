@@ -45,8 +45,12 @@ function KycChecking() {
         kyc_token: mobile,
         mobile_key: secret_key,
       })
-      .then((response) => {
-        const { success, message, data } = response;
+      .then((response) => {        
+        let { success, message, data } = response;        
+        // if (data?.kyc_files[0]?.file) {
+        //   data.kyc_files[0].file = 'http://192.168.1.32/SARE/customer-onboard/storage/app/uploads/kyc-documents/1681113291_file (1).pdf';
+        //   // data.kyc_files[0].file = 'http://192.168.1.32/SARE/customer-onboard/storage/app/uploads/kyc-documents/1681106148_file.jpeg';        
+        // }
         if (!success) {
           notify.error(message);
         } else if (data.kyc_status === "pending") {
