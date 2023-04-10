@@ -360,7 +360,7 @@ body {
   padding: 12px 11px 17px;
   border-radius: 8px;
   overflow: hidden;
-  margin: 10px -15px 10px -15px;
+  margin: auto auto 10px auto;
 }
 
 .error-list {
