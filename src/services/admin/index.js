@@ -7,5 +7,7 @@ export * from './banner_management.service';
 export * from './site_setting.service';
 
 export * from './page.service';
+export * from './kyc_request.service';
+export * from './dashboard.service';
 
 

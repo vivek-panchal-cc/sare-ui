@@ -33,9 +33,9 @@ export const setLoading = (flag) => {
     if (flag) {
         loader.classList.add("loading");
     } else {
-        loader.classList.remove("loading");
+            loader.classList.remove("loading");
+        }
     }
-}
 
 /* Capitalized first character from string */
 export const capitalize = (s) => {

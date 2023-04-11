@@ -49,6 +49,7 @@ class User_Index extends React.Component {
       sort_field: "name",
       search_name: "",
       search_email: "",
+      mobile_number: "",
       user_group_id: "",
       _openPopup: false,
       multiaction: [],
@@ -104,6 +105,7 @@ class User_Index extends React.Component {
         sort_field: "name",
         search_name: "",
         search_email: "",
+        mobile_number: "",
         user_group_id: ""
       }, () => { this.props.getUsersList(this.state) });
 
@@ -253,6 +255,14 @@ class User_Index extends React.Component {
                 <CCol xl={3}>
                   <CFormGroup row>
                     <CCol xs="12">
+                      <CLabel htmlFor="name">Mobile</CLabel>
+                      <CInput id="name" placeholder="Search Mobile" name="mobile_number" value={this.state.mobile_number} onChange={this.handleChange} />
+                    </CCol>
+                  </CFormGroup>
+                </CCol>
+                <CCol xl={3}>
+                  <CFormGroup row>
+                    <CCol xs="12">
                       <CLabel htmlFor="name">User Groups</CLabel>
                       <UserGroups key="user_group_id" id="user_group_id" value={this.state.user_group_id} onChange={this.handleFieldChange} />
                     </CCol>
@@ -328,6 +338,18 @@ class User_Index extends React.Component {
                           {this.state.sort_dir === 'desc' && this.state.sort_field === 'email' && <FontAwesomeIcon icon={faSortDown} />}
                         </span>
                       </th>
+
+                      <th onClick={() => this.handleColumnSort("mobile_number")}>
+                        <span className="sortCls">
+                          <span className="table-header-text-mrg">
+                            Mobile
+                          </span>
+                          {this.state.sort_field !== 'mobile_number' && <FontAwesomeIcon icon={faSort} />}
+                          {this.state.sort_dir === 'asc' && this.state.sort_field === 'mobile_number' && <FontAwesomeIcon icon={faSortUp} />}
+                          {this.state.sort_dir === 'desc' && this.state.sort_field === 'mobile_number' && <FontAwesomeIcon icon={faSortDown} />}
+                        </span>
+                      </th>
+
                       <th>User Groups</th>
                       <th>Status</th>
                       {(_canAccess('users', 'update') || _canAccess('users', 'delete')) && <><th>Action</th></>}
@@ -341,6 +363,7 @@ class User_Index extends React.Component {
                           <td>{index + 1}</td>
                           <td>{u.name}</td>
                           <td>{u.email}</td>
+                          <td>{u.mobile_number}</td>
                           <td>{(u.user_group_id !== undefined && u.user_group_id !== null) ? u.user_group_id.user_group_name : '-'}</td>
                           <td>
                             {current_user.id !== u._id && _canAccess('users', 'update') &&

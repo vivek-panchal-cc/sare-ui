@@ -5,6 +5,8 @@ export const globalConstants = {
     EDIT_BTN:'Click to edit record.',
     DELETE_BTN:'Click to delete record.',
     List_BTN:'Click to list menu items',
+    Details_BTN:'Click to view details',
+    Download_BTN:'Click to download',
     SINGLE_DELETE_MSG:'Are you sure you want to delete this record?',
     MULTI_DELETE_MSG:'Are you sure you want to delete these records?',
     SUPER_PERMISSION_USER_ID:['5f892faf636e9014088cc3af','60227751e2e5152364d34551'],
