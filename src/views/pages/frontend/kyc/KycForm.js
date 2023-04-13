@@ -57,9 +57,7 @@ const KycForm = ({ props }) => {
   const [selectedImageFile, setSelectedImageFile] = useState(null);
   const { mobile, secret_key } = useParams();
   const history = useHistory();
-  const alreadyRedirected = useRef(false);
-
-  console.log("idFile", idFile);
+  const alreadyRedirected = useRef(false);  
 
   let mobileNo = props?.res?.mobile_number;
   let formData = new FormData();
@@ -728,7 +726,7 @@ const KycForm = ({ props }) => {
                       </span>
                     ) : null}
                   </FormGroup>
-                  <div className="form-group col-xs-12">
+                  <FormGroup className="form-group col-xs-12">
                     <Label for="idExpirationDate">ID Expiration Date</Label>
                     <Input
                       type="date"
@@ -755,7 +753,7 @@ const KycForm = ({ props }) => {
                         ID Expiration Date is required
                       </span>
                     ) : null}
-                  </div>
+                  </FormGroup>
                   {editing ? (
                     <div>
                       <Button

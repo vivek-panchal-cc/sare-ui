@@ -159,6 +159,7 @@ class User_Add extends React.Component {
                     id="mobile_number"
                     name="mobile_number"
                     placeholder="Enter Mobile "
+                    min={1}
                     autoComplete="mobile_number"
                     onChange={this.handleChange}
                     onBlur={() => this.validator.showMessageFor("mobile_number")}

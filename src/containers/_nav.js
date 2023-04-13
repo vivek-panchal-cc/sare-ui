@@ -42,6 +42,22 @@ const _nav = [
     id: 'users_sidebar_id'
   },
   {
+    _tag: 'CSidebarNavItem',
+    name: 'Customers Management',
+    to: '/admin/customers',
+    icon: <FontAwesomeIcon icon={faUser} className="c-sidebar-nav-icon" />,
+    module_name: 'customers',
+    id: 'customers_sidebar_id'
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Agents Management',
+    to: '/admin/agents',
+    icon: <FontAwesomeIcon icon={faUser} className="c-sidebar-nav-icon" />,
+    module_name: 'agents',
+    id: 'agents_sidebar_id'
+  },
+  {
     _tag: 'CSidebarNavTitle',
     _children: ['Content Management']
   },

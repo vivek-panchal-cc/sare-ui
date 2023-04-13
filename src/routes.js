@@ -5,6 +5,12 @@ const User_Index = React.lazy(() => import('./views/pages/admin/users/User_Index
 const User_Add = React.lazy(() => import('./views/pages/admin/users/User_Add'));
 const User_Edit = React.lazy(() => import('./views/pages/admin/users/User_Edit'));
 
+const Customer_Index = React.lazy(() => import('./views/pages/admin/customer/Customer_Index'));
+const Customer_Edit = React.lazy(() => import('./views/pages/admin/customer/Customer_Edit'));
+
+const Agent_Index = React.lazy(() => import('./views/pages/admin/agent/Agent_Index'));
+const Agent_Edit = React.lazy(() => import('./views/pages/admin/agent/Agent_Edit'));
+
 const User_Groups_Index = React.lazy(() => import('./views/pages/admin/user_groups/User_Groups_Index'));
 const User_Groups_Add = React.lazy(() => import('./views/pages/admin/user_groups/User_Groups_Add'));
 const User_Groups_Edit = React.lazy(() => import('./views/pages/admin/user_groups/User_Groups_Edit'));
@@ -63,6 +69,14 @@ const routes = [
   { path: '/admin/users/add', exact: true, name: 'Add', component: User_Add, module_name: 'users', action: 'create' },
   { path: '/admin/users/edit/:id', exact: true, name: 'Edit', component: User_Edit, module_name: 'users', action: 'update' },
   { path: '/admin/my-profile', exact: true, name: 'My Profile', component: User_Myprofile},
+
+  // customer management
+  { path: '/admin/customers', exact: true, name: 'Customers Management', component: Customer_Index, module_name: 'customers', action: 'view' },
+  { path: '/admin/customers/edit/:id', exact: true, name: 'Edit', component: Customer_Edit, module_name: 'customers', action: 'update' },
+  
+  // agent management
+  { path: '/admin/agents', exact: true, name: 'Agents Management', component: Agent_Index, module_name: 'agents', action: 'view' },
+  { path: '/admin/agents/edit/:id', exact: true, name: 'Edit', component: Agent_Edit, module_name: 'agents', action: 'update' },
 
   // module_name and action parameter used for ACL mechanisam its required column
   { path: '/admin/user_groups', exact: true, name: 'Groups Management', component: User_Groups_Index, module_name: 'user_groups', action: 'view' },

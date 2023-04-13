@@ -182,7 +182,9 @@ class User_Edit extends React.Component {
                     name="mobile_number"
                     placeholder="Enter Mobile "
                     autoComplete="mobile_number"
+                    value={this.state.fields.mobile_number}
                     onChange={this.handleChange}
+                    min={1}
                     onBlur={() =>
                       this.validator.showMessageFor("mobile_number")
                     }
