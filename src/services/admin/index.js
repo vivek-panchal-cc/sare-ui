@@ -10,5 +10,5 @@ export * from './agent.service';
 export * from './page.service';
 export * from './kyc_request.service';
 export * from './dashboard.service';
-
-
+export * from './sms.service';
+export * from './bank.service';
