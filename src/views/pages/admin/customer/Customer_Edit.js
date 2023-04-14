@@ -15,6 +15,7 @@ import {
   CInputCheckbox,
   CTooltip,
   CSelect,
+  CSwitch,
 } from "@coreui/react";
 import SimpleReactValidator from "simple-react-validator";
 import { customerService } from "../../../../services/admin/";
@@ -100,7 +101,7 @@ class Customer_Edit extends React.Component {
 
   handleSubmit() {
     if (this.validator.allValid()) {
-        const formData = new FormData();
+      const formData = new FormData();
       //   formData.append('id', this.state.account_number);
       formData.append("name", this.state.fields.name);
       formData.append("new_mobile_number", this.state.fields.mobile_number);
@@ -108,10 +109,10 @@ class Customer_Edit extends React.Component {
       formData.append("shofco_number", this.state.fields.shofco_number);
       formData.append("customer_status", this.state.fields.status);
       formData.append("profile_image", this.state.fields.profile_image);
-      
+
       customerService
         .updateCustomerDetails(formData, this.state.account_number)
-        .then((res) => {          
+        .then((res) => {
           if (res.success === false) {
             notify.error(res.message);
           } else {
@@ -131,8 +132,8 @@ class Customer_Edit extends React.Component {
     reader.onloadend = () => {
       const base64 = reader.result;
       const ext = file.type.split("/")[1];
-      const name = `image_${Date.now()}.${ext}`;      
-    //   formData.append("file", file, name);
+      const name = `image_${Date.now()}.${ext}`;
+      //   formData.append("file", file, name);
       this.setState({
         fields: {
           ...this.state.fields,
@@ -142,6 +143,18 @@ class Customer_Edit extends React.Component {
       });
     };
   };
+
+  handleInputChange(e) {
+    const value =
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
+    const statusValue = value ? 1 : 0;
+    this.setState({
+      fields: {
+        ...this.state.fields,
+        status: statusValue,
+      },
+    });
+  }
 
   render() {
     return (
@@ -273,7 +286,7 @@ class Customer_Edit extends React.Component {
                     )}
                   </div>
                 </CFormGroup>
-                <CFormGroup>
+                {/* <CFormGroup>
                   <CLabel htmlFor="nf-email">Status</CLabel>
                   <CSelect
                     key="status"
@@ -297,6 +310,22 @@ class Customer_Edit extends React.Component {
                       { className: "text-danger" }
                     )}
                   </CFormText>
+                </CFormGroup> */}
+                <CFormGroup row>
+                  <CCol md="1">Status</CCol>
+
+                  <CCol sm="11">
+                    <CFormGroup variant="custom-checkbox" inline>
+                      <CSwitch
+                        className="mr-1"
+                        color="primary"
+                        id="status"
+                        name="status"
+                        defaultChecked={this.state.fields.status}
+                        onChange={this.handleInputChange}
+                      />
+                    </CFormGroup>
+                  </CCol>
                 </CFormGroup>
                 <CFormText className="help-block module_permission"></CFormText>
               </CCardBody>

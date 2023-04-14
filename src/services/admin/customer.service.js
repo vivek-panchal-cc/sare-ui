@@ -153,7 +153,7 @@ async function changeCustomerStatus(id, postData) {
   let response;
   try {
     response = await fetch(
-      `${process.env.REACT_APP_API_URL}api/customers/${id}`,
+      `${process.env.REACT_APP_API_URL}api/customers/${id}/change-status`,
       requestOptions
     );
   } catch (error) {

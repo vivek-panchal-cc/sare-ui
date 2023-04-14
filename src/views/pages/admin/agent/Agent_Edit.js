@@ -14,6 +14,7 @@ import {
   CLink,
   CTooltip,
   CSelect,
+  CSwitch,
 } from "@coreui/react";
 import SimpleReactValidator from "simple-react-validator";
 import { agentService } from "../../../../services/admin/";
@@ -134,6 +135,18 @@ class Agent_Edit extends React.Component {
       });
     };
   };
+
+  handleInputChange(e) {
+    const value =
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
+    const statusValue = value ? 1 : 0;
+    this.setState({
+      fields: {
+        ...this.state.fields,
+        status: statusValue,
+      },
+    });
+  }
 
   render() {
     return (
@@ -265,7 +278,7 @@ class Agent_Edit extends React.Component {
                     )}
                   </div>
                 </CFormGroup>
-                <CFormGroup>
+                {/* <CFormGroup>
                   <CLabel htmlFor="nf-email">Status</CLabel>
                   <CSelect
                     key="status"
@@ -289,6 +302,22 @@ class Agent_Edit extends React.Component {
                       { className: "text-danger" }
                     )}
                   </CFormText>
+                </CFormGroup> */}
+                <CFormGroup row>
+                  <CCol md="1">Status</CCol>
+
+                  <CCol sm="11">
+                    <CFormGroup variant="custom-checkbox" inline>
+                      <CSwitch
+                        className="mr-1"
+                        color="primary"
+                        id="status"
+                        name="status"
+                        defaultChecked={this.state.fields.status}
+                        onChange={this.handleInputChange}
+                      />
+                    </CFormGroup>
+                  </CCol>
                 </CFormGroup>
                 <CFormText className="help-block module_permission"></CFormText>
               </CCardBody>

@@ -151,7 +151,7 @@ async function changeAgentStatus(id, postData) {
   let response;
   try {
     response = await fetch(
-      `${process.env.REACT_APP_API_URL}api/agents/${id}`,
+      `${process.env.REACT_APP_API_URL}api/agents/${id}/change-status`,
       requestOptions
     );
   } catch (error) {
