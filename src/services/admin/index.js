@@ -12,3 +12,4 @@ export * from './kyc_request.service';
 export * from './dashboard.service';
 export * from './sms.service';
 export * from './bank.service';
+export * from './faq.service';

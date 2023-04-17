@@ -78,6 +78,14 @@ const _nav = [
     id: 'bank_sidebar_id'
   },
   {
+    _tag: 'CSidebarNavItem',
+    name: 'FAQ',
+    to: '/admin/faq',
+    icon: <FontAwesomeIcon icon={faUser} className="c-sidebar-nav-icon" />,
+    module_name: 'faq',
+    id: 'faq_sidebar_id'
+  },
+  {
     _tag: 'CSidebarNavTitle',
     _children: ['Content Management']
   },

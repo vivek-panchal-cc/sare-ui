@@ -438,15 +438,15 @@ class Customer_Index extends React.Component {
               </CCardHeader>
               <CCardBody>
                 <div className="position-relative table-responsive">
-                  <MultiActionBar
+                  {/* <MultiActionBar
                     onClick={this.handleApplyAction}
                     checkBoxData={this.state.multiaction}
                     module_name={"customers"}
-                  />
+                  /> */}
                   <table className="table">
                     <thead>
                       <tr>
-                        <th>
+                        {/* <th>
                           <input
                             type="checkbox"
                             onClick={this.handleAllChecked}
@@ -454,7 +454,7 @@ class Customer_Index extends React.Component {
                             onChange={() => {}}
                             checked={this.state.allCheckedbox}
                           />
-                        </th>
+                        </th> */}
                         <th>#</th>
                         <th>
                           <span className="sortCls">
@@ -553,7 +553,7 @@ class Customer_Index extends React.Component {
                       {this.state?.user_list?.length > 0 &&
                         this.state.user_list.map((u, index) => (
                           <tr key={u.customer_account_rel?.account_number}>
-                            <td>
+                            {/* <td>
                               {" "}
                               {current_user.id !==
                                 u.customer_account_rel?.account_number && (
@@ -569,7 +569,7 @@ class Customer_Index extends React.Component {
                                   }
                                 />
                               )}{" "}
-                            </td>
+                            </td> */}
                             <td>{index + 1}</td>
                             <td>{u.customer_account_rel?.account_number}</td>
                             <td>{u.name}</td>

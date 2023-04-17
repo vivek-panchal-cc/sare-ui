@@ -444,15 +444,15 @@ class Agent_Index extends React.Component {
               </CCardHeader>
               <CCardBody>
                 <div className="position-relative table-responsive">
-                  <MultiActionBar
+                  {/* <MultiActionBar
                     onClick={this.handleApplyAction}
                     checkBoxData={this.state.multiaction}
                     module_name={"users"}
-                  />
+                  /> */}
                   <table className="table">
                     <thead>
                       <tr>
-                        <th>
+                        {/* <th>
                           <input
                             type="checkbox"
                             onClick={this.handleAllChecked}
@@ -460,7 +460,7 @@ class Agent_Index extends React.Component {
                             onChange={(e) => {}}
                             checked={this.state.allCheckedbox}
                           />
-                        </th>
+                        </th> */}
                         <th>#</th>
                         <th>
                           <span className="sortCls">
@@ -559,7 +559,7 @@ class Agent_Index extends React.Component {
                       {this.state?.user_list?.length > 0 &&
                         this.state.user_list.map((u, index) => (
                           <tr key={u.customer_account_rel?.account_number}>
-                            <td>
+                            {/* <td>
                               {" "}
                               {current_user.id !==
                                 u.customer_account_rel?.account_number && (
@@ -575,7 +575,7 @@ class Agent_Index extends React.Component {
                                   }
                                 />
                               )}{" "}
-                            </td>
+                            </td> */}
                             <td>{index + 1}</td>
                             <td>{u.customer_account_rel?.account_number}</td>
                             <td>{u.name}</td>
@@ -622,8 +622,7 @@ class Agent_Index extends React.Component {
                                             className="btn  btn-md btn-danger "
                                             onClick={() =>
                                               this.openDeletePopup(
-                                                u.customer_account_rel
-                                                  .account_number
+                                                u.customer_account_rel?.account_number
                                               )
                                             }
                                           >

@@ -34,7 +34,7 @@ class Agent_Edit extends React.Component {
         national_id: "",
         shofco_number: "",
         profile_image: null,
-        status: 1,
+        status: "0",
         account_number: this.props.match.params.id,
       },
     };
@@ -74,8 +74,14 @@ class Agent_Edit extends React.Component {
   handleChange(e) {
     const { name, value } = e.target;
     if (name === "status") {
-      var fstatus = value === "true" ? false : true;
-      this.setState({ fields: { ...this.state.fields, [name]: fstatus } });
+      let newStatus = "0";
+      if (value === "1") {
+        newStatus = "0";
+      }
+      if (value === "0") {
+        newStatus = "1";
+      }
+      this.setState({ fields: { ...this.state.fields, [name]: newStatus } });
     } else if (name === "mobile_number") {
       if (/^\d{0,9}$/.test(value)) {
         this.setState({ fields: { ...this.state.fields, [name]: value } });
@@ -96,7 +102,7 @@ class Agent_Edit extends React.Component {
       const formData = new FormData();
       //   formData.append('id', this.state.account_number);
       formData.append("name", this.state.fields.name);
-      formData.append("mobile_number", this.state.fields.mobile_number);
+      formData.append("new_mobile_number", this.state.fields.mobile_number);
       formData.append("national_id", this.state.fields.national_id);
       formData.append("shofco_number", this.state.fields.shofco_number);
       formData.append("status", this.state.fields.status);
@@ -308,14 +314,28 @@ class Agent_Edit extends React.Component {
 
                   <CCol sm="11">
                     <CFormGroup variant="custom-checkbox" inline>
-                      <CSwitch
-                        className="mr-1"
-                        color="primary"
-                        id="status"
-                        name="status"
-                        defaultChecked={this.state.fields.status}
-                        onChange={this.handleInputChange}
-                      />
+                      {this.state.fields.status === "1" && (
+                        <CSwitch
+                          className="mr-1"
+                          color="primary"
+                          id="status"
+                          name="status"
+                          value={this.state.fields.status}
+                          defaultChecked
+                          onChange={this.handleChange}
+                        />
+                      )}
+
+                      {this.state.fields.status === "0" && (
+                        <CSwitch
+                          className="mr-1"
+                          color="primary"
+                          id="status"
+                          name="status"
+                          value={this.state.fields.status}
+                          onChange={this.handleChange}
+                        />
+                      )}
                     </CFormGroup>
                   </CCol>
                 </CFormGroup>

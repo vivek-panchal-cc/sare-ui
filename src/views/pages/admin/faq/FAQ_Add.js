@@ -17,15 +17,11 @@ import {
   CTooltip,
 } from "@coreui/react";
 import SimpleReactValidator from "simple-react-validator";
-import { userService } from "../../../../services/admin/user.service";
-import { smsService } from "../../../../services/admin/sms.service";
+import { faqService } from "../../../../services/admin/faq.service";
 import { notify, history, _canAccess } from "../../../../_helpers/index";
 import { globalConstants } from "../../../../constants/admin/global.constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faBan, faSave } from "@fortawesome/free-solid-svg-icons";
-const UserGroups = React.lazy(() =>
-  import("../../../../components/admin/UserGroups")
-);
 
 class Sms_Add extends React.Component {
   constructor(props) {
@@ -33,14 +29,13 @@ class Sms_Add extends React.Component {
 
     this.state = {
       fields: {
-        title: "",
-        slug: "",
-        message: "",
-        status: true,
+        question: "",
+        answer: "",
+        status: 1,
       },
     };
     if (this.props._renderAccess === false) {
-      history.push("/admin/sms");
+      history.push("/admin/faq");
     }
     this.handleChange = this.handleChange.bind(this);
     this.validator = new SimpleReactValidator({ autoForceUpdate: this });
@@ -50,8 +45,15 @@ class Sms_Add extends React.Component {
   handleChange(e) {
     const { name, value } = e.target;
     if (name === "status") {
-      var fstatus = value === "true" ? false : true;
-      this.setState({ fields: { ...this.state.fields, [name]: fstatus } });
+      const newStatus = !this.state.fields.status;
+      let updateStatus = false;
+      if (newStatus === false) {
+        updateStatus = 0;
+      }
+      if (newStatus === true) {
+        updateStatus = 1;
+      }          
+      this.setState({ fields: { ...this.state.fields, [name]: updateStatus } });
     } else {
       this.setState({ fields: { ...this.state.fields, [name]: value } });
     }
@@ -59,12 +61,12 @@ class Sms_Add extends React.Component {
 
   handleSubmit() {
     if (this.validator.allValid()) {
-      smsService.createSms(this.state.fields).then((res) => {
+      faqService.createFaq(this.state.fields).then((res) => {        
         if (res.status === false) {
           notify.error(res.message);
         } else {
           notify.success(res.message);
-          history.push("/admin/sms");
+          history.push("/admin/faq");
         }
       });
     } else {
@@ -79,7 +81,7 @@ class Sms_Add extends React.Component {
   };
   componentDidMount() {
     setTimeout(
-      () => _canAccess(this.props.module_name, this.props.action, "/admin/sms"),
+      () => _canAccess(this.props.module_name, this.props.action, "/admin/faq"),
       300
     );
   }
@@ -91,13 +93,13 @@ class Sms_Add extends React.Component {
           <CCol xs="12">
             <CCard>
               <CCardHeader>
-                <strong>Add SMS template</strong>
+                <strong>Add FAQ</strong>
                 <div className="card-header-actions">
                   <CTooltip content={globalConstants.BACK_MSG}>
                     <CLink
                       className="btn btn-danger btn-sm"
                       aria-current="page"
-                      to="/admin/sms"
+                      to="/admin/faq"
                     >
                       {" "}
                       <FontAwesomeIcon icon={faArrowLeft} className="mr-1" />
@@ -108,57 +110,38 @@ class Sms_Add extends React.Component {
               </CCardHeader>
               <CCardBody>
                 <CFormGroup>
-                  <CLabel htmlFor="nf-name">Title</CLabel>
+                  <CLabel htmlFor="nf-name">Question</CLabel>
                   <CInput
                     type="text"
-                    id="title"
-                    name="title"
-                    placeholder="Enter Title"
-                    autoComplete="title"
+                    id="question"
+                    name="question"
+                    placeholder="Enter Question"
+                    autoComplete="question"
                     onChange={this.handleChange}
                   />
                   <CFormText className="help-block">
                     {this.validator.message(
-                      "title",
-                      this.state.fields.title,
+                      "question",
+                      this.state.fields.question,
                       "required",
                       { className: "text-danger" }
                     )}
                   </CFormText>
                 </CFormGroup>
                 <CFormGroup>
-                  <CLabel htmlFor="nf-name">Slug</CLabel>
+                  <CLabel htmlFor="nf-name">Answer</CLabel>
                   <CInput
                     type="text"
-                    id="slug"
-                    name="slug"
-                    placeholder="Enter Slug"
-                    autoComplete="slug"
+                    id="answer"
+                    name="answer"
+                    placeholder="Enter Answer"
+                    autoComplete="answer"
                     onChange={this.handleChange}
                   />
                   <CFormText className="help-block">
                     {this.validator.message(
-                      "slug",
-                      this.state.fields.slug,
-                      "required",
-                      { className: "text-danger" }
-                    )}
-                  </CFormText>
-                </CFormGroup>
-                <CFormGroup>
-                  <CLabel htmlFor="nf-name">Message</CLabel>
-                  <CInput
-                    type="text"
-                    id="message"
-                    name="message"
-                    placeholder="Enter Message"
-                    autoComplete="message"
-                    onChange={this.handleChange}
-                  />
-                  <CFormText className="help-block">
-                    {this.validator.message(
-                      "message",
-                      this.state.fields.message,
+                      "answer",
+                      this.state.fields.answer,
                       "required",
                       { className: "text-danger" }
                     )}
@@ -202,7 +185,7 @@ class Sms_Add extends React.Component {
                     )}
                   </CFormText>
                 </CFormGroup> */}
-                <CFormGroup row>
+                {/* <CFormGroup row>
                   <CCol md="1">
                     <CLabel htmlFor="select">Status</CLabel>
                   </CCol>
@@ -214,6 +197,23 @@ class Sms_Add extends React.Component {
                         color="primary"
                         defaultChecked={this.state.fields.status}
                         onClick={this.handleInputChange}
+                      />
+                    </CFormGroup>
+                  </CCol>
+                </CFormGroup> */}
+                <CFormGroup row>
+                  <CCol md="1">
+                    <CLabel htmlFor="select">Status</CLabel>
+                  </CCol>
+                  <CCol md="11">
+                    <CFormGroup variant="custom-checkbox" inline>
+                      <CSwitch
+                        name="status"
+                        className="mr-1"
+                        color="primary"
+                        defaultChecked={this.state.fields.status}
+                        onClick={this.handleChange}
+                        disabled={true}
                       />
                     </CFormGroup>
                   </CCol>
@@ -232,7 +232,7 @@ class Sms_Add extends React.Component {
                 <CLink
                   className="btn btn-danger btn-sm"
                   aria-current="page"
-                  to="/admin/sms"
+                  to="/admin/faq"
                 >
                   <FontAwesomeIcon icon={faBan} className="mr-1" />
                   Cancel
