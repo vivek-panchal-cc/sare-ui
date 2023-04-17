@@ -5,6 +5,18 @@ const User_Index = React.lazy(() => import('./views/pages/admin/users/User_Index
 const User_Add = React.lazy(() => import('./views/pages/admin/users/User_Add'));
 const User_Edit = React.lazy(() => import('./views/pages/admin/users/User_Edit'));
 
+const Customer_Index = React.lazy(() => import('./views/pages/admin/customer/Customer_Index'));
+const Customer_Edit = React.lazy(() => import('./views/pages/admin/customer/Customer_Edit'));
+
+const Agent_Index = React.lazy(() => import('./views/pages/admin/agent/Agent_Index'));
+const Agent_Edit = React.lazy(() => import('./views/pages/admin/agent/Agent_Edit'));
+
+const Sms_Index = React.lazy(() => import('./views/pages/admin/sms/Sms_Index'));
+const Sms_Add = React.lazy(() => import('./views/pages/admin/sms/Sms_Add'));
+const Sms_Edit = React.lazy(() => import('./views/pages/admin/sms/Sms_Edit'));
+
+const Bank_Add = React.lazy(() => import('./views/pages/admin/bank_details/Bank_Add'));
+
 const User_Groups_Index = React.lazy(() => import('./views/pages/admin/user_groups/User_Groups_Index'));
 const User_Groups_Add = React.lazy(() => import('./views/pages/admin/user_groups/User_Groups_Add'));
 const User_Groups_Edit = React.lazy(() => import('./views/pages/admin/user_groups/User_Groups_Edit'));
@@ -51,9 +63,6 @@ const Site_Setting_Edit = React.lazy(() => import('./views/pages/admin/site_sett
 const User_Myprofile = React.lazy(() => import('./views/pages/admin/users/User_Myprofile'));
 
 
-
-
-
 const routes = [
   { path: '/admin', exact: true, name: 'Home' },
   { path: '/admin/dashboard', name: 'Dashboard', component: Dashboard },
@@ -63,6 +72,22 @@ const routes = [
   { path: '/admin/users/add', exact: true, name: 'Add', component: User_Add, module_name: 'users', action: 'create' },
   { path: '/admin/users/edit/:id', exact: true, name: 'Edit', component: User_Edit, module_name: 'users', action: 'update' },
   { path: '/admin/my-profile', exact: true, name: 'My Profile', component: User_Myprofile},
+
+  // customer management
+  { path: '/admin/customers', exact: true, name: 'Customers Management', component: Customer_Index, module_name: 'customers', action: 'view' },
+  { path: '/admin/customers/edit/:id', exact: true, name: 'Edit', component: Customer_Edit, module_name: 'customers', action: 'update' },
+  
+  // agent management
+  { path: '/admin/agents', exact: true, name: 'Agents Management', component: Agent_Index, module_name: 'agents', action: 'view' },
+  { path: '/admin/agents/edit/:id', exact: true, name: 'Edit', component: Agent_Edit, module_name: 'agents', action: 'update' },
+
+  // sms templates
+  { path: '/admin/sms', exact: true, name: 'Sms Templates', component: Sms_Index, module_name: 'sms', action: 'view' },
+  { path: '/admin/sms/add', exact: true, name: 'Add', component: Sms_Add, module_name: 'sms', action: 'create'},
+  { path: '/admin/sms/edit/:id', exact: true, name: 'Edit', component: Sms_Edit, module_name: 'sms', action: 'update'},
+
+  // bank details
+  { path: '/admin/bank', exact: true, name: 'Bank Details', component: Bank_Add, module_name: 'bank', action: 'update' },
 
   // module_name and action parameter used for ACL mechanisam its required column
   { path: '/admin/user_groups', exact: true, name: 'Groups Management', component: User_Groups_Index, module_name: 'user_groups', action: 'view' },

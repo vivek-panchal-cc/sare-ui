@@ -160,6 +160,7 @@ class User_Index extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log("Users Next Props", nextProps)
     const current_user = _loginUsersDetails();
     if (nextProps.users.user_list.length > 0) {
       let users = nextProps.users.user_list;

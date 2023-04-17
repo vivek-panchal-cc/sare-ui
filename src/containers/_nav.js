@@ -42,6 +42,42 @@ const _nav = [
     id: 'users_sidebar_id'
   },
   {
+    _tag: 'CSidebarNavItem',
+    name: 'Customers Management',
+    to: '/admin/customers',
+    icon: <FontAwesomeIcon icon={faUser} className="c-sidebar-nav-icon" />,
+    module_name: 'customers',
+    id: 'customers_sidebar_id'
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Agents Management',
+    to: '/admin/agents',
+    icon: <FontAwesomeIcon icon={faUser} className="c-sidebar-nav-icon" />,
+    module_name: 'agents',
+    id: 'agents_sidebar_id'
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Sms Templates',
+    to: '/admin/sms',
+    icon: <FontAwesomeIcon icon={faUser} className="c-sidebar-nav-icon" />,
+    module_name: 'sms',
+    id: 'sms_sidebar_id'
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['System Options']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Bank Details',
+    to: '/admin/bank',
+    icon: <FontAwesomeIcon icon={faUser} className="c-sidebar-nav-icon" />,
+    module_name: 'bank',
+    id: 'bank_sidebar_id'
+  },
+  {
     _tag: 'CSidebarNavTitle',
     _children: ['Content Management']
   },
