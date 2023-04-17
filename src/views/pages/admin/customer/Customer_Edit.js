@@ -35,16 +35,17 @@ class Customer_Edit extends React.Component {
     super(props);
     this.state = {
       fields: {
+        account_number: this.props.match.params.id,
         name: "",
         mobile_number: "",
         customer_type: "",
         national_id: "",
         shofco_number: "",
         profile_image: null,
-        status: 1,
-        account_number: this.props.match.params.id,
+        status: "0",
       },
     };
+    // this.handleInputChange = this.handleInputChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.validator = new SimpleReactValidator({ autoForceUpdate: this });
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -79,11 +80,17 @@ class Customer_Edit extends React.Component {
     }, 300);
   }
 
-  handleChange(e) {
+  handleChange(e) {    
     const { name, value } = e.target;
     if (name === "status") {
-      var fstatus = value === "true" ? false : true;
-      this.setState({ fields: { ...this.state.fields, [name]: fstatus } });
+      let newStatus = "0";
+      if (value === "1") {
+        newStatus = "0";
+      }
+      if (value === "0") {
+        newStatus = "1";
+      }      
+      this.setState({ fields: { ...this.state.fields, [name]: newStatus } });
     } else if (name === "mobile_number") {
       if (/^\d{0,9}$/.test(value)) {
         this.setState({ fields: { ...this.state.fields, [name]: value } });
@@ -107,7 +114,7 @@ class Customer_Edit extends React.Component {
       formData.append("new_mobile_number", this.state.fields.mobile_number);
       formData.append("national_id", this.state.fields.national_id);
       formData.append("shofco_number", this.state.fields.shofco_number);
-      formData.append("customer_status", this.state.fields.status);
+      formData.append("status", this.state.fields.status);
       formData.append("profile_image", this.state.fields.profile_image);
 
       customerService
@@ -144,17 +151,11 @@ class Customer_Edit extends React.Component {
     };
   };
 
-  handleInputChange(e) {
-    const value =
-      e.target.type === "checkbox" ? e.target.checked : e.target.value;
-    const statusValue = value ? 1 : 0;
-    this.setState({
-      fields: {
-        ...this.state.fields,
-        status: statusValue,
-      },
-    });
-  }
+  // handleInputChange(e) {
+  //   const value = e.target.checked ? "1" : "0";
+  //   // this.setState({ fields: { status: value } });
+  //   console.log('this.state', this.state)
+  // };
 
   render() {
     return (
@@ -316,14 +317,28 @@ class Customer_Edit extends React.Component {
 
                   <CCol sm="11">
                     <CFormGroup variant="custom-checkbox" inline>
-                      <CSwitch
-                        className="mr-1"
-                        color="primary"
-                        id="status"
-                        name="status"
-                        defaultChecked={this.state.fields.status}
-                        onChange={this.handleInputChange}
-                      />
+                      {this.state.fields.status === "1" && (
+                        <CSwitch
+                          className="mr-1"
+                          color="primary"
+                          id="status"
+                          name="status"
+                          value={this.state.fields.status}
+                          defaultChecked
+                          onChange={this.handleChange}
+                        />
+                      )}
+
+                      {this.state.fields.status === "0" && (
+                        <CSwitch
+                          className="mr-1"
+                          color="primary"
+                          id="status"
+                          name="status"
+                          value={this.state.fields.status}
+                          onChange={this.handleChange}
+                        />
+                      )}
                     </CFormGroup>
                   </CCol>
                 </CFormGroup>

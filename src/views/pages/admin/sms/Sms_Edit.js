@@ -42,8 +42,7 @@ class Sms_Edit extends React.Component {
         message: "",
         status: "0",
       },
-    };
-    console.log("state", this.state);
+    };    
     this.handleChange = this.handleChange.bind(this);
     this.validator = new SimpleReactValidator({ autoForceUpdate: this });
     this.handleSubmit = this.handleSubmit.bind(this);

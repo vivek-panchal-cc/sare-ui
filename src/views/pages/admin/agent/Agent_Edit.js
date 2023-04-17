@@ -99,7 +99,7 @@ class Agent_Edit extends React.Component {
       formData.append("mobile_number", this.state.fields.mobile_number);
       formData.append("national_id", this.state.fields.national_id);
       formData.append("shofco_number", this.state.fields.shofco_number);
-      formData.append("customer_status", this.state.fields.status);
+      formData.append("status", this.state.fields.status);
       formData.append("profile_image", this.state.fields.profile_image);
 
       agentService

@@ -292,12 +292,19 @@ class Agent_Index extends React.Component {
   };
 
   userStatusChangedHandler(user_id, status) {
-    agentService.changeAgentStatus(user_id, { status: !status }).then(res => {
+    let currentStatus;
+    if (status === "0") {
+      currentStatus = "1";
+    }
+    if (status === "1") {
+      currentStatus = "0";
+    }
+    agentService.changeAgentStatus(user_id, { status: currentStatus }).then(res => {
       if (res.status === 'error') {
         notify.error(res.message);
       } else {
         notify.success(res.message);
-        this.getCustomersList();
+        this.getAgentsList();
       }
     });
   }
@@ -392,7 +399,7 @@ class Agent_Index extends React.Component {
                         >
                           <option value="">-- Select Status --</option>
                           <option value="1">Active</option>
-                          <option value="0">In-Active</option>
+                          <option value="0">De-active</option>
                         </CSelect>
                       </CCol>
                     </CFormGroup>
@@ -579,11 +586,11 @@ class Agent_Index extends React.Component {
                             </td>
                             {/* <td>{u.status === "1" ? "Active" : "In-Active"}</td> */}
                             <td>
-                            {current_user.id !== u.customer_account_rel?.account_number && _canAccess('users', 'update') &&
-                              <CLink onClick={() => this.userStatusChangedHandler(u.customer_account_rel?.account_number, u.status)} >{(u.status) ? 'Active' : 'De-active'}</CLink>
+                            {current_user.id !== u.customer_account_rel?.account_number && _canAccess('agents', 'update') &&
+                              <CLink onClick={() => this.userStatusChangedHandler(u.customer_account_rel?.account_number, u.status)} >{(u.status === "1") ? 'Active' : 'De-active'}</CLink>
                             }
-                            {current_user.id !== u.customer_account_rel?.account_number && _canAccess('users', 'update') === false &&
-                              <>{(u.status) ? 'Active' : 'De-active'}</>
+                            {current_user.id !== u.customer_account_rel?.account_number && _canAccess('agents', 'update') === false &&
+                              <>{(u.status === "1") ? 'Active' : 'De-active'}</>
                             }
                           </td>
                             {(_canAccess("agents", "update") ||
