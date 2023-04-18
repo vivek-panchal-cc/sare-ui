@@ -57,7 +57,7 @@ class Customer_Index extends React.Component {
         pageNo: 1,
         sort_dir: "desc",
         sort_field: "name",
-        search_name: "",
+        name: "",
         mobile_number: "",
         customer_type: "",
         status: "",
@@ -113,7 +113,9 @@ class Customer_Index extends React.Component {
             ) {
               continue;
             }
-            multiaction[users[key].customer_account_rel?.account_number] = false;
+            multiaction[
+              users[key].customer_account_rel?.account_number
+            ] = false;
           }
 
           this.setState({ multiaction: multiaction });
@@ -170,7 +172,7 @@ class Customer_Index extends React.Component {
             pageNo: 1,
             sort_dir: "desc",
             sort_field: "name",
-            search_name: "",
+            name: "",
             mobile_number: "",
             customer_type: "",
             status: "",
@@ -186,6 +188,7 @@ class Customer_Index extends React.Component {
     }
   }
 
+  // To delete customer from list
   openDeletePopup(id) {
     this.setState({ _openPopup: true, deleteId: id });
   }
@@ -202,7 +205,8 @@ class Customer_Index extends React.Component {
     });
   }
 
-  userStatusChangedHandler(user_id, status) {    
+  // To change the status of customer
+  customerStatusChangedHandler(user_id, status) {
     let currentStatus;
     if (status === "0") {
       currentStatus = "1";
@@ -210,14 +214,16 @@ class Customer_Index extends React.Component {
     if (status === "1") {
       currentStatus = "0";
     }
-    customerService.changeCustomerStatus(user_id, { status: currentStatus }).then(res => {
-      if (res.status === 'error') {
-        notify.error(res.message);
-      } else {
-        notify.success(res.message);
-        this.getCustomersList();
-      }
-    });
+    customerService
+      .changeCustomerStatus(user_id, { status: currentStatus })
+      .then((res) => {
+        if (res.status === "error") {
+          notify.error(res.message);
+        } else {
+          notify.success(res.message);
+          this.getCustomersList();
+        }
+      });
   }
 
   handleFieldChange = (inputFieldId, inputFieldValue) => {
@@ -319,8 +325,8 @@ class Customer_Index extends React.Component {
                         <CInput
                           id="name"
                           placeholder="Search Name"
-                          name="search_name"
-                          value={this.state.fields.search_name}
+                          name="name"
+                          value={this.state.fields.name}
                           onChange={this.handleChange}
                           onKeyPress={(event) => {
                             if (event.key === "Enter") {
@@ -580,13 +586,28 @@ class Customer_Index extends React.Component {
                             </td>
                             {/* <td>{u.status === "1" ? "Active" : "In-Active"}</td> */}
                             <td>
-                            {current_user.id !== u.customer_account_rel?.account_number && _canAccess('customers', 'update') &&
-                              <CLink onClick={() => this.userStatusChangedHandler(u.customer_account_rel?.account_number, u.status)} >{(u.status === "1") ? 'Active' : 'De-active'}</CLink>
-                            }
-                            {current_user.id !== u.customer_account_rel?.account_number && _canAccess('customers', 'update') === false &&
-                              <>{(u.status === "1") ? 'Active' : 'De-active'}</>
-                            }
-                          </td>
+                              {current_user.id !==
+                                u.customer_account_rel?.account_number &&
+                                _canAccess("customers", "update") && (
+                                  <CLink
+                                    onClick={() =>
+                                      this.customerStatusChangedHandler(
+                                        u.customer_account_rel?.account_number,
+                                        u.status
+                                      )
+                                    }
+                                  >
+                                    {u.status === "1" ? "Active" : "De-active"}
+                                  </CLink>
+                                )}
+                              {current_user.id !==
+                                u.customer_account_rel?.account_number &&
+                                _canAccess("customers", "update") === false && (
+                                  <>
+                                    {u.status === "1" ? "Active" : "De-active"}
+                                  </>
+                                )}
+                            </td>
 
                             {(_canAccess("customers", "update") ||
                               _canAccess("customers", "delete")) && (

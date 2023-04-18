@@ -14,10 +14,12 @@ import {
   CModalTitle,
   CButton,
   CTooltip,
+  CFormGroup,
+  CLabel,
+  CInput,
+  CSelect,
 } from "@coreui/react";
-import {
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import CIcon from "@coreui/icons-react";
 import { faqService } from "../../../../services/admin/faq.service";
 import {
@@ -34,7 +36,7 @@ class FAQ_Index extends React.Component {
     super(props);
 
     // this.handleColumnSort = this.handleColumnSort.bind(this);
-    // this.handleSearch = this.handleSearch.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.openDeletePopup = this.openDeletePopup.bind(this);
     this.deleteFaq = this.deleteFaq.bind(this);
@@ -47,6 +49,7 @@ class FAQ_Index extends React.Component {
         question: "",
         answer: "",
         status: "",
+        totalPage: 1,
       },
       faq_list: [],
       _openPopup: false,
@@ -65,24 +68,44 @@ class FAQ_Index extends React.Component {
   }
 
   async getFaqDetails() {
-    const faqList = await faqService.getFaq();    
-    if (faqList.length > 0) {
-      let multiActions = {};
-      const current_user = _loginUsersDetails();
-      faqList.forEach((faq) => {
-        if (globalConstants.DEVELOPER_PERMISSION_USER_ID.indexOf(faq.id) > -1) {
-          return;
+    faqService.getFaq(this.state.fields).then((res) => {
+      if (res.success === false) {
+        notify.error(res.message);
+      } else {
+        this.setState({
+          totalRecords: res.data.totalRecords,
+          fields: {
+            ...this.state.fields,
+            totalPage: res.data.totalPage,
+          },
+          faq_list: res.data.result,
+        });
+
+        /* Multi delete checkbox code */
+        if (res?.data?.result?.length > 0) {
+          let users = res.data.result;
+          let multiAction = [];
+          const current_user = _loginUsersDetails();
+          for (var key in users) {
+            if (
+              globalConstants.DEVELOPER_PERMISSION_USER_ID.indexOf(
+                users[key].id
+              ) > -1
+            ) {
+              continue;
+            }
+            if (current_user.user_group_id === users[key].id) {
+              continue;
+            }
+            multiAction[users[key].id] = false;
+          }
+
+          this.setState({ multiAction: multiAction });
+        } else if (res?.data?.result?.length === 0) {
+          this.setState({ multiAction: [] });
         }
-        if (current_user.user_group_id === faq.id) {
-          return;
-        }
-        multiActions[faq.id] = false;
-      });
-      this.setState({ multiActions });
-    } else {
-      this.setState({ multiActions: {} });
-    }
-    this.setState({ faq_list: faqList });
+      }
+    });
   }
 
   pageChange = (newPage) => {
@@ -122,30 +145,29 @@ class FAQ_Index extends React.Component {
     this.setState({ fields: { ...this.state.fields, [name]: value } });
   }
 
-  // handleSearch(type) {
-  //   this.resetCheckedBox();
-  //   if (type === "reset") {
-  //     this.setState(
-  //       {
-  //         fields: {
-  //           pageNo: 1,
-  //           sort_dir: "desc",
-  //           sort_field: "name",
-  //           title: "",
-  //           slug: "",
-  //           message: "",
-  //           status: "",
-  //           totalPage: 1,
-  //         },
-  //       },
-  //       () => {
-  //         this.getFaqDetails(this.state.fields);
-  //       }
-  //     );
-  //   } else {
-  //     this.getFaqDetails(this.state.fields);
-  //   }
-  // }
+  handleSearch(type) {
+    this.resetCheckedBox();
+    if (type === "reset") {
+      this.setState(
+        {
+          fields: {
+            pageNo: 1,
+            sort_dir: "desc",
+            sort_field: "name",
+            question: "",
+            answer: "",            
+            status: "",
+            totalPage: 1,
+          },
+        },
+        () => {
+          this.getFaqDetails(this.state.fields);
+        }
+      );
+    } else {
+      this.getFaqDetails(this.state.fields);
+    }
+  }
 
   openDeletePopup(id) {
     this.setState({ _openPopup: true, deleteId: id });
@@ -163,10 +185,16 @@ class FAQ_Index extends React.Component {
     });
   }
 
-  faqStatusChangeHandler(user_id, _status) {
-    const updateStatus = this.state.fields.status === 1 ? 0 : 1;
+  faqStatusChangeHandler(user_id, status) {
+    let currentStatus;
+    if (status === 0) {
+      currentStatus = 1;
+    }
+    if (status === 1) {
+      currentStatus = 0;
+    }
     faqService
-      .changeFaqStatus(user_id, { status: updateStatus })
+      .changeFaqStatus(user_id, { status: currentStatus })
       .then((res) => {
         if (res.status === "error") {
           notify.error(res.message);
@@ -264,7 +292,7 @@ class FAQ_Index extends React.Component {
 
     return (
       <>
-        {/* <CRow>
+        <CRow>
           <CCol xl={12}>
             <CCard>
               <CCardBody>
@@ -272,12 +300,12 @@ class FAQ_Index extends React.Component {
                   <CCol xl={3}>
                     <CFormGroup row>
                       <CCol xs="12">
-                        <CLabel htmlFor="name">Title</CLabel>
+                        <CLabel htmlFor="name">Question</CLabel>
                         <CInput
-                          id="title"
-                          placeholder="Search Title"
-                          name="title"
-                          value={this.state.fields.title}
+                          id="question"
+                          placeholder="Search Question"
+                          name="question"
+                          value={this.state.fields.question}
                           onChange={this.handleChange}
                           onKeyPress={(event) => {
                             if (event.key === "Enter") {
@@ -288,7 +316,7 @@ class FAQ_Index extends React.Component {
                       </CCol>
                     </CFormGroup>
                   </CCol>
-                  <CCol xl={3}>
+                  {/* <CCol xl={3}>
                     <CFormGroup row>
                       <CCol xs="12">
                         <CLabel htmlFor="name">Slug</CLabel>
@@ -306,7 +334,7 @@ class FAQ_Index extends React.Component {
                         />
                       </CCol>
                     </CFormGroup>
-                  </CCol>
+                  </CCol> */}
                   <CCol xl={3}>
                     <CFormGroup row>
                       <CCol xs="12">
@@ -362,7 +390,7 @@ class FAQ_Index extends React.Component {
               </CCardBody>
             </CCard>
           </CCol>
-        </CRow> */}
+        </CRow>
         <CRow>
           <CCol xl={12}>
             <CCard>
@@ -526,11 +554,9 @@ class FAQ_Index extends React.Component {
                                 )}
                               {current_user.id !== u.id &&
                                 _canAccess("faq", "update") === false && (
-                                  <>
-                                    {u.status === 1 ? "Active" : "De-active"}
-                                  </>
+                                  <>{u.status === 1 ? "Active" : "De-active"}</>
                                 )}
-                            </td> 
+                            </td>
 
                             {(_canAccess("faq", "update") ||
                               _canAccess("faq", "delete")) && (
