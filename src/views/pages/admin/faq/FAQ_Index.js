@@ -7,9 +7,6 @@ import {
   CRow,
   CPagination,
   CLink,
-  CFormGroup,
-  CInput,
-  CLabel,
   CModal,
   CModalBody,
   CModalFooter,
@@ -17,11 +14,12 @@ import {
   CModalTitle,
   CButton,
   CTooltip,
-  CSelect,
 } from "@coreui/react";
+import {
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import CIcon from "@coreui/icons-react";
-import { customerService } from "../../../../services/admin/customer.service";
-import { smsService } from "../../../../services/admin/sms.service";
+import { faqService } from "../../../../services/admin/faq.service";
 import {
   notify,
   _canAccess,
@@ -29,90 +27,62 @@ import {
   _loginUsersDetails,
 } from "../../../../_helpers/index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faSort,
-  faSortDown,
-  faSortUp,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
 import { globalConstants } from "../../../../constants/admin/global.constants";
 
-class Sms_Index extends React.Component {
+class FAQ_Index extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleColumnSort = this.handleColumnSort.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
+    // this.handleColumnSort = this.handleColumnSort.bind(this);
+    // this.handleSearch = this.handleSearch.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.openDeletePopup = this.openDeletePopup.bind(this);
-    this.deleteSmsTemplate = this.deleteSmsTemplate.bind(this);
+    this.deleteFaq = this.deleteFaq.bind(this);
 
     this.state = {
       fields: {
         pageNo: 1,
         sort_dir: "desc",
         sort_field: "name",
-        title: "",
-        slug: "",
-        message: "",
+        question: "",
+        answer: "",
         status: "",
-        totalPage: 1,
       },
-      sms_list: [],
+      faq_list: [],
       _openPopup: false,
-      multiaction: [],
+      multiActions: [],
       allCheckedbox: false,
     };
 
     if (this.props._renderAccess === false) {
       notify.error("Access Denied Contact to Super User");
-      history.push("/admin/sms");
+      history.push("/admin/faq");
     }
   }
 
   componentDidMount() {
-    this.getSmsTemplates();
+    this.getFaqDetails();
   }
 
-  getSmsTemplates() {
-    smsService.getSmsTemplates(this.state.fields).then((res) => {
-      if (res.success === false) {
-        notify.error(res.message);
-      } else {
-        this.setState({
-          totalRecords: res.data.totalRecords,
-          fields: {
-            ...this.state.fields,
-            totalPage: res.data.totalPage,
-          },
-          sms_list: res.data.result,
-        });
-
-        /* Multi delete checkbox code */
-        if (res?.data?.result?.length > 0) {
-          let users = res.data.result;
-          let multiaction = [];
-          const current_user = _loginUsersDetails();
-          for (var key in users) {
-            if (
-              globalConstants.DEVELOPER_PERMISSION_USER_ID.indexOf(
-                users[key].id
-              ) > -1
-            ) {
-              continue;
-            }
-            if (current_user.user_group_id === users[key].id) {
-              continue;
-            }
-            multiaction[users[key].id] = false;
-          }
-
-          this.setState({ multiaction: multiaction });
-        } else if (res?.data?.result?.length === 0) {
-          this.setState({ multiaction: [] });
+  async getFaqDetails() {
+    const faqList = await faqService.getFaq();    
+    if (faqList.length > 0) {
+      let multiActions = {};
+      const current_user = _loginUsersDetails();
+      faqList.forEach((faq) => {
+        if (globalConstants.DEVELOPER_PERMISSION_USER_ID.indexOf(faq.id) > -1) {
+          return;
         }
-      }
-    });
+        if (current_user.user_group_id === faq.id) {
+          return;
+        }
+        multiActions[faq.id] = false;
+      });
+      this.setState({ multiActions });
+    } else {
+      this.setState({ multiActions: {} });
+    }
+    this.setState({ faq_list: faqList });
   }
 
   pageChange = (newPage) => {
@@ -125,90 +95,84 @@ class Sms_Index extends React.Component {
         },
       },
       () => {
-        this.getSmsTemplates();
+        this.getFaqDetails();
       }
     );
   };
 
-  handleColumnSort(fieldName) {
-    this.setState(
-      {
-        fields: {
-          //   ...this.state.fields,
-          sort_dir: ["desc"].includes(this.state.fields.sort_dir)
-            ? "asc"
-            : "desc",
-          sort_field: fieldName,
-        },
-      },
-      () => {
-        this.getSmsTemplates();
-      }
-    );
-  }
+  // handleColumnSort(fieldName) {
+  //   this.setState(
+  //     {
+  //       fields: {
+  //         //   ...this.state.fields,
+  //         sort_dir: ["desc"].includes(this.state.fields.sort_dir)
+  //           ? "asc"
+  //           : "desc",
+  //         sort_field: fieldName,
+  //       },
+  //     },
+  //     () => {
+  //       this.getFaqDetails();
+  //     }
+  //   );
+  // }
 
   handleChange(e) {
     const { name, value } = e.target;
     this.setState({ fields: { ...this.state.fields, [name]: value } });
   }
 
-  handleSearch(type) {
-    this.resetCheckedBox();
-    if (type === "reset") {
-      this.setState(
-        {
-          fields: {
-            pageNo: 1,
-            sort_dir: "desc",
-            sort_field: "name",
-            title: "",
-            slug: "",
-            message: "",
-            status: "",
-            totalPage: 1,
-          },
-        },
-        () => {
-          this.getSmsTemplates(this.state.fields);
-        }
-      );
-    } else {
-      this.getSmsTemplates(this.state.fields);
-    }
-  }
+  // handleSearch(type) {
+  //   this.resetCheckedBox();
+  //   if (type === "reset") {
+  //     this.setState(
+  //       {
+  //         fields: {
+  //           pageNo: 1,
+  //           sort_dir: "desc",
+  //           sort_field: "name",
+  //           title: "",
+  //           slug: "",
+  //           message: "",
+  //           status: "",
+  //           totalPage: 1,
+  //         },
+  //       },
+  //       () => {
+  //         this.getFaqDetails(this.state.fields);
+  //       }
+  //     );
+  //   } else {
+  //     this.getFaqDetails(this.state.fields);
+  //   }
+  // }
 
   openDeletePopup(id) {
     this.setState({ _openPopup: true, deleteId: id });
   }
 
-  deleteSmsTemplate() {
+  deleteFaq() {
     this.setState({ _openPopup: false, deleteId: undefined });
-    smsService.deleteSmsTemplate(this.state.deleteId).then((res) => {
+    faqService.deleteFaq(this.state.deleteId).then((res) => {
       if (res.status === "error") {
         notify.error(res.message);
       } else {
         notify.success(res.message);
-        this.getSmsTemplates();
+        this.getFaqDetails();
       }
     });
   }
 
-  smsStatusChangeHandler(user_id, status) {    
-    let currentStatus;
-    if (status === "0") {
-      currentStatus = "1";
-    }
-    if (status === "1") {
-      currentStatus = "0";
-    }
-    smsService
-      .changeSmsStatus(user_id, { status: currentStatus })
+  faqStatusChangeHandler(user_id, _status) {
+    const updateStatus = this.state.fields.status === 1 ? 0 : 1;
+    faqService
+      .changeFaqStatus(user_id, { status: updateStatus })
       .then((res) => {
         if (res.status === "error") {
           notify.error(res.message);
         } else {
           notify.success(res.message);
-          this.getSmsTemplates();
+          this.getFaqDetails();
         }
       });
   }
@@ -218,21 +182,21 @@ class Sms_Index extends React.Component {
   };
 
   handleAllChecked = (event) => {
-    let multiactions = this.state.multiaction;
-    console.log(multiactions);
-    for (var key in multiactions) {
-      multiactions[key] = event.target.checked;
+    let multiActionss = this.state.multiActions;
+    console.log(multiActionss);
+    for (var key in multiActionss) {
+      multiActionss[key] = event.target.checked;
     }
     this.setState({
-      multiaction: multiactions,
+      multiActions: multiActionss,
       allCheckedbox: event.target.checked,
     });
   };
 
   handleCheckFieldElement = (event) => {
-    let multiactions = this.state.multiaction;
-    multiactions[event.target.value] = event.target.checked;
-    this.setState({ multiaction: multiactions });
+    let multiActionss = this.state.multiActions;
+    multiActionss[event.target.value] = event.target.checked;
+    this.setState({ multiActions: multiActionss });
   };
 
   resetCheckedBox() {
@@ -245,62 +209,62 @@ class Sms_Index extends React.Component {
   //         notify.error(res.message);
   //       } else {
   //         notify.success(res.message);
-  //         this.getSmsTemplates(this.state.fields);
+  //         this.getFaqDetails(this.state.fields);
   //       }
   //     });
   //   }
 
-  handleApplyAction = (actionValue = "") => {
-    if (actionValue !== "") {
-      let appliedActionId = [];
-      let selectedIds = this.state.multiaction;
-      for (var key in selectedIds) {
-        if (selectedIds[key]) {
-          appliedActionId.push(key);
-        }
-      }
+  // handleApplyAction = (actionValue = "") => {
+  //   if (actionValue !== "") {
+  //     let appliedActionId = [];
+  //     let selectedIds = this.state.multiActions;
+  //     for (var key in selectedIds) {
+  //       if (selectedIds[key]) {
+  //         appliedActionId.push(key);
+  //       }
+  //     }
 
-      this.resetCheckedBox();
-      switch (actionValue) {
-        case "delete": {
-          customerService
-            .deleteMultipleCustomers({ user_ids: appliedActionId })
-            .then((res) => {
-              if (res.status === false) {
-                notify.error(res.message);
-              } else {
-                notify.success(res.message);
-                this.getSmsTemplates(this.state.fields);
-              }
-            });
-          break;
-        }
-        case "active": {
-          this.bulkCustomersStatusChangeHandler({
-            user_ids: appliedActionId,
-            status: true,
-          });
-          break;
-        }
-        case "deactive": {
-          this.bulkCustomersStatusChangeHandler({
-            user_ids: appliedActionId,
-            status: false,
-          });
-          break;
-        }
-        default:
-          return "";
-      }
-    }
-  };
+  //     this.resetCheckedBox();
+  //     switch (actionValue) {
+  //       case "delete": {
+  //         customerService
+  //           .deleteMultipleCustomers({ user_ids: appliedActionId })
+  //           .then((res) => {
+  //             if (res.status === false) {
+  //               notify.error(res.message);
+  //             } else {
+  //               notify.success(res.message);
+  //               this.getFaqDetails(this.state.fields);
+  //             }
+  //           });
+  //         break;
+  //       }
+  //       case "active": {
+  //         this.bulkCustomersStatusChangeHandler({
+  //           user_ids: appliedActionId,
+  //           status: true,
+  //         });
+  //         break;
+  //       }
+  //       case "deactive": {
+  //         this.bulkCustomersStatusChangeHandler({
+  //           user_ids: appliedActionId,
+  //           status: false,
+  //         });
+  //         break;
+  //       }
+  //       default:
+  //         return "";
+  //     }
+  //   }
+  // };
 
   render() {
     const current_user = _loginUsersDetails();
 
     return (
       <>
-        <CRow>
+        {/* <CRow>
           <CCol xl={12}>
             <CCard>
               <CCardBody>
@@ -398,19 +362,19 @@ class Sms_Index extends React.Component {
               </CCardBody>
             </CCard>
           </CCol>
-        </CRow>
+        </CRow> */}
         <CRow>
           <CCol xl={12}>
             <CCard>
               <CCardHeader>
-                <strong>SMS Templates</strong>
+                <strong>FAQ</strong>
                 <div className="card-header-actions">
-                  {_canAccess("sms", "create") && (
+                  {_canAccess("faq", "create") && (
                     <CTooltip content={globalConstants.ADD_BTN}>
                       <CLink
                         className="btn btn-dark btn-block"
                         aria-current="page"
-                        to="/admin/sms/add"
+                        to="/admin/faq/add"
                       >
                         <FontAwesomeIcon icon={faPlus} />
                       </CLink>
@@ -420,10 +384,10 @@ class Sms_Index extends React.Component {
               </CCardHeader>
               <CCardBody>
                 <div className="position-relative table-responsive">
-                  {/* <MultiActionBar
+                  {/* <multiActionsBar
                     onClick={this.handleApplyAction}
-                    checkBoxData={this.state.multiaction}
-                    module_name={"sms"}
+                    checkBoxData={this.state.multiActions}
+                    module_name={"faq"}
                   /> */}
                   <table className="table">
                     <thead>
@@ -438,7 +402,9 @@ class Sms_Index extends React.Component {
                           />
                         </th> */}
                         <th>#</th>
-                        <th onClick={() => this.handleColumnSort("title")}>
+                        <th>Question</th>
+                        <th>Answer</th>
+                        {/* <th onClick={() => this.handleColumnSort("title")}>
                           <span className="sortCls">
                             <span className="table-header-text-mrg">Title</span>
                             {this.state.sort_field !== "title" && (
@@ -488,9 +454,9 @@ class Sms_Index extends React.Component {
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
-                        </th>
+                        </th>*/}
 
-                        <th onClick={() => this.handleColumnSort("status")}>
+                        {/* <th onClick={() => this.handleColumnSort("status")}>
                           <span className="sortCls">
                             <span className="table-header-text-mrg">
                               Status
@@ -507,9 +473,10 @@ class Sms_Index extends React.Component {
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
-                        </th>
-                        {(_canAccess("sms", "update") ||
-                          _canAccess("sms", "delete")) && (
+                        </th>  */}
+                        <th>Status</th>
+                        {(_canAccess("faq", "update") ||
+                          _canAccess("faq", "delete")) && (
                           <>
                             <th>Action</th>
                           </>
@@ -517,8 +484,8 @@ class Sms_Index extends React.Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {this.state?.sms_list?.length > 0 &&
-                        this.state.sms_list.map((u, index) => (
+                      {this.state?.faq_list?.length > 0 &&
+                        this.state.faq_list.map((u, index) => (
                           <tr key={u.id}>
                             {/* <td>
                               {" "}
@@ -530,7 +497,7 @@ class Sms_Index extends React.Component {
                                   }
                                   _id={u.id}
                                   _isChecked={
-                                    this.state.multiaction[
+                                    this.state.multiActions[
                                       u.id
                                     ]
                                   }
@@ -538,52 +505,54 @@ class Sms_Index extends React.Component {
                               )}{" "}
                             </td> */}
                             <td>{index + 1}</td>
-                            <td>{u.title}</td>
+                            <td>{u.question}</td>
+                            <td>{u.answer}</td>
+                            {/* <td>{u.title}</td>
                             <td>{u.slug}</td>
-                            <td>{u.message}</td>
+                            <td>{u.message}</td>*/}
                             <td>
                               {current_user.id !== u.id &&
-                                _canAccess("sms", "update") && (
+                                _canAccess("faq", "update") && (
                                   <CLink
                                     onClick={() =>
-                                      this.smsStatusChangeHandler(
+                                      this.faqStatusChangeHandler(
                                         u.id,
                                         u.status
                                       )
                                     }
                                   >
-                                    {u.status === "1" ? "Active" : "De-active"}
+                                    {u.status === 1 ? "Active" : "De-active"}
                                   </CLink>
                                 )}
                               {current_user.id !== u.id &&
-                                _canAccess("sms", "update") === false && (
+                                _canAccess("faq", "update") === false && (
                                   <>
-                                    {u.status === "1" ? "Active" : "De-active"}
+                                    {u.status === 1 ? "Active" : "De-active"}
                                   </>
                                 )}
-                            </td>
+                            </td> 
 
-                            {(_canAccess("sms", "update") ||
-                              _canAccess("sms", "delete")) && (
+                            {(_canAccess("faq", "update") ||
+                              _canAccess("faq", "delete")) && (
                               <>
                                 <td>
                                   {current_user.id !== u.id && (
                                     <>
-                                      {_canAccess("sms", "update") && (
+                                      {_canAccess("faq", "update") && (
                                         <CTooltip
                                           content={globalConstants.EDIT_BTN}
                                         >
                                           <CLink
                                             className="btn  btn-md btn-primary"
                                             aria-current="page"
-                                            to={`/admin/sms/edit/${u.id}`}
+                                            to={`/admin/faq/edit/${u.id}`}
                                           >
                                             <CIcon name="cil-pencil"></CIcon>{" "}
                                           </CLink>
                                         </CTooltip>
                                       )}
                                       &nbsp;
-                                      {_canAccess("sms", "delete") && (
+                                      {_canAccess("faq", "delete") && (
                                         <CTooltip
                                           content={globalConstants.DELETE_BTN}
                                         >
@@ -604,7 +573,7 @@ class Sms_Index extends React.Component {
                             )}
                           </tr>
                         ))}
-                      {this.state?.sms_list?.length?.length === 0 && (
+                      {this.state?.faq_list?.length?.length === 0 && (
                         <tr>
                           <td colSpan="5">No records found</td>
                         </tr>
@@ -636,7 +605,7 @@ class Sms_Index extends React.Component {
           </CModalHeader>
           <CModalBody>Are you sure you want to delete this record?</CModalBody>
           <CModalFooter>
-            <CButton color="danger" onClick={() => this.deleteSmsTemplate()}>
+            <CButton color="danger" onClick={() => this.deleteFaq()}>
               Delete
             </CButton>
             <CButton
@@ -654,4 +623,4 @@ class Sms_Index extends React.Component {
   }
 }
 
-export default Sms_Index;
+export default FAQ_Index;

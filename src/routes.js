@@ -17,6 +17,10 @@ const Sms_Edit = React.lazy(() => import('./views/pages/admin/sms/Sms_Edit'));
 
 const Bank_Add = React.lazy(() => import('./views/pages/admin/bank_details/Bank_Add'));
 
+const FAQ_Index = React.lazy(() => import('./views/pages/admin/faq/FAQ_Index'));
+const FAQ_Add = React.lazy(() => import('./views/pages/admin/faq/FAQ_Add'));
+const FAQ_Edit = React.lazy(() => import('./views/pages/admin/faq/FAQ_Edit'));
+
 const User_Groups_Index = React.lazy(() => import('./views/pages/admin/user_groups/User_Groups_Index'));
 const User_Groups_Add = React.lazy(() => import('./views/pages/admin/user_groups/User_Groups_Add'));
 const User_Groups_Edit = React.lazy(() => import('./views/pages/admin/user_groups/User_Groups_Edit'));
@@ -88,6 +92,11 @@ const routes = [
 
   // bank details
   { path: '/admin/bank', exact: true, name: 'Bank Details', component: Bank_Add, module_name: 'bank', action: 'update' },
+
+  // FAQ
+  { path: '/admin/faq', exact: true, name: 'FAQ', component: FAQ_Index, module_name: 'faq', action: 'view' },
+  { path: '/admin/faq/add', exact: true, name: 'Add', component: FAQ_Add, module_name: 'faq', action: 'create'},
+  { path: '/admin/faq/edit/:id', exact: true, name: 'Edit', component: FAQ_Edit, module_name: 'faq', action: 'update'},
 
   // module_name and action parameter used for ACL mechanisam its required column
   { path: '/admin/user_groups', exact: true, name: 'Groups Management', component: User_Groups_Index, module_name: 'user_groups', action: 'view' },

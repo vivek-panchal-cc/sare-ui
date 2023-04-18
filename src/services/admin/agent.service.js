@@ -58,7 +58,7 @@ async function getAgentDetails(id) {
 async function updateAgentDetails(postData, custId) {
   setLoading(true);
   const requestOptions = {
-    method: "PUT",
+    method: "POST",
     headers: authHeaderFile("agents", "update"),
     body: postData,
   };
