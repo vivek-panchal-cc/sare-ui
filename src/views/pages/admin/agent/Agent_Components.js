@@ -72,7 +72,7 @@ const AgentDetailsComponent = (props) => {
           notify.error(res.message);
         } else {
             // setUserList(res.data.result);
-            if (res.data.length === 0) {
+            if (res?.data?.length === 0) {
                 setUserList([]);
             } else {
                 setUserList(res.data.result);
@@ -116,7 +116,7 @@ const AgentDetailsComponent = (props) => {
 
   const sortedData =
     props.agentDetails &&
-    props.agentDetails.length > 0 &&
+    props.agentDetails?.length > 0 &&
     sortOrder.column &&
     sortOrder.direction
       ? props.agentDetails.sort((a, b) => {
@@ -164,12 +164,12 @@ const AgentDetailsComponent = (props) => {
                     <br />
                     <b>National Id :</b> {props.agent.nation_id}
                     <br />
-                    <b>Shofco Number :</b> {props.agent.shofco_number}
+                    <b>SHOFCO Number :</b> {props.agent.shofco_number}
                   </CCol>
                   <CCol sm="12">
                     {/* <b>Customer Type :</b> {props.agent.customer_type} */}
                     <b>Status :</b>{" "}
-                    {props.agent.status === "0" ? "De-active" : "Active"}
+                    {props.agent.status === "0" ? "Deactive" : "Active"}
                   </CCol>
                 </CRow>
               </CCardBody>

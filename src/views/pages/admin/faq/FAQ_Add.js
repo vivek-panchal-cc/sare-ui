@@ -45,14 +45,13 @@ class Sms_Add extends React.Component {
   handleChange(e) {
     const { name, value } = e.target;
     if (name === "status") {
-      const newStatus = !this.state.fields.status;
-      let updateStatus = false;
-      if (newStatus === false) {
+      let updateStatus = 0;
+      if (value === true) {
         updateStatus = 0;
       }
-      if (newStatus === true) {
+      if (value === false) {
         updateStatus = 1;
-      }          
+      }
       this.setState({ fields: { ...this.state.fields, [name]: updateStatus } });
     } else {
       this.setState({ fields: { ...this.state.fields, [name]: value } });
@@ -61,7 +60,7 @@ class Sms_Add extends React.Component {
 
   handleSubmit() {
     if (this.validator.allValid()) {
-      faqService.createFaq(this.state.fields).then((res) => {        
+      faqService.createFaq(this.state.fields).then((res) => {
         if (res.status === false) {
           notify.error(res.message);
         } else {
@@ -213,7 +212,7 @@ class Sms_Add extends React.Component {
                         color="primary"
                         defaultChecked={this.state.fields.status}
                         onClick={this.handleChange}
-                        disabled={true}
+                        // disabled={true}
                       />
                     </CFormGroup>
                   </CCol>

@@ -15,6 +15,7 @@ import {
   CLink,
   CSwitch,
   CTooltip,
+  CTextarea,
 } from "@coreui/react";
 import SimpleReactValidator from "simple-react-validator";
 import { userService } from "../../../../services/admin/user.service";
@@ -50,9 +51,20 @@ class Sms_Add extends React.Component {
   handleChange(e) {
     const { name, value } = e.target;
     if (name === "status") {
-      var fstatus = value === "true" ? false : true;
-      this.setState({ fields: { ...this.state.fields, [name]: fstatus } });
-    } else {
+      let newStatus = "0";
+      if (value === true) {
+        newStatus = "0";
+      }
+      if (value === false) {
+        newStatus = "1";
+      }
+      this.setState({ fields: { ...this.state.fields, [name]: newStatus } });
+    }
+    // else if (name === "status") {
+    //   var fstatus = value === "true" ? false : true;
+    //   this.setState({ fields: { ...this.state.fields, [name]: fstatus } });
+    // } 
+    else {
       this.setState({ fields: { ...this.state.fields, [name]: value } });
     }
   }
@@ -147,7 +159,7 @@ class Sms_Add extends React.Component {
                 </CFormGroup>
                 <CFormGroup>
                   <CLabel htmlFor="nf-name">Message</CLabel>
-                  <CInput
+                  <CTextarea
                     type="text"
                     id="message"
                     name="message"
@@ -213,7 +225,7 @@ class Sms_Add extends React.Component {
                         className="mr-1"
                         color="primary"
                         defaultChecked={this.state.fields.status}
-                        onClick={this.handleInputChange}
+                        onClick={this.handleChange}
                       />
                     </CFormGroup>
                   </CCol>
