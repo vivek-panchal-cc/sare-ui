@@ -12,11 +12,12 @@ export const faqService = {
   changeFaqStatus
 };
 
-async function getFaq() {
+async function getFaq(postData) {
   setLoading(true);
   const requestOptions = {
-    method: "GET",
-    headers: authHeader("faq", "view")
+    method: "POST",
+    headers: authHeader("faq", "view"),
+    body: JSON.stringify(postData),
   };
 
   let response;
@@ -28,17 +29,9 @@ async function getFaq() {
   } catch (error) {
     notify.error("Something went wrong");
     setLoading(false);
-    response = await Promise.reject();
+    const response = undefined;
   }
-  const data = await response.json();
-  if (data.success) {
-    setLoading(false);
-    return data.data;
-  } else {
-    notify.error(data.message);
-    setLoading(false);
-    return [];
-  }
+  return handleResponse(response);
 }
 
 // async function changeSmsStatus(id, postData) {

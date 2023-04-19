@@ -49,6 +49,7 @@ class Agent_Edit extends React.Component {
       if (
         _canAccess(this.props.module_name, this.props.action, "/admin/agents")
       ) {
+        // Fetching Agent details.
         agentService
           .getAgentDetails(this.state.fields.account_number)
           .then((res) => {
@@ -107,7 +108,7 @@ class Agent_Edit extends React.Component {
       formData.append("shofco_number", this.state.fields.shofco_number);
       formData.append("status", this.state.fields.status);
       formData.append("profile_image", this.state.fields.profile_image);
-
+      // Updating Agent details
       agentService
         .updateAgentDetails(formData, this.state.account_number)
         .then((res) => {
@@ -283,32 +284,7 @@ class Agent_Edit extends React.Component {
                       />
                     )}
                   </div>
-                </CFormGroup>
-                {/* <CFormGroup>
-                  <CLabel htmlFor="nf-email">Status</CLabel>
-                  <CSelect
-                    key="status"
-                    id="status"
-                    placeholder="Status"
-                    value={this.state.fields.status}
-                    style={{ cursor: "pointer" }}
-                    onChange={(event) =>
-                      this.handleFieldChange("status", event.target.value)
-                    }
-                  >
-                    <option value="">-- Select Status --</option>
-                    <option value="1">Active</option>
-                    <option value="0">In-Active</option>
-                  </CSelect>
-                  <CFormText className="help-block">
-                    {this.validator.message(
-                      "status",
-                      this.state.fields.status,
-                      "required",
-                      { className: "text-danger" }
-                    )}
-                  </CFormText>
-                </CFormGroup> */}
+                </CFormGroup>                
                 <CFormGroup row>
                   <CCol md="1">Status</CCol>
 

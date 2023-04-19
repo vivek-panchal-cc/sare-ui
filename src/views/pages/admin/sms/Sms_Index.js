@@ -193,6 +193,7 @@ class Sms_Index extends React.Component {
     });
   }
 
+  // To change the status of sms
   smsStatusChangeHandler(user_id, status) {    
     let currentStatus;
     if (status === "0") {

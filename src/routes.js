@@ -10,6 +10,7 @@ const Customer_Edit = React.lazy(() => import('./views/pages/admin/customer/Cust
 
 const Agent_Index = React.lazy(() => import('./views/pages/admin/agent/Agent_Index'));
 const Agent_Edit = React.lazy(() => import('./views/pages/admin/agent/Agent_Edit'));
+const Agent_Details = React.lazy(() => import('./views/pages/admin/agent/Agent_Details'));
 
 const Sms_Index = React.lazy(() => import('./views/pages/admin/sms/Sms_Index'));
 const Sms_Add = React.lazy(() => import('./views/pages/admin/sms/Sms_Add'));
@@ -84,6 +85,7 @@ const routes = [
   // agent management
   { path: '/admin/agents', exact: true, name: 'Agents Management', component: Agent_Index, module_name: 'agents', action: 'view' },
   { path: '/admin/agents/edit/:id', exact: true, name: 'Edit', component: Agent_Edit, module_name: 'agents', action: 'update' },
+  { path: '/admin/agents/detailView/:id', exact: true, name: 'Agent Details', component: Agent_Details, module_name: 'agents', action: 'view' },
 
   // sms templates
   { path: '/admin/sms', exact: true, name: 'Sms Templates', component: Sms_Index, module_name: 'sms', action: 'view' },

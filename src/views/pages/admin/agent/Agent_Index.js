@@ -64,7 +64,7 @@ class Agent_Index extends React.Component {
         pageNo: 1,
         sort_dir: "desc",
         sort_field: "name",
-        search_name: "",
+        name: "",
         mobile_number: "",
         customer_type: "",
         status: "",
@@ -120,7 +120,9 @@ class Agent_Index extends React.Component {
             ) {
               continue;
             }
-            multiaction[users[key].customer_account_rel?.account_number] = false;
+            multiaction[
+              users[key].customer_account_rel?.account_number
+            ] = false;
           }
 
           this.setState({ multiaction: multiaction });
@@ -177,7 +179,7 @@ class Agent_Index extends React.Component {
             pageNo: 1,
             sort_dir: "desc",
             sort_field: "name",
-            search_name: "",
+            name: "",
             mobile_number: "",
             customer_type: "",
             status: "",
@@ -291,7 +293,7 @@ class Agent_Index extends React.Component {
     }
   };
 
-  userStatusChangedHandler(user_id, status) {
+  agentStatusChangedHandler(user_id, status) {
     let currentStatus;
     if (status === "0") {
       currentStatus = "1";
@@ -299,14 +301,16 @@ class Agent_Index extends React.Component {
     if (status === "1") {
       currentStatus = "0";
     }
-    agentService.changeAgentStatus(user_id, { status: currentStatus }).then(res => {
-      if (res.status === 'error') {
-        notify.error(res.message);
-      } else {
-        notify.success(res.message);
-        this.getAgentsList();
-      }
-    });
+    agentService
+      .changeAgentStatus(user_id, { status: currentStatus })
+      .then((res) => {
+        if (res.status === "error") {
+          notify.error(res.message);
+        } else {
+          notify.success(res.message);
+          this.getAgentsList();
+        }
+      });
   }
 
   render() {
@@ -326,8 +330,8 @@ class Agent_Index extends React.Component {
                         <CInput
                           id="name"
                           placeholder="Search Name"
-                          name="search_name"
-                          value={this.state.fields.search_name}
+                          name="name"
+                          value={this.state.fields.name}
                           onChange={this.handleChange}
                           onKeyPress={(event) => {
                             if (event.key === "Enter") {
@@ -577,7 +581,14 @@ class Agent_Index extends React.Component {
                               )}{" "}
                             </td> */}
                             <td>{index + 1}</td>
-                            <td>{u.customer_account_rel?.account_number}</td>
+                            {/* <td>{u.customer_account_rel?.account_number}</td> */}
+                            <td>
+                              <a
+                                href={`/admin/agents/detailView/${u.customer_account_rel?.account_number}`}
+                              >
+                                {u.customer_account_rel?.account_number}
+                              </a>
+                            </td>                            
                             <td>{u.name}</td>
                             <td>{u.mobile_number}</td>
                             <td>
@@ -586,13 +597,28 @@ class Agent_Index extends React.Component {
                             </td>
                             {/* <td>{u.status === "1" ? "Active" : "In-Active"}</td> */}
                             <td>
-                            {current_user.id !== u.customer_account_rel?.account_number && _canAccess('agents', 'update') &&
-                              <CLink onClick={() => this.userStatusChangedHandler(u.customer_account_rel?.account_number, u.status)} >{(u.status === "1") ? 'Active' : 'De-active'}</CLink>
-                            }
-                            {current_user.id !== u.customer_account_rel?.account_number && _canAccess('agents', 'update') === false &&
-                              <>{(u.status === "1") ? 'Active' : 'De-active'}</>
-                            }
-                          </td>
+                              {current_user.id !==
+                                u.customer_account_rel?.account_number &&
+                                _canAccess("agents", "update") && (
+                                  <CLink
+                                    onClick={() =>
+                                      this.agentStatusChangedHandler(
+                                        u.customer_account_rel?.account_number,
+                                        u.status
+                                      )
+                                    }
+                                  >
+                                    {u.status === "1" ? "Active" : "De-active"}
+                                  </CLink>
+                                )}
+                              {current_user.id !==
+                                u.customer_account_rel?.account_number &&
+                                _canAccess("agents", "update") === false && (
+                                  <>
+                                    {u.status === "1" ? "Active" : "De-active"}
+                                  </>
+                                )}
+                            </td>
                             {(_canAccess("agents", "update") ||
                               _canAccess("agents", "delete")) && (
                               <>
@@ -622,7 +648,8 @@ class Agent_Index extends React.Component {
                                             className="btn  btn-md btn-danger "
                                             onClick={() =>
                                               this.openDeletePopup(
-                                                u.customer_account_rel?.account_number
+                                                u.customer_account_rel
+                                                  ?.account_number
                                               )
                                             }
                                           >

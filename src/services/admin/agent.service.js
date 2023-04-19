@@ -10,6 +10,7 @@ export const agentService = {
   changeBulkAgentsStatus,
   deleteMultipleAgents,
   changeAgentStatus,
+  agentDetailsView
 };
 
 async function getAgentsList(postData) {
@@ -141,10 +142,10 @@ async function deleteMultipleAgents(postData) {
   return handleResponse(response);
 }
 
-async function changeAgentStatus(id, postData) {
+async function changeAgentStatus(id, postData) {  
   setLoading(true);
   const requestOptions = {
-    method: "PUT",
+    method: "POST",
     headers: authHeader("agents", "edit"),
     body: JSON.stringify(postData),
   };
@@ -156,6 +157,23 @@ async function changeAgentStatus(id, postData) {
     );
   } catch (error) {
     notify.error("Something went wrong");
+    setLoading(false);
+    response = await Promise.reject();
+  }
+  return handleResponse(response);
+}
+
+async function agentDetailsView(id) {
+  setLoading(true);
+  const requestOptions = {
+      method: 'POST',
+      headers: authHeader('agents', 'view')
+  };
+  let response;
+  try {
+    response = await fetch(`${process.env.REACT_APP_API_URL}api/agents/${id}/transactions`, requestOptions);
+  } catch (error) {
+    notify.error('Something went wrong');
     setLoading(false);
     response = await Promise.reject();
   }
