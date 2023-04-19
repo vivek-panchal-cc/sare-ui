@@ -1,5 +1,6 @@
 import { authHeader, authHeaderFile } from "../../_helpers";
 import { notify, handleResponse, setLoading } from "../../_helpers";
+import moment from "moment";
 require("dotenv").config();
 
 export const agentService = {
@@ -10,7 +11,7 @@ export const agentService = {
   changeBulkAgentsStatus,
   deleteMultipleAgents,
   changeAgentStatus,
-  agentDetailsView
+  agentDetailsView,
 };
 
 async function getAgentsList(postData) {
@@ -142,7 +143,7 @@ async function deleteMultipleAgents(postData) {
   return handleResponse(response);
 }
 
-async function changeAgentStatus(id, postData) {  
+async function changeAgentStatus(id, postData) {
   setLoading(true);
   const requestOptions = {
     method: "POST",
@@ -163,17 +164,31 @@ async function changeAgentStatus(id, postData) {
   return handleResponse(response);
 }
 
-async function agentDetailsView(id) {
+async function agentDetailsView(id, postData) {  
+  const fromDate = moment(postData?.from).format("DD/MM/YYYY");
+  const toDate = moment(postData?.to).format("DD/MM/YYYY");
+  if (fromDate === 'Invalid date' || toDate === 'Invalid date') {
+    postData.from = "";
+    postData.to = "";
+  } 
+  else if (postData) {
+    postData.from = fromDate;
+    postData.to = toDate;
+  }  
   setLoading(true);
   const requestOptions = {
-      method: 'POST',
-      headers: authHeader('agents', 'view')
+    method: "POST",
+    headers: authHeader("agents", "view"),
+    body: JSON.stringify(postData),
   };
   let response;
   try {
-    response = await fetch(`${process.env.REACT_APP_API_URL}api/agents/${id}/transactions`, requestOptions);
+    response = await fetch(
+      `${process.env.REACT_APP_API_URL}api/agents/${id}/transactions`,
+      requestOptions
+    );
   } catch (error) {
-    notify.error('Something went wrong');
+    notify.error("Something went wrong");
     setLoading(false);
     response = await Promise.reject();
   }

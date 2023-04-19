@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import { useState } from "react";
+import moment from "moment";
 import { capitalize } from "_helpers";
 // import "./page.css";
 import {
@@ -24,12 +25,14 @@ import {
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useParams } from "react-router-dom";
 import { agentService } from "../../../../services/admin";
 import { notify, history, _loginUsersDetails } from "../../../../_helpers";
 import { globalConstants } from "../../../../constants/admin/global.constants";
 import FileSaver, { saveAs } from "file-saver";
 
 const AgentDetailsComponent = (props) => {
+  const { account_number } = useParams();
   const [fields, setFields] = useState({
     pageNo: 1,
     sort_dir: "desc",
@@ -37,15 +40,17 @@ const AgentDetailsComponent = (props) => {
     credit_acc: "",
     ref_id: "",
     status: "",
-    fromDate: "",
-    toDate: "",
+    from: "",
+    to: "",
     totalPage: 1,
   });
   const [sortOrder, setSortOrder] = useState({
     column: null,
     direction: null,
   });
+//   const [sortedData, setSortedData] = useState([]);
   const [userList, setUserList] = useState([]);
+  const [userListFlag, setUserListFlag] = useState(false);
   const [multiaction, setMultiaction] = useState([]);
 
   const handleMultiAction = (userId) => {
@@ -59,61 +64,26 @@ const AgentDetailsComponent = (props) => {
     setFields((prevFields) => ({ ...prevFields, [name]: value }));
   };
 
-  //   const getAgentDetailsView = () => {
-  //     agentService.agentDetailsView(fields).then((res) => {
-  //       if (res.success === false) {
-  //         notify.error(res.message);
-  //         history.push("/admin/agents");
-  //       } else {
-  //         setFields(res.data.result);
-  //       }
-  //     });
-  //   };
-
   const getAgentDetailsView = () => {
-    agentService.agentDetailsView(fields).then((res) => {
-      if (res.success === false) {
-        notify.error(res.message);
-      } else {
-        setFields((prevFields) => ({
-          ...prevFields,
-          totalPage: res?.data?.totalPage,
-        }));
-        setUserList(res.data.result);
-
-        /* Multi delete checkbox code */
-        if (res?.data?.result?.length > 0) {
-          let users = res.data.result;
-          let updatedMultiaction = { ...multiaction };
-          const currentUser = _loginUsersDetails();
-          for (var key in users) {
-            if (
-              globalConstants.DEVELOPER_PERMISSION_USER_ID.indexOf(
-                users[key].customer_account_rel?.account_number
-              ) > -1
-            ) {
-              continue;
+    agentService
+      .agentDetailsView(props.agent.account_number, fields)
+      .then((res) => {
+        if (res.success === false) {
+          notify.error(res.message);
+        } else {
+            // setUserList(res.data.result);
+            if (res.data.length === 0) {
+                setUserList([]);
+            } else {
+                setUserList(res.data.result);
             }
-            if (
-              currentUser.user_group_id ===
-              users[key].customer_account_rel?.account_number
-            ) {
-              continue;
-            }
-            updatedMultiaction[
-              users[key].customer_account_rel?.account_number
-            ] = false;
-          }
-          setMultiaction(updatedMultiaction);
-        } else if (res?.data?.result?.length === 0) {
-          setMultiaction([]);
+            setUserListFlag(true);          
         }
-      }
-    });
+      });
   };
 
   const handleSearch = () => {
-    getAgentDetailsView(fields);
+    getAgentDetailsView(props.agent.account_number);
   };
 
   const handleReset = () => {
@@ -124,8 +94,12 @@ const AgentDetailsComponent = (props) => {
       credit_acc: "",
       ref_id: "",
       status: "",
+      from: "",
+      to: "",
       totalPage: 1,
     });
+    getAgentDetailsView(props.agent.account_number);
+    setUserListFlag(false);
   };
 
   const sortData = (column) => {
@@ -158,6 +132,8 @@ const AgentDetailsComponent = (props) => {
         })
       : props.agentDetails;
 
+    //   setSortedData(sortedDataList);
+
   const renderSortIcon = (column) => {
     if (sortOrder.column === column) {
       if (sortOrder.direction === "asc") {
@@ -167,8 +143,7 @@ const AgentDetailsComponent = (props) => {
       }
     }
     return null;
-  };
-
+};
   return (
     <>
       <CContainer fluid>
@@ -273,12 +248,12 @@ const AgentDetailsComponent = (props) => {
                       <CCol xl={2}>
                         <CFormGroup row>
                           <CCol xs="12">
-                            <CLabel htmlFor="fromDate">From Date</CLabel>
+                            <CLabel htmlFor="from">From Date</CLabel>
                             <CInput
                               type="date"
-                              id="fromDate"
-                              name="fromDate"
-                              value={fields.fromDate}
+                              id="from"
+                              name="from"
+                              value={fields.from}
                               onChange={handleChange}
                               style={{ cursor: "pointer" }}
                               onKeyPress={(event) => {
@@ -293,12 +268,12 @@ const AgentDetailsComponent = (props) => {
                       <CCol xl={2}>
                         <CFormGroup row>
                           <CCol xs="12">
-                            <CLabel htmlFor="toDate">To Date</CLabel>
+                            <CLabel htmlFor="to">To Date</CLabel>
                             <CInput
                               type="date"
-                              id="toDate"
-                              name="toDate"
-                              value={fields.toDate}
+                              id="to"
+                              name="to"
+                              value={fields.to}
                               onChange={handleChange}
                               style={{ cursor: "pointer" }}
                               onKeyPress={(event) => {
@@ -381,8 +356,8 @@ const AgentDetailsComponent = (props) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {sortedData?.length > 0 ? (
-                            sortedData.map((data, index) => (
+                          {userListFlag  ? (
+                            userList?.map((data, index) => (
                               <tr key={index}>
                                 <td>{data.credit_acc}</td>
                                 <td>{data.ref_id}</td>
@@ -390,7 +365,37 @@ const AgentDetailsComponent = (props) => {
                                 <td>{capitalize(data.status)}</td>
                                 <td>
                                   {new Date(data.created_at).toLocaleDateString(
-                                    "en-GB"
+                                    "en-GB",
+                                    {
+                                      day: "2-digit",
+                                      month: "2-digit",
+                                      year: "numeric",
+                                    }
+                                  )}{" "}
+                                  {new Date(data.created_at).toLocaleTimeString(
+                                    "en-US"
+                                  )}
+                                </td>
+                              </tr>
+                            ))
+                          ) : sortedData?.length > 0 ? (
+                            sortedData?.map((data, index) => (
+                              <tr key={index}>
+                                <td>{data.credit_acc}</td>
+                                <td>{data.ref_id}</td>
+                                <td>{data.amount}</td>
+                                <td>{capitalize(data.status)}</td>
+                                <td>
+                                  {new Date(data.created_at).toLocaleDateString(
+                                    "en-GB",
+                                    {
+                                      day: "2-digit",
+                                      month: "2-digit",
+                                      year: "numeric",
+                                    }
+                                  )}{" "}
+                                  {new Date(data.created_at).toLocaleTimeString(
+                                    "en-US"
                                   )}
                                 </td>
                               </tr>
