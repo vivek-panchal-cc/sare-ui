@@ -360,30 +360,7 @@ class Agent_Index extends React.Component {
                         />
                       </CCol>
                     </CFormGroup>
-                  </CCol>
-                  <CCol xl={3}>
-                    <CFormGroup row>
-                      <CCol xs="12">
-                        <CLabel htmlFor="name">Customer Type</CLabel>
-                        <CSelect
-                          id="name"
-                          placeholder="Type"
-                          name="customer_type"
-                          value={this.state.fields.customer_type}
-                          onChange={this.handleChange}
-                          style={{ cursor: "pointer" }}
-                          onKeyPress={(event) => {
-                            if (event.key === "Enter") {
-                              this.handleSearch("search");
-                            }
-                          }}
-                        >
-                          <option value="">-- Select Type --</option>
-                          <option value="agent">Agent</option>
-                        </CSelect>
-                      </CCol>
-                    </CFormGroup>
-                  </CCol>
+                  </CCol>                  
                   <CCol xl={3}>
                     <CFormGroup row>
                       <CCol xs="12">

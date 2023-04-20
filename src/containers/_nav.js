@@ -28,6 +28,18 @@ const _nav = [
   },
   {
     _tag: "CSidebarNavTitle",
+    _children: ["Content Management"],
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "KYC Requests",
+    to: "/admin/kyc_requests",
+    icon: <FontAwesomeIcon icon={faFileAlt} className="c-sidebar-nav-icon" />,
+    module_name: "kyc_requests",
+    id: "kyc_requests_sidebar_id",
+  },
+  {
+    _tag: "CSidebarNavTitle",
     _children: ["Access"],
   },
   {
@@ -101,18 +113,6 @@ const _nav = [
     ),
     module_name: "faq",
     id: "faq_sidebar_id",
-  },
-  {
-    _tag: "CSidebarNavTitle",
-    _children: ["Content Management"],
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "KYC Requests",
-    to: "/admin/kyc_requests",
-    icon: <FontAwesomeIcon icon={faFileAlt} className="c-sidebar-nav-icon" />,
-    module_name: "kyc_requests",
-    id: "kyc_requests_sidebar_id",
   },
   /* {
     _tag: 'CSidebarNavItem',

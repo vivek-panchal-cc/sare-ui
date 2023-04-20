@@ -77,13 +77,14 @@ const AgentDetailsComponent = (props) => {
             } else {
                 setUserList(res.data.result);
             }
-            setUserListFlag(true);          
+            // setUserListFlag(true);          
         }
       });
   };
 
   const handleSearch = () => {
     getAgentDetailsView(props.agent.account_number);
+    setUserListFlag(true); 
   };
 
   const handleReset = () => {
@@ -98,8 +99,8 @@ const AgentDetailsComponent = (props) => {
       to: "",
       totalPage: 1,
     });
-    getAgentDetailsView(props.agent.account_number);
     setUserListFlag(false);
+    getAgentDetailsView(props.agent.account_number);
   };
 
   const sortData = (column) => {
@@ -144,6 +145,7 @@ const AgentDetailsComponent = (props) => {
     }
     return null;
 };
+console.log("userListFlag", userListFlag)
   return (
     <>
       <CContainer fluid>
