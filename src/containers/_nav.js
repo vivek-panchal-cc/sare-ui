@@ -28,7 +28,7 @@ const _nav = [
   },
   {
     _tag: "CSidebarNavTitle",
-    _children: ["Content Management"],
+    _children: ["Management"],
   },
   {
     _tag: "CSidebarNavItem",
@@ -37,6 +37,22 @@ const _nav = [
     icon: <FontAwesomeIcon icon={faFileAlt} className="c-sidebar-nav-icon" />,
     module_name: "kyc_requests",
     id: "kyc_requests_sidebar_id",
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Customers",
+    to: "/admin/customers",
+    icon: <FontAwesomeIcon icon={faHandshake} className="c-sidebar-nav-icon" />,
+    module_name: "customers",
+    id: "customers_sidebar_id",
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Agents",
+    to: "/admin/agents",
+    icon: <FontAwesomeIcon icon={faUserSecret} className="c-sidebar-nav-icon" />,
+    module_name: "agents",
+    id: "agents_sidebar_id",
   },
   {
     _tag: "CSidebarNavTitle",
@@ -67,22 +83,6 @@ const _nav = [
     icon: <FontAwesomeIcon icon={faUser} className="c-sidebar-nav-icon" />,
     module_name: "users",
     id: "users_sidebar_id",
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Customers Management",
-    to: "/admin/customers",
-    icon: <FontAwesomeIcon icon={faHandshake} className="c-sidebar-nav-icon" />,
-    module_name: "customers",
-    id: "customers_sidebar_id",
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Agents Management",
-    to: "/admin/agents",
-    icon: <FontAwesomeIcon icon={faUserSecret} className="c-sidebar-nav-icon" />,
-    module_name: "agents",
-    id: "agents_sidebar_id",
   },
   {
     _tag: "CSidebarNavTitle",
