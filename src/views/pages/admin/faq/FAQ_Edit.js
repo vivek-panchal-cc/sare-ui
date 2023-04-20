@@ -34,7 +34,7 @@ class Faq_Edit extends React.Component {
         id: this.props.match.params.id,
         question: "",
         answer: "",
-        status: 1,
+        status: 0,
       },
     };
     this.handleChange = this.handleChange.bind(this);

@@ -102,7 +102,7 @@ class Bank_Add extends React.Component {
           <CCol xs="12">
             <CCard>
               <CCardHeader>
-                <strong>Add Bank Details</strong>
+                <strong>Bank Details</strong>
                 <div className="card-header-actions"></div>
               </CCardHeader>
               <CCardBody>
@@ -157,7 +157,7 @@ class Bank_Add extends React.Component {
                 >
                   <FontAwesomeIcon icon={faSave} className="mr-1" /> Submit
                 </CButton>
-                &nbsp;
+                {/* &nbsp;
                 <CLink
                   className="btn btn-danger btn-sm"
                   aria-current="page"
@@ -166,7 +166,7 @@ class Bank_Add extends React.Component {
                 >
                   <FontAwesomeIcon icon={faBan} className="mr-1" />
                   Cancel
-                </CLink>
+                </CLink> */}
               </CCardFooter>
             </CCard>
           </CCol>

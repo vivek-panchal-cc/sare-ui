@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React from "react";
 import {
   CCard,
@@ -28,7 +29,9 @@ import {
 import $ from "jquery";
 import { globalConstants } from "../../../../constants/admin/global.constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import CIcon from "@coreui/icons-react";
 import { faArrowLeft, faBan, faSave } from "@fortawesome/free-solid-svg-icons";
+import FileSaver, { saveAs } from "file-saver";
 
 class Customer_Edit extends React.Component {
   constructor(props) {
@@ -80,7 +83,15 @@ class Customer_Edit extends React.Component {
     }, 300);
   }
 
-  handleChange(e) {    
+  downloadFile(url) {
+    if (url) {
+      const urlArray = url.split("/");
+      const fileName = urlArray[urlArray.length - 1];
+      FileSaver.saveAs(url, fileName);
+    }
+  }
+
+  handleChange(e) {
     const { name, value } = e.target;
     if (name === "status") {
       let newStatus = "0";
@@ -89,12 +100,18 @@ class Customer_Edit extends React.Component {
       }
       if (value === "0") {
         newStatus = "1";
-      }      
+      }
       this.setState({ fields: { ...this.state.fields, [name]: newStatus } });
     } else if (name === "mobile_number") {
       if (/^\d{0,9}$/.test(value)) {
         this.setState({ fields: { ...this.state.fields, [name]: value } });
       }
+    } else if (name === "national_id") {
+      const newValue = value.replace(/[^A-Za-z0-9]/g, "").slice(0, 9);
+      this.setState({ fields: { ...this.state.fields, [name]: newValue } });
+    } else if (name === "shofco_number") {
+      const newValue = value.replace(/[^A-Za-z0-9]/g, "").slice(0, 50);
+      this.setState({ fields: { ...this.state.fields, [name]: newValue } });
     } else {
       this.setState({ fields: { ...this.state.fields, [name]: value } });
     }
@@ -115,7 +132,12 @@ class Customer_Edit extends React.Component {
       formData.append("national_id", this.state.fields.national_id);
       formData.append("shofco_number", this.state.fields.shofco_number);
       formData.append("status", this.state.fields.status);
-      formData.append("profile_image", this.state.fields.profile_image);
+
+      if (typeof this.state.fields.profile_image === "string") {
+        formData.append("profile_image", null);
+      } else {
+        formData.append("profile_image", this.state.fields.profile_image);
+      }
 
       customerService
         .updateCustomerDetails(formData, this.state.account_number)
@@ -226,14 +248,16 @@ class Customer_Edit extends React.Component {
                 <CFormGroup>
                   <CLabel htmlFor="nf-name">National Id</CLabel>
                   <CInput
-                    type="number"
+                    type="text"
                     id="national_id"
                     name="national_id"
                     placeholder="Enter National Id"
                     autoComplete="name"
                     value={this.state.fields.national_id}
                     onChange={this.handleChange}
-                    min={1}
+                    minLength={9}
+                    maxLength={9}
+                    pattern="[A-Za-z0-9]{9}"
                   />
                   <CFormText className="help-block">
                     {this.validator.message(
@@ -245,16 +269,17 @@ class Customer_Edit extends React.Component {
                   </CFormText>
                 </CFormGroup>
                 <CFormGroup>
-                  <CLabel htmlFor="nf-name">ShofCo Number</CLabel>
+                  <CLabel htmlFor="nf-name">SHOFCO Number</CLabel>
                   <CInput
-                    type="number"
+                    type="text"
                     id="shofco_number"
                     name="shofco_number"
-                    placeholder="Enter ShofCo Number"
+                    placeholder="Enter SHOFCO Number"
                     autoComplete="name"
                     value={this.state.fields.shofco_number}
                     onChange={this.handleChange}
-                    min={1}
+                    maxLength={50}
+                    pattern="[A-Za-z0-9]{9}"
                   />
                   <CFormText className="help-block">
                     {this.validator.message(
@@ -273,7 +298,7 @@ class Customer_Edit extends React.Component {
                       accept=".jpg,.jpeg,.png"
                       onChange={this.handleImageChange}
                     />
-                    {this.state.imagePreview && (
+                    {this.state.imagePreview ? (
                       <img
                         src={this.state.imagePreview}
                         alt="Profile"
@@ -284,7 +309,68 @@ class Customer_Edit extends React.Component {
                           height: "auto",
                         }}
                       />
+                    ) : (
+                      <span>
+                        <td>
+                          <img
+                            // src="http://192.168.1.32/SARE/customer-onboard/storage/app/uploads/profile-images/1681901854_file.jpeg"
+                            src={this.state.fields.profile_image}
+                            alt="Profile Image"
+                            style={{
+                              maxWidth: "200px",
+                              maxHeight: "200px",
+                              width: "auto",
+                              height: "auto",
+                            }}
+                          />
+                        </td>
+                        <td>
+                          {this.state.fields.profile_image && (
+                            <CTooltip content={globalConstants.Download_BTN}>
+                              <CLink
+                                className="btn btn-md btn-primary"
+                                aria-current="page"
+                                onClick={() =>
+                                  this.downloadFile(
+                                    this.state.fields.profile_image
+                                  )
+                                }
+                              >
+                                <CIcon name="cil-cloud-download"></CIcon>
+                              </CLink>
+                            </CTooltip>
+                          )}
+                        </td>
+                      </span>
                     )}
+                    {/* <td>
+                      <img
+                        src="http://192.168.1.32/SARE/customer-onboard/storage/app/uploads/profile-images/1681901854_file.jpeg"
+                        // src={file.profile_image}
+                        alt="Profile Image"
+                        style={{
+                          maxWidth: "200px",
+                          maxHeight: "200px",
+                          width: "auto",
+                          height: "auto",
+                        }}
+                      />
+                    </td>
+                    <td>
+                      {this.state.fields.profile_image && (
+                        <CTooltip content={globalConstants.Download_BTN}>
+                          <CLink
+                            className="btn btn-md btn-primary"
+                            aria-current="page"
+                            onClick={() =>
+                              this.downloadFile(this.state.fields.profile_image)
+                            }
+                          >
+                            <CIcon name="cil-cloud-download"></CIcon>
+                          </CLink>
+                        </CTooltip>
+                      )}
+                    </td> */}
                   </div>
                 </CFormGroup>
                 {/* <CFormGroup>

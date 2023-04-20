@@ -162,7 +162,7 @@ class User_Index extends React.Component {
   componentWillReceiveProps(nextProps) {
     console.log("Users Next Props", nextProps)
     const current_user = _loginUsersDetails();
-    if (nextProps.users.user_list.length > 0) {
+    if (nextProps.users.user_list?.length > 0) {
       let users = nextProps.users.user_list;
       let multiaction = [];
       for (var key in users) {
@@ -171,7 +171,7 @@ class User_Index extends React.Component {
         }
       }
       this.setState({ multiaction: multiaction });
-    } else if (nextProps.users.user_list.length === 0) {
+    } else if (nextProps.users.user_list?.length === 0) {
       this.setState({ multiaction: [] });
     }
   }
@@ -357,7 +357,7 @@ class User_Index extends React.Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {user_list.length > 0 &&
+                    {user_list?.length > 0 &&
                       user_list.map((u, index) => (
                         <tr key={u._id}>
                           <td> {current_user.id !== u._id && <CheckBoxes handleCheckChieldElement={this.handleCheckChieldElement} _id={u._id} _isChecked={this.state.multiaction[u._id]} />} </td>
@@ -387,7 +387,7 @@ class User_Index extends React.Component {
                         </tr>
                       ))
                     }
-                    {user_list.length === 0 && <tr><td colSpan='5'>No records found</td></tr>}
+                    {user_list?.length === 0 && <tr><td colSpan='5'>No records found</td></tr>}
                   </tbody>
                 </table>
                 <CPagination

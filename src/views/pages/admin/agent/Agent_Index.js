@@ -364,7 +364,7 @@ class Agent_Index extends React.Component {
                   <CCol xl={3}>
                     <CFormGroup row>
                       <CCol xs="12">
-                        <CLabel htmlFor="name">Type</CLabel>
+                        <CLabel htmlFor="name">Customer Type</CLabel>
                         <CSelect
                           id="name"
                           placeholder="Type"
@@ -403,7 +403,7 @@ class Agent_Index extends React.Component {
                         >
                           <option value="">-- Select Status --</option>
                           <option value="1">Active</option>
-                          <option value="0">De-active</option>
+                          <option value="0">Deactive</option>
                         </CSelect>
                       </CCol>
                     </CFormGroup>
@@ -608,14 +608,14 @@ class Agent_Index extends React.Component {
                                       )
                                     }
                                   >
-                                    {u.status === "1" ? "Active" : "De-active"}
+                                    {u.status === "1" ? "Active" : "Deactive"}
                                   </CLink>
                                 )}
                               {current_user.id !==
                                 u.customer_account_rel?.account_number &&
                                 _canAccess("agents", "update") === false && (
                                   <>
-                                    {u.status === "1" ? "Active" : "De-active"}
+                                    {u.status === "1" ? "Active" : "Deactive"}
                                   </>
                                 )}
                             </td>

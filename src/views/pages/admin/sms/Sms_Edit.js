@@ -16,6 +16,7 @@ import {
   CTooltip,
   CSelect,
   CSwitch,
+  CTextarea,
 } from "@coreui/react";
 import SimpleReactValidator from "simple-react-validator";
 import { customerService } from "../../../../services/admin/";
@@ -42,7 +43,7 @@ class Sms_Edit extends React.Component {
         message: "",
         status: "0",
       },
-    };    
+    };
     this.handleChange = this.handleChange.bind(this);
     this.validator = new SimpleReactValidator({ autoForceUpdate: this });
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -70,8 +71,14 @@ class Sms_Edit extends React.Component {
   handleChange(e) {
     const { name, value } = e.target;
     if (name === "status") {
-      var fstatus = value === "true" ? false : true;
-      this.setState({ fields: { ...this.state.fields, [name]: fstatus } });
+      let newStatus = "0";
+      if (value === "1") {
+        newStatus = "0";
+      }
+      if (value === "0") {
+        newStatus = "1";
+      }
+      this.setState({ fields: { ...this.state.fields, [name]: newStatus } });
     } else {
       this.setState({ fields: { ...this.state.fields, [name]: value } });
     }
@@ -168,7 +175,7 @@ class Sms_Edit extends React.Component {
                 </CFormGroup>
                 <CFormGroup>
                   <CLabel htmlFor="nf-name">Message</CLabel>
-                  <CInput
+                  <CTextarea
                     type="text"
                     id="message"
                     name="message"
@@ -198,7 +205,7 @@ class Sms_Edit extends React.Component {
                           name="status"
                           value={this.state.fields.status}
                           defaultChecked
-                          onChange={this.handleInputChange}
+                          onChange={this.handleChange}
                         />
                       )}
 
@@ -209,7 +216,7 @@ class Sms_Edit extends React.Component {
                           id="status"
                           name="status"
                           value={this.state.fields.status}
-                          onChange={this.handleInputChange}
+                          onChange={this.handleChange}
                         />
                       )}
                     </CFormGroup>
