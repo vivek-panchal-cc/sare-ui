@@ -42,7 +42,7 @@ class Bank_Add extends React.Component {
   componentDidMount() {
     bankService.getBankDetails().then((res) => {
       if (res.success === false) {
-        notify.error(res.message);
+        // notify.error(res.message);
       } else {
         const bankDetails = res.data;
         this.setState({
