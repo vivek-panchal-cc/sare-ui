@@ -15,9 +15,11 @@ import {
   CLink,
   CSwitch,
   CTooltip,
+  CTextarea,
 } from "@coreui/react";
 import SimpleReactValidator from "simple-react-validator";
 import { userService } from "../../../../services/admin/user.service";
+import { smsService } from "../../../../services/admin/sms.service";
 import { notify, history, _canAccess } from "../../../../_helpers/index";
 import { globalConstants } from "../../../../constants/admin/global.constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,21 +28,20 @@ const UserGroups = React.lazy(() =>
   import("../../../../components/admin/UserGroups")
 );
 
-class User_Add extends React.Component {
+class Sms_Add extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       fields: {
-        name: "",
-        email: "",
-        user_group_id: "",
-        mobile_number: "",
-        status: false,
+        title: "",
+        slug: "",
+        message: "",
+        status: true,
       },
     };
     if (this.props._renderAccess === false) {
-      history.push("/admin/users");
+      history.push("/admin/sms");
     }
     this.handleChange = this.handleChange.bind(this);
     this.validator = new SimpleReactValidator({ autoForceUpdate: this });
@@ -50,26 +51,32 @@ class User_Add extends React.Component {
   handleChange(e) {
     const { name, value } = e.target;
     if (name === "status") {
-      var fstatus = value === "true" ? false : true;
-      this.setState({ fields: { ...this.state.fields, [name]: fstatus } });
-    } else if (name === 'mobile') {
-      // only allow 9 digit mobile numbers
-      if (/^\d{0,9}$/.test(value)) {
-        this.setState({ fields: { ...this.state.fields, [name]: value } });
+      let newStatus = "0";
+      if (value === true) {
+        newStatus = "0";
       }
-    } else {
+      if (value === false) {
+        newStatus = "1";
+      }
+      this.setState({ fields: { ...this.state.fields, [name]: newStatus } });
+    }
+    // else if (name === "status") {
+    //   var fstatus = value === "true" ? false : true;
+    //   this.setState({ fields: { ...this.state.fields, [name]: fstatus } });
+    // } 
+    else {
       this.setState({ fields: { ...this.state.fields, [name]: value } });
     }
   }
 
   handleSubmit() {
     if (this.validator.allValid()) {
-      userService.createUsers(this.state.fields).then((res) => {
+      smsService.createSms(this.state.fields).then((res) => {
         if (res.status === false) {
           notify.error(res.message);
         } else {
           notify.success(res.message);
-          history.push("/admin/users");
+          history.push("/admin/sms");
         }
       });
     } else {
@@ -84,8 +91,7 @@ class User_Add extends React.Component {
   };
   componentDidMount() {
     setTimeout(
-      () =>
-        _canAccess(this.props.module_name, this.props.action, "/admin/users"),
+      () => _canAccess(this.props.module_name, this.props.action, "/admin/sms"),
       300
     );
   }
@@ -97,13 +103,13 @@ class User_Add extends React.Component {
           <CCol xs="12">
             <CCard>
               <CCardHeader>
-                Add User
+                <strong>Add SMS template</strong>
                 <div className="card-header-actions">
                   <CTooltip content={globalConstants.BACK_MSG}>
                     <CLink
                       className="btn btn-danger btn-sm"
                       aria-current="page"
-                      to="/admin/users"
+                      to="/admin/sms"
                     >
                       {" "}
                       <FontAwesomeIcon icon={faArrowLeft} className="mr-1" />
@@ -114,45 +120,63 @@ class User_Add extends React.Component {
               </CCardHeader>
               <CCardBody>
                 <CFormGroup>
-                  <CLabel htmlFor="nf-name">Name</CLabel>
+                  <CLabel htmlFor="nf-name">Title</CLabel>
                   <CInput
                     type="text"
-                    id="name"
-                    name="name"
-                    placeholder="Enter Name "
-                    autoComplete="name"
+                    id="title"
+                    name="title"
+                    placeholder="Enter Title"
+                    autoComplete="title"
                     onChange={this.handleChange}
                   />
                   <CFormText className="help-block">
                     {this.validator.message(
-                      "name",
-                      this.state.fields.name,
+                      "title",
+                      this.state.fields.title,
                       "required",
                       { className: "text-danger" }
                     )}
                   </CFormText>
                 </CFormGroup>
                 <CFormGroup>
-                  <CLabel htmlFor="nf-email">Email</CLabel>
+                  <CLabel htmlFor="nf-name">Slug</CLabel>
                   <CInput
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Enter Email "
-                    autoComplete="email"
+                    type="text"
+                    id="slug"
+                    name="slug"
+                    placeholder="Enter Slug"
+                    autoComplete="slug"
                     onChange={this.handleChange}
-                    onBlur={() => this.validator.showMessageFor("email")}
                   />
                   <CFormText className="help-block">
                     {this.validator.message(
-                      "email",
-                      this.state.fields.email,
-                      "required|email",
+                      "slug",
+                      this.state.fields.slug,
+                      "required",
                       { className: "text-danger" }
                     )}
                   </CFormText>
                 </CFormGroup>
                 <CFormGroup>
+                  <CLabel htmlFor="nf-name">Message</CLabel>
+                  <CTextarea
+                    type="text"
+                    id="message"
+                    name="message"
+                    placeholder="Enter Message"
+                    autoComplete="message"
+                    onChange={this.handleChange}
+                  />
+                  <CFormText className="help-block">
+                    {this.validator.message(
+                      "message",
+                      this.state.fields.message,
+                      "required",
+                      { className: "text-danger" }
+                    )}
+                  </CFormText>
+                </CFormGroup>
+                {/* <CFormGroup>
                   <CLabel htmlFor="nf-email">Mobile</CLabel>
                   <CInput
                     type="number"
@@ -189,7 +213,7 @@ class User_Add extends React.Component {
                       { className: "text-danger" }
                     )}
                   </CFormText>
-                </CFormGroup>
+                </CFormGroup> */}
                 <CFormGroup row>
                   <CCol md="1">
                     <CLabel htmlFor="select">Status</CLabel>
@@ -201,7 +225,7 @@ class User_Add extends React.Component {
                         className="mr-1"
                         color="primary"
                         defaultChecked={this.state.fields.status}
-                        onClick={this.handleInputChange}
+                        onClick={this.handleChange}
                       />
                     </CFormGroup>
                   </CCol>
@@ -220,7 +244,7 @@ class User_Add extends React.Component {
                 <CLink
                   className="btn btn-danger btn-sm"
                   aria-current="page"
-                  to="/admin/users"
+                  to="/admin/sms"
                 >
                   <FontAwesomeIcon icon={faBan} className="mr-1" />
                   Cancel
@@ -234,4 +258,4 @@ class User_Add extends React.Component {
   }
 }
 
-export default User_Add;
+export default Sms_Add;

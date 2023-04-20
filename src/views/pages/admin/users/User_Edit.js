@@ -73,7 +73,7 @@ class User_Edit extends React.Component {
     if (name === "status") {
       var fstatus = value === "true" ? false : true;
       this.setState({ fields: { ...this.state.fields, [name]: fstatus } });
-    } else if (name === 'mobile') {
+    } else if (name === 'mobile_number') {
       // only allow 9 digit mobile numbers
       if (/^\d{0,9}$/.test(value)) {
         this.setState({ fields: { ...this.state.fields, [name]: value } });
@@ -182,7 +182,9 @@ class User_Edit extends React.Component {
                     name="mobile_number"
                     placeholder="Enter Mobile "
                     autoComplete="mobile_number"
+                    value={this.state.fields.mobile_number}
                     onChange={this.handleChange}
+                    min={1}
                     onBlur={() =>
                       this.validator.showMessageFor("mobile_number")
                     }

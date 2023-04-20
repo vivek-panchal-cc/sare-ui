@@ -17,30 +17,25 @@ import {
   CTooltip,
 } from "@coreui/react";
 import SimpleReactValidator from "simple-react-validator";
-import { userService } from "../../../../services/admin/user.service";
+import { faqService } from "../../../../services/admin/faq.service";
 import { notify, history, _canAccess } from "../../../../_helpers/index";
 import { globalConstants } from "../../../../constants/admin/global.constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faBan, faSave } from "@fortawesome/free-solid-svg-icons";
-const UserGroups = React.lazy(() =>
-  import("../../../../components/admin/UserGroups")
-);
 
-class User_Add extends React.Component {
+class Sms_Add extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       fields: {
-        name: "",
-        email: "",
-        user_group_id: "",
-        mobile_number: "",
-        status: false,
+        question: "",
+        answer: "",
+        status: 1,
       },
     };
     if (this.props._renderAccess === false) {
-      history.push("/admin/users");
+      history.push("/admin/faq");
     }
     this.handleChange = this.handleChange.bind(this);
     this.validator = new SimpleReactValidator({ autoForceUpdate: this });
@@ -50,13 +45,14 @@ class User_Add extends React.Component {
   handleChange(e) {
     const { name, value } = e.target;
     if (name === "status") {
-      var fstatus = value === "true" ? false : true;
-      this.setState({ fields: { ...this.state.fields, [name]: fstatus } });
-    } else if (name === 'mobile') {
-      // only allow 9 digit mobile numbers
-      if (/^\d{0,9}$/.test(value)) {
-        this.setState({ fields: { ...this.state.fields, [name]: value } });
+      let updateStatus = 0;
+      if (value === true) {
+        updateStatus = 0;
       }
+      if (value === false) {
+        updateStatus = 1;
+      }
+      this.setState({ fields: { ...this.state.fields, [name]: updateStatus } });
     } else {
       this.setState({ fields: { ...this.state.fields, [name]: value } });
     }
@@ -64,12 +60,12 @@ class User_Add extends React.Component {
 
   handleSubmit() {
     if (this.validator.allValid()) {
-      userService.createUsers(this.state.fields).then((res) => {
+      faqService.createFaq(this.state.fields).then((res) => {
         if (res.status === false) {
           notify.error(res.message);
         } else {
           notify.success(res.message);
-          history.push("/admin/users");
+          history.push("/admin/faq");
         }
       });
     } else {
@@ -84,8 +80,7 @@ class User_Add extends React.Component {
   };
   componentDidMount() {
     setTimeout(
-      () =>
-        _canAccess(this.props.module_name, this.props.action, "/admin/users"),
+      () => _canAccess(this.props.module_name, this.props.action, "/admin/faq"),
       300
     );
   }
@@ -97,13 +92,13 @@ class User_Add extends React.Component {
           <CCol xs="12">
             <CCard>
               <CCardHeader>
-                Add User
+                <strong>Add FAQ</strong>
                 <div className="card-header-actions">
                   <CTooltip content={globalConstants.BACK_MSG}>
                     <CLink
                       className="btn btn-danger btn-sm"
                       aria-current="page"
-                      to="/admin/users"
+                      to="/admin/faq"
                     >
                       {" "}
                       <FontAwesomeIcon icon={faArrowLeft} className="mr-1" />
@@ -114,45 +109,44 @@ class User_Add extends React.Component {
               </CCardHeader>
               <CCardBody>
                 <CFormGroup>
-                  <CLabel htmlFor="nf-name">Name</CLabel>
+                  <CLabel htmlFor="nf-name">Question</CLabel>
                   <CInput
                     type="text"
-                    id="name"
-                    name="name"
-                    placeholder="Enter Name "
-                    autoComplete="name"
+                    id="question"
+                    name="question"
+                    placeholder="Enter Question"
+                    autoComplete="question"
                     onChange={this.handleChange}
                   />
                   <CFormText className="help-block">
                     {this.validator.message(
-                      "name",
-                      this.state.fields.name,
+                      "question",
+                      this.state.fields.question,
                       "required",
                       { className: "text-danger" }
                     )}
                   </CFormText>
                 </CFormGroup>
                 <CFormGroup>
-                  <CLabel htmlFor="nf-email">Email</CLabel>
+                  <CLabel htmlFor="nf-name">Answer</CLabel>
                   <CInput
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Enter Email "
-                    autoComplete="email"
+                    type="text"
+                    id="answer"
+                    name="answer"
+                    placeholder="Enter Answer"
+                    autoComplete="answer"
                     onChange={this.handleChange}
-                    onBlur={() => this.validator.showMessageFor("email")}
                   />
                   <CFormText className="help-block">
                     {this.validator.message(
-                      "email",
-                      this.state.fields.email,
-                      "required|email",
+                      "answer",
+                      this.state.fields.answer,
+                      "required",
                       { className: "text-danger" }
                     )}
                   </CFormText>
                 </CFormGroup>
-                <CFormGroup>
+                {/* <CFormGroup>
                   <CLabel htmlFor="nf-email">Mobile</CLabel>
                   <CInput
                     type="number"
@@ -189,8 +183,8 @@ class User_Add extends React.Component {
                       { className: "text-danger" }
                     )}
                   </CFormText>
-                </CFormGroup>
-                <CFormGroup row>
+                </CFormGroup> */}
+                {/* <CFormGroup row>
                   <CCol md="1">
                     <CLabel htmlFor="select">Status</CLabel>
                   </CCol>
@@ -202,6 +196,23 @@ class User_Add extends React.Component {
                         color="primary"
                         defaultChecked={this.state.fields.status}
                         onClick={this.handleInputChange}
+                      />
+                    </CFormGroup>
+                  </CCol>
+                </CFormGroup> */}
+                <CFormGroup row>
+                  <CCol md="1">
+                    <CLabel htmlFor="select">Status</CLabel>
+                  </CCol>
+                  <CCol md="11">
+                    <CFormGroup variant="custom-checkbox" inline>
+                      <CSwitch
+                        name="status"
+                        className="mr-1"
+                        color="primary"
+                        defaultChecked={this.state.fields.status}
+                        onClick={this.handleChange}
+                        // disabled={true}
                       />
                     </CFormGroup>
                   </CCol>
@@ -220,7 +231,7 @@ class User_Add extends React.Component {
                 <CLink
                   className="btn btn-danger btn-sm"
                   aria-current="page"
-                  to="/admin/users"
+                  to="/admin/faq"
                 >
                   <FontAwesomeIcon icon={faBan} className="mr-1" />
                   Cancel
@@ -234,4 +245,4 @@ class User_Add extends React.Component {
   }
 }
 
-export default User_Add;
+export default Sms_Add;
