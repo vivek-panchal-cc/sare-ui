@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import OTPInput from "otp-input-react";
 import successImage from "../img/check_circle.png";
-import errorImage from "../img/error.png";
 import logo from "../img/logo.svg";
 import "../css/styles.css";
 
@@ -9,7 +8,6 @@ import {
   Button,
   Container,
   Row,
-  Col,
   CardBody,
   CardTitle,
   Form,
@@ -24,8 +22,7 @@ function KycValidate() {
   const [otp, setOTP] = useState("");
   const [isOtpValid, setIsOtpValid] = useState(false);
   const [otpAttempted, setOtpAttempted] = useState(false);
-  const [countdown, setCountdown] = useState(60); // in seconds
-  const [resendDisabled, setResendDisabled] = useState(false);
+  const [countdown, setCountdown] = useState(60); // in seconds  
   const [isResendDisabled, setIsResendDisabled] = useState(false);
   const { mobile } = useParams();
 

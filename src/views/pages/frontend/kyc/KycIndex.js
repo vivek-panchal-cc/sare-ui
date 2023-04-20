@@ -1,16 +1,12 @@
 import { useEffect, useState } from "react";
 import { kycService } from "../../../../services/frontend/kyc.service";
 import { notify } from "../../../../_helpers/index";
-import { useParams, useHistory } from "react-router-dom";
-import KycSuccess from "./KycSuccess";
+import { useParams } from "react-router-dom";
 import KycFail from "./KycFail";
 import KycValidate from "./KycValidate";
 
 function KycIndex() {
-  const [showKycSuccess, setKycSuccess] = useState(false);
-  const { params } = useParams();
-  const [kycToken, setKycToken] = useState("");
-  const history = useHistory();
+  const [showKycSuccess, setKycSuccess] = useState(false);  
   const { mobile } = useParams();
 
   useEffect(() => {

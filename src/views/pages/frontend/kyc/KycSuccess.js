@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
-import { Container, Row, CardBody, Button, Form } from "reactstrap";
+import { useHistory } from "react-router-dom";
+import { Container, Row, CardBody, Form } from "reactstrap";
 import logo from "../img/logo.svg";
 import kycComplete from "../img/complete.svg";
 import "../css/styles.css";
@@ -9,7 +9,6 @@ const KycSuccess = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [kycToken, setKycToken] = useState("");
   const history = useHistory();
-  const { mobile } = useParams();
 
   const handleButtonClick = () => {
     setIsLoading(true);

@@ -18,7 +18,7 @@ function getList(postData) {
     setLoading(true);
     const requestOptions = {
         method: 'POST',
-        headers: authHeader('kyc_request', 'view'),
+        headers: authHeader('kyc_requests', 'view'),
         body: JSON.stringify(postData)
     };
 
@@ -37,7 +37,7 @@ function getDetail(id) {
     setLoading(true);
     const requestOptions = {
         method: 'GET',
-        headers: authHeader('kyc_request', 'view')
+        headers: authHeader('kyc_requests', 'view')
     };
 
     return fetch(`${process.env.REACT_APP_API_URL}api/kyc/${id}`, requestOptions).catch((error) => {
@@ -54,7 +54,7 @@ function updateRequest(id, postData) {
     setLoading(true);
     const requestOptions = {
         method: 'PUT',
-        headers: authHeader('kyc_request', 'update'),
+        headers: authHeader('kyc_requests', 'update'),
         body: JSON.stringify(postData)
     };
 
@@ -70,7 +70,7 @@ function detailview(id) {
     setLoading(true);
     const requestOptions = {
         method: 'GET',
-        headers: authHeader('kyc_request', 'view')
+        headers: authHeader('kyc_requests', 'view')
     };
     return fetch(`${process.env.REACT_APP_API_URL}api/kyc/${id}`, requestOptions).catch((error) => {
         notify.error('Something went wrong');

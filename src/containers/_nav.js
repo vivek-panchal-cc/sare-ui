@@ -6,15 +6,11 @@ import {
   faUserFriends,
   faCogs,
   faFileAlt,
-  faTasks,
-  faFlag,
-  faCog,
   faSms,
   faPiggyBank,
   faQuestionCircle,
-  faQuestion,
   faHandshake,
-  faUserTie, faBullhorn, faUserSecret
+  faUserSecret
 } from "@fortawesome/free-solid-svg-icons";
 
 const _nav = [
@@ -25,6 +21,34 @@ const _nav = [
     icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon" />,
     module_name: "dashboard",
     id: "dashboard_sidebar_id",
+  },
+  {
+    _tag: "CSidebarNavTitle",
+    _children: ["Management"],
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "KYC Requests",
+    to: "/admin/kyc_requests",
+    icon: <FontAwesomeIcon icon={faFileAlt} className="c-sidebar-nav-icon" />,
+    module_name: "kyc_requests",
+    id: "kyc_requests_sidebar_id",
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Customers",
+    to: "/admin/customers",
+    icon: <FontAwesomeIcon icon={faHandshake} className="c-sidebar-nav-icon" />,
+    module_name: "customers",
+    id: "customers_sidebar_id",
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Agents",
+    to: "/admin/agents",
+    icon: <FontAwesomeIcon icon={faUserSecret} className="c-sidebar-nav-icon" />,
+    module_name: "agents",
+    id: "agents_sidebar_id",
   },
   {
     _tag: "CSidebarNavTitle",
@@ -57,22 +81,6 @@ const _nav = [
     id: "users_sidebar_id",
   },
   {
-    _tag: "CSidebarNavItem",
-    name: "Customers Management",
-    to: "/admin/customers",
-    icon: <FontAwesomeIcon icon={faHandshake} className="c-sidebar-nav-icon" />,
-    module_name: "customers",
-    id: "customers_sidebar_id",
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Agents Management",
-    to: "/admin/agents",
-    icon: <FontAwesomeIcon icon={faUserSecret} className="c-sidebar-nav-icon" />,
-    module_name: "agents",
-    id: "agents_sidebar_id",
-  },
-  {
     _tag: "CSidebarNavTitle",
     _children: ["System Options"],
   },
@@ -81,7 +89,7 @@ const _nav = [
     name: "Sms Templates",
     to: "/admin/sms",
     icon: <FontAwesomeIcon icon={faSms} className="c-sidebar-nav-icon" />,
-    module_name: "sms",
+    module_name: "sms_templates",
     id: "sms_sidebar_id",
   },
   {
@@ -89,7 +97,7 @@ const _nav = [
     name: "Bank Details",
     to: "/admin/bank",
     icon: <FontAwesomeIcon icon={faPiggyBank} className="c-sidebar-nav-icon" />,
-    module_name: "bank",
+    module_name: "bank_details",
     id: "bank_sidebar_id",
   },
   {
@@ -99,20 +107,8 @@ const _nav = [
     icon: (
       <FontAwesomeIcon icon={faQuestionCircle} className="c-sidebar-nav-icon" />
     ),
-    module_name: "faq",
+    module_name: "faqs",
     id: "faq_sidebar_id",
-  },
-  {
-    _tag: "CSidebarNavTitle",
-    _children: ["Content Management"],
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "KYC Requests",
-    to: "/admin/kyc_requests",
-    icon: <FontAwesomeIcon icon={faFileAlt} className="c-sidebar-nav-icon" />,
-    module_name: "kyc_requests",
-    id: "kyc_requests_sidebar_id",
   },
   /* {
     _tag: 'CSidebarNavItem',

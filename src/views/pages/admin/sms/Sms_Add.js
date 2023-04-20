@@ -18,16 +18,11 @@ import {
   CTextarea,
 } from "@coreui/react";
 import SimpleReactValidator from "simple-react-validator";
-import { userService } from "../../../../services/admin/user.service";
 import { smsService } from "../../../../services/admin/sms.service";
 import { notify, history, _canAccess } from "../../../../_helpers/index";
 import { globalConstants } from "../../../../constants/admin/global.constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faBan, faSave } from "@fortawesome/free-solid-svg-icons";
-const UserGroups = React.lazy(() =>
-  import("../../../../components/admin/UserGroups")
-);
-
 class Sms_Add extends React.Component {
   constructor(props) {
     super(props);

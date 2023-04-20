@@ -13,9 +13,7 @@ import {
   CCardFooter,
   CButton,
   CLink,
-  CInputCheckbox,
   CTooltip,
-  CSelect,
   CSwitch,
 } from "@coreui/react";
 import SimpleReactValidator from "simple-react-validator";
@@ -23,15 +21,13 @@ import { customerService } from "../../../../services/admin/";
 import {
   notify,
   history,
-  capitalize,
   _canAccess,
 } from "../../../../_helpers/index";
-import $ from "jquery";
 import { globalConstants } from "../../../../constants/admin/global.constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CIcon from "@coreui/icons-react";
 import { faArrowLeft, faBan, faSave } from "@fortawesome/free-solid-svg-icons";
-import FileSaver, { saveAs } from "file-saver";
+import FileSaver from "file-saver";
 
 class Customer_Edit extends React.Component {
   constructor(props) {
@@ -66,8 +62,7 @@ class Customer_Edit extends React.Component {
       ) {
         customerService
           .getCustomerDetails(this.state.fields.account_number)
-          .then((res) => {
-            console.log("Response", res);
+          .then((res) => {            
             if (res.success === false) {
               notify.error(res.message);
             } else {
@@ -160,8 +155,6 @@ class Customer_Edit extends React.Component {
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       const base64 = reader.result;
-      const ext = file.type.split("/")[1];
-      const name = `image_${Date.now()}.${ext}`;
       //   formData.append("file", file, name);
       this.setState({
         fields: {

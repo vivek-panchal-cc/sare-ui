@@ -1,4 +1,4 @@
-import { authHeader, authHeaderFile, frontHeader } from "../../_helpers";
+import { authHeader } from "../../_helpers";
 import { notify, handleResponse, setLoading } from "../../_helpers";
 require("dotenv").config();
 
@@ -11,7 +11,7 @@ async function getBankDetails(postData) {
   setLoading(true);
   const requestOptions = {
     method: "GET",
-    headers: authHeader("bank", "view"),
+    headers: authHeader("bank_details", "view"),
     body: JSON.stringify(postData),
   };
 
@@ -33,7 +33,7 @@ async function updateBankDetails(postData) {
   setLoading(true);
   const requestOptions = {
     method: "POST",
-    headers: authHeader("bank", "update"),
+    headers: authHeader("bank_details", "update"),
     body: JSON.stringify(postData),
   };
 

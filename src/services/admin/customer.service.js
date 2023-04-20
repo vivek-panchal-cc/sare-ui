@@ -1,4 +1,4 @@
-import { authHeader, authHeaderFile, frontHeader } from "../../_helpers";
+import { authHeader, authHeaderFile } from "../../_helpers";
 import { notify, handleResponse, setLoading } from "../../_helpers/";
 require("dotenv").config();
 
@@ -29,7 +29,6 @@ async function getCustomersList(postData) {
   } catch (error) {
     notify.error("Something went wrong");
     setLoading(false);
-    const response = undefined;
   }
   return handleResponse(response);
 }
@@ -55,12 +54,10 @@ async function getCustomerDetails(id) {
   return handleResponse(response);
 }
 
-async function updateCustomerDetails(postData, custId) {
-  //   console.log(Object.fromEntries(postData));
+async function updateCustomerDetails(postData, custId) {  
   setLoading(true);
   const requestOptions = {
-    method: "POST",
-    // headers: authHeaderFile(),
+    method: "POST",    
     headers: authHeaderFile("customers", "update"),
     body: postData,
   };

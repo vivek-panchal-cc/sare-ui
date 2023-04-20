@@ -1,7 +1,7 @@
 import { customerConstants } from "../../constants/admin";
 import { customerService } from "../../services/admin";
 import { alertActions } from "./";
-import { history, notify } from "../../_helpers";
+import { notify } from "../../_helpers";
 
 /* export const customerActions = {
   getCustomersList,

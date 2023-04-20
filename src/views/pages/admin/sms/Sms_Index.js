@@ -50,8 +50,8 @@ class Sms_Index extends React.Component {
     this.state = {
       fields: {
         pageNo: 1,
-        sort_dir: "desc",
-        sort_field: "name",
+        direction: "desc",
+        sort: "id",
         title: "",
         slug: "",
         message: "",
@@ -135,10 +135,10 @@ class Sms_Index extends React.Component {
       {
         fields: {
           //   ...this.state.fields,
-          sort_dir: ["desc"].includes(this.state.fields.sort_dir)
+          direction: ["desc"].includes(this.state.fields.direction)
             ? "asc"
             : "desc",
-          sort_field: fieldName,
+          sort: fieldName,
         },
       },
       () => {
@@ -159,8 +159,8 @@ class Sms_Index extends React.Component {
         {
           fields: {
             pageNo: 1,
-            sort_dir: "desc",
-            sort_field: "name",
+            direction: "desc",
+            sort: "id",
             title: "",
             slug: "",
             message: "",
@@ -406,7 +406,7 @@ class Sms_Index extends React.Component {
               <CCardHeader>
                 <strong>SMS Templates</strong>
                 <div className="card-header-actions">
-                  {_canAccess("sms", "create") && (
+                  {_canAccess("sms_templates", "create") && (
                     <CTooltip content={globalConstants.ADD_BTN}>
                       <CLink
                         className="btn btn-dark btn-block"
@@ -424,7 +424,7 @@ class Sms_Index extends React.Component {
                   {/* <MultiActionBar
                     onClick={this.handleApplyAction}
                     checkBoxData={this.state.multiaction}
-                    module_name={"sms"}
+                    module_name={"sms_templates"}
                   /> */}
                   <table className="table">
                     <thead>
@@ -442,15 +442,15 @@ class Sms_Index extends React.Component {
                         <th onClick={() => this.handleColumnSort("title")}>
                           <span className="sortCls">
                             <span className="table-header-text-mrg">Title</span>
-                            {this.state.sort_field !== "title" && (
+                            {this.state.fields.sort !== "title" && (
                               <FontAwesomeIcon icon={faSort} />
                             )}
-                            {this.state.sort_dir === "asc" &&
-                              this.state.sort_field === "title" && (
+                            {this.state.fields.direction === "asc" &&
+                              this.state.fields.sort === "title" && (
                                 <FontAwesomeIcon icon={faSortUp} />
                               )}
-                            {this.state.sort_dir === "desc" &&
-                              this.state.sort_field === "title" && (
+                            {this.state.fields.direction === "desc" &&
+                              this.state.fields.sort === "title" && (
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
@@ -458,15 +458,15 @@ class Sms_Index extends React.Component {
                         <th onClick={() => this.handleColumnSort("slug")}>
                           <span className="sortCls">
                             <span className="table-header-text-mrg">Slug</span>
-                            {this.state.sort_field !== "slug" && (
+                            {this.state.fields.sort !== "slug" && (
                               <FontAwesomeIcon icon={faSort} />
                             )}
-                            {this.state.sort_dir === "asc" &&
-                              this.state.sort_field === "slug" && (
+                            {this.state.fields.direction === "asc" &&
+                              this.state.fields.sort === "slug" && (
                                 <FontAwesomeIcon icon={faSortUp} />
                               )}
-                            {this.state.sort_dir === "desc" &&
-                              this.state.sort_field === "slug" && (
+                            {this.state.fields.direction === "desc" &&
+                              this.state.fields.sort === "slug" && (
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
@@ -477,15 +477,15 @@ class Sms_Index extends React.Component {
                             <span className="table-header-text-mrg">
                               Message
                             </span>
-                            {this.state.sort_field !== "message" && (
+                            {this.state.fields.sort !== "message" && (
                               <FontAwesomeIcon icon={faSort} />
                             )}
-                            {this.state.sort_dir === "asc" &&
-                              this.state.sort_field === "message" && (
+                            {this.state.fields.direction === "asc" &&
+                              this.state.fields.sort === "message" && (
                                 <FontAwesomeIcon icon={faSortUp} />
                               )}
-                            {this.state.sort_dir === "desc" &&
-                              this.state.sort_field === "message" && (
+                            {this.state.fields.direction === "desc" &&
+                              this.state.fields.sort === "message" && (
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
@@ -496,21 +496,21 @@ class Sms_Index extends React.Component {
                             <span className="table-header-text-mrg">
                               Status
                             </span>
-                            {this.state.sort_field !== "status" && (
+                            {this.state.fields.sort !== "status" && (
                               <FontAwesomeIcon icon={faSort} />
                             )}
-                            {this.state.sort_dir === "asc" &&
-                              this.state.sort_field === "status" && (
+                            {this.state.fields.direction === "asc" &&
+                              this.state.fields.sort === "status" && (
                                 <FontAwesomeIcon icon={faSortUp} />
                               )}
-                            {this.state.sort_dir === "desc" &&
-                              this.state.sort_field === "status" && (
+                            {this.state.fields.direction === "desc" &&
+                              this.state.fields.sort === "status" && (
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
                         </th>
-                        {(_canAccess("sms", "update") ||
-                          _canAccess("sms", "delete")) && (
+                        {(_canAccess("sms_templates", "update") ||
+                          _canAccess("sms_templates", "delete")) && (
                           <>
                             <th>Action</th>
                           </>
@@ -544,7 +544,7 @@ class Sms_Index extends React.Component {
                             <td>{u.message}</td>
                             <td>
                               {current_user.id !== u.id &&
-                                _canAccess("sms", "update") && (
+                                _canAccess("sms_templates", "update") && (
                                   <CLink
                                     onClick={() =>
                                       this.smsStatusChangeHandler(
@@ -557,20 +557,20 @@ class Sms_Index extends React.Component {
                                   </CLink>
                                 )}
                               {current_user.id !== u.id &&
-                                _canAccess("sms", "update") === false && (
+                                _canAccess("sms_templates", "update") === false && (
                                   <>
                                     {u.status === "1" ? "Active" : "Deactive"}
                                   </>
                                 )}
                             </td>
 
-                            {(_canAccess("sms", "update") ||
-                              _canAccess("sms", "delete")) && (
+                            {(_canAccess("sms_templates", "update") ||
+                              _canAccess("sms_templates", "delete")) && (
                               <>
                                 <td>
                                   {current_user.id !== u.id && (
                                     <>
-                                      {_canAccess("sms", "update") && (
+                                      {_canAccess("sms_templates", "update") && (
                                         <CTooltip
                                           content={globalConstants.EDIT_BTN}
                                         >
@@ -584,7 +584,7 @@ class Sms_Index extends React.Component {
                                         </CTooltip>
                                       )}
                                       &nbsp;
-                                      {_canAccess("sms", "delete") && (
+                                      {_canAccess("sms_templates", "delete") && (
                                         <CTooltip
                                           content={globalConstants.DELETE_BTN}
                                         >

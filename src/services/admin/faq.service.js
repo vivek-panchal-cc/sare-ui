@@ -16,7 +16,7 @@ async function getFaq(postData) {
   setLoading(true);
   const requestOptions = {
     method: "POST",
-    headers: authHeader("faq", "view"),
+    headers: authHeader("faqs", "view"),
     body: JSON.stringify(postData),
   };
 
@@ -34,32 +34,11 @@ async function getFaq(postData) {
   return handleResponse(response);
 }
 
-// async function changeSmsStatus(id, postData) {
-//   setLoading(true);
-//   const requestOptions = {
-//     method: "PUT",
-//     headers: authHeader("sms", "edit"),
-//     body: JSON.stringify(postData),
-//   };
-//   let response;
-//   try {
-//     response = await fetch(
-//       `${process.env.REACT_APP_API_URL}api/templates/sms/${id}/change-status`,
-//       requestOptions
-//     );
-//   } catch (error) {
-//     notify.error("Something went wrong");
-//     setLoading(false);
-//     response = await Promise.reject();
-//   }
-//   return handleResponse(response);
-// }
-
 async function createFaq(postData) {  
   setLoading(true);
   const requestOptions = {
     method: "POST",
-    headers: authHeader("faq", "create"),
+    headers: authHeader("faqs", "create"),
     body: JSON.stringify(postData),
   };
 
@@ -81,7 +60,7 @@ async function getFaqDetails(id) {
   setLoading(true);
   const requestOptions = {
     method: "GET",
-    headers: authHeader("faq", "view"),
+    headers: authHeader("faqs", "view"),
   };
 
   let response;
@@ -102,7 +81,7 @@ async function updateFaq(postData) {
   setLoading(true);
   const requestOptions = {
     method: "PUT",
-    headers: authHeader("faq", "update"),
+    headers: authHeader("faqs", "update"),
     body: JSON.stringify(postData),
   };
 
@@ -124,7 +103,7 @@ async function deleteFaq(id) {
   setLoading(true);
   const requestOptions = {
     method: "DELETE",
-    headers: authHeader("faq", "delete"),
+    headers: authHeader("faqs", "delete"),
   };
   let response;
   try {
@@ -144,7 +123,7 @@ async function changeFaqStatus(id, postData) {
   setLoading(true);
   const requestOptions = {
     method: "PUT",
-    headers: authHeader("faq", "edit"),
+    headers: authHeader("faqs", "edit"),
     body: JSON.stringify(postData),
   };
   let response;

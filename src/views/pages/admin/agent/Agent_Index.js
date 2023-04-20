@@ -62,8 +62,8 @@ class Agent_Index extends React.Component {
     this.state = {
       fields: {
         pageNo: 1,
-        sort_dir: "desc",
-        sort_field: "name",
+        direction: "desc",
+        sort: "name",
         name: "",
         mobile_number: "",
         customer_type: "",
@@ -90,6 +90,14 @@ class Agent_Index extends React.Component {
   getAgentsList() {
     agentService.getAgentsList(this.state.fields).then((res) => {
       if (res.success === false) {
+        this.setState({
+          totalRecords: res.data.totalRecords,
+          fields: {
+            ...this.state.fields,
+            totalPage: res?.data?.totalPage,
+          },
+          user_list: res.data.result,
+        });
         notify.error(res.message);
       } else {
         this.setState({
@@ -153,10 +161,10 @@ class Agent_Index extends React.Component {
       {
         fields: {
           ...this.state.fields,
-          sort_dir: ["desc"].includes(this.state.fields.sort_dir)
+          direction: ["desc"].includes(this.state.fields.direction)
             ? "asc"
             : "desc",
-          sort_field: fieldName,
+          sort: fieldName,
         },
       },
       () => {
@@ -177,8 +185,8 @@ class Agent_Index extends React.Component {
         {
           fields: {
             pageNo: 1,
-            sort_dir: "desc",
-            sort_field: "name",
+            direction: "desc",
+            sort: "name",
             name: "",
             mobile_number: "",
             customer_type: "",
@@ -360,30 +368,7 @@ class Agent_Index extends React.Component {
                         />
                       </CCol>
                     </CFormGroup>
-                  </CCol>
-                  <CCol xl={3}>
-                    <CFormGroup row>
-                      <CCol xs="12">
-                        <CLabel htmlFor="name">Customer Type</CLabel>
-                        <CSelect
-                          id="name"
-                          placeholder="Type"
-                          name="customer_type"
-                          value={this.state.fields.customer_type}
-                          onChange={this.handleChange}
-                          style={{ cursor: "pointer" }}
-                          onKeyPress={(event) => {
-                            if (event.key === "Enter") {
-                              this.handleSearch("search");
-                            }
-                          }}
-                        >
-                          <option value="">-- Select Type --</option>
-                          <option value="agent">Agent</option>
-                        </CSelect>
-                      </CCol>
-                    </CFormGroup>
-                  </CCol>
+                  </CCol>                  
                   <CCol xl={3}>
                     <CFormGroup row>
                       <CCol xs="12">
@@ -476,15 +461,15 @@ class Agent_Index extends React.Component {
                         <th onClick={() => this.handleColumnSort("name")}>
                           <span className="sortCls">
                             <span className="table-header-text-mrg">Name</span>
-                            {this.state.sort_field !== "name" && (
+                            {this.state.fields.sort !== "name" && (
                               <FontAwesomeIcon icon={faSort} />
                             )}
-                            {this.state.sort_dir === "asc" &&
-                              this.state.sort_field === "name" && (
+                            {this.state.fields.direction === "asc" &&
+                              this.state.fields.sort === "name" && (
                                 <FontAwesomeIcon icon={faSortUp} />
                               )}
-                            {this.state.sort_dir === "desc" &&
-                              this.state.sort_field === "name" && (
+                            {this.state.fields.direction === "desc" &&
+                              this.state.fields.sort === "name" && (
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
@@ -497,15 +482,15 @@ class Agent_Index extends React.Component {
                             <span className="table-header-text-mrg">
                               Mobile
                             </span>
-                            {this.state.sort_field !== "mobile_number" && (
+                            {this.state.fields.sort !== "mobile_number" && (
                               <FontAwesomeIcon icon={faSort} />
                             )}
-                            {this.state.sort_dir === "asc" &&
-                              this.state.sort_field === "mobile_number" && (
+                            {this.state.fields.direction === "asc" &&
+                              this.state.fields.sort === "mobile_number" && (
                                 <FontAwesomeIcon icon={faSortUp} />
                               )}
-                            {this.state.sort_dir === "desc" &&
-                              this.state.sort_field === "mobile_number" && (
+                            {this.state.fields.direction === "desc" &&
+                              this.state.fields.sort === "mobile_number" && (
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
@@ -518,15 +503,15 @@ class Agent_Index extends React.Component {
                             <span className="table-header-text-mrg">
                               Customer Type
                             </span>
-                            {this.state.sort_field !== "customer_type" && (
+                            {this.state.fields.sort !== "customer_type" && (
                               <FontAwesomeIcon icon={faSort} />
                             )}
-                            {this.state.sort_dir === "asc" &&
-                              this.state.sort_field === "customer_type" && (
+                            {this.state.fields.direction === "asc" &&
+                              this.state.fields.sort === "customer_type" && (
                                 <FontAwesomeIcon icon={faSortUp} />
                               )}
-                            {this.state.sort_dir === "desc" &&
-                              this.state.sort_field === "customer_type" && (
+                            {this.state.fields.direction === "desc" &&
+                              this.state.fields.sort === "customer_type" && (
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
@@ -538,15 +523,15 @@ class Agent_Index extends React.Component {
                             <span className="table-header-text-mrg">
                               Status
                             </span>
-                            {this.state.sort_field !== "status" && (
+                            {this.state.fields.sort !== "status" && (
                               <FontAwesomeIcon icon={faSort} />
                             )}
-                            {this.state.sort_dir === "asc" &&
-                              this.state.sort_field === "status" && (
+                            {this.state.fields.direction === "asc" &&
+                              this.state.fields.sort === "status" && (
                                 <FontAwesomeIcon icon={faSortUp} />
                               )}
-                            {this.state.sort_dir === "desc" &&
-                              this.state.sort_field === "status" && (
+                            {this.state.fields.direction === "desc" &&
+                              this.state.fields.sort === "status" && (
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
@@ -588,7 +573,7 @@ class Agent_Index extends React.Component {
                               >
                                 {u.customer_account_rel?.account_number}
                               </a>
-                            </td>                            
+                            </td>
                             <td>{u.name}</td>
                             <td>{u.mobile_number}</td>
                             <td>
@@ -664,7 +649,7 @@ class Agent_Index extends React.Component {
                             )}
                           </tr>
                         ))}
-                      {this.state?.user_list?.length?.length === 0 && (
+                      {this.state?.user_list?.length === 0 && (
                         <tr>
                           <td colSpan="5">No records found</td>
                         </tr>

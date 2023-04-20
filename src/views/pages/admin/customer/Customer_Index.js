@@ -35,13 +35,6 @@ import {
   faSortUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { globalConstants } from "../../../../constants/admin/global.constants";
-const CheckBoxes = React.lazy(() =>
-  import("../../../../components/admin/Checkboxes")
-);
-const MultiActionBar = React.lazy(() =>
-  import("../../../../components/admin/MultiActionBar")
-);
-
 class Customer_Index extends React.Component {
   constructor(props) {
     super(props);
@@ -55,8 +48,8 @@ class Customer_Index extends React.Component {
     this.state = {
       fields: {
         pageNo: 1,
-        sort_dir: "desc",
-        sort_field: "name",
+        direction: "desc",
+        sort: "name",
         name: "",
         mobile_number: "",
         customer_type: "",
@@ -81,7 +74,7 @@ class Customer_Index extends React.Component {
   }
 
   getCustomersList() {
-    customerService.getCustomersList(this.state.fields).then((res) => {
+    customerService.getCustomersList(this.state.fields).then((res) => {      
       if (res.success === false) {
         notify.error(res.message);
       } else {
@@ -89,7 +82,7 @@ class Customer_Index extends React.Component {
           totalRecords: res.data.totalRecords,
           fields: {
             ...this.state.fields,
-            totalPage: res.data.totalPage,
+            totalPage: res?.data?.totalPage,
           },
           user_list: res.data.result,
         });
@@ -146,10 +139,10 @@ class Customer_Index extends React.Component {
       {
         fields: {
           ...this.state.fields,
-          sort_dir: ["desc"].includes(this.state.fields.sort_dir)
+          direction: ["desc"].includes(this.state.fields.direction)
             ? "asc"
             : "desc",
-          sort_field: fieldName,
+          sort: fieldName,
         },
       },
       () => {
@@ -170,8 +163,8 @@ class Customer_Index extends React.Component {
         {
           fields: {
             pageNo: 1,
-            sort_dir: "desc",
-            sort_field: "name",
+            direction: "desc",
+            sort: "name",
             name: "",
             mobile_number: "",
             customer_type: "",
@@ -472,15 +465,15 @@ class Customer_Index extends React.Component {
                         <th onClick={() => this.handleColumnSort("name")}>
                           <span className="sortCls">
                             <span className="table-header-text-mrg">Name</span>
-                            {this.state.sort_field !== "name" && (
+                            {this.state.fields.sort !== "name" && (
                               <FontAwesomeIcon icon={faSort} />
                             )}
-                            {this.state.sort_dir === "asc" &&
-                              this.state.sort_field === "name" && (
+                            {this.state.fields.direction === "asc" &&
+                              this.state.fields.sort === "name" && (
                                 <FontAwesomeIcon icon={faSortUp} />
                               )}
-                            {this.state.sort_dir === "desc" &&
-                              this.state.sort_field === "name" && (
+                            {this.state.fields.direction === "desc" &&
+                              this.state.fields.sort === "name" && (
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
@@ -493,15 +486,15 @@ class Customer_Index extends React.Component {
                             <span className="table-header-text-mrg">
                               Mobile
                             </span>
-                            {this.state.sort_field !== "mobile_number" && (
+                            {this.state.fields.sort !== "mobile_number" && (
                               <FontAwesomeIcon icon={faSort} />
                             )}
-                            {this.state.sort_dir === "asc" &&
-                              this.state.sort_field === "mobile_number" && (
+                            {this.state.fields.direction === "asc" &&
+                              this.state.fields.sort === "mobile_number" && (
                                 <FontAwesomeIcon icon={faSortUp} />
                               )}
-                            {this.state.sort_dir === "desc" &&
-                              this.state.sort_field === "mobile_number" && (
+                            {this.state.fields.direction === "desc" &&
+                              this.state.fields.sort === "mobile_number" && (
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
@@ -514,15 +507,15 @@ class Customer_Index extends React.Component {
                             <span className="table-header-text-mrg">
                               Customer Type
                             </span>
-                            {this.state.sort_field !== "customer_type" && (
+                            {this.state.fields.sort !== "customer_type" && (
                               <FontAwesomeIcon icon={faSort} />
                             )}
-                            {this.state.sort_dir === "asc" &&
-                              this.state.sort_field === "customer_type" && (
+                            {this.state.fields.direction === "asc" &&
+                              this.state.fields.sort === "customer_type" && (
                                 <FontAwesomeIcon icon={faSortUp} />
                               )}
-                            {this.state.sort_dir === "desc" &&
-                              this.state.sort_field === "customer_type" && (
+                            {this.state.fields.direction === "desc" &&
+                              this.state.fields.sort === "customer_type" && (
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
@@ -534,15 +527,15 @@ class Customer_Index extends React.Component {
                             <span className="table-header-text-mrg">
                               Status
                             </span>
-                            {this.state.sort_field !== "status" && (
+                            {this.state.fields.sort !== "status" && (
                               <FontAwesomeIcon icon={faSort} />
                             )}
-                            {this.state.sort_dir === "asc" &&
-                              this.state.sort_field === "status" && (
+                            {this.state.fields.direction === "asc" &&
+                              this.state.fields.sort === "status" && (
                                 <FontAwesomeIcon icon={faSortUp} />
                               )}
-                            {this.state.sort_dir === "desc" &&
-                              this.state.sort_field === "status" && (
+                            {this.state.fields.direction === "desc" &&
+                              this.state.fields.sort === "status" && (
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
@@ -654,7 +647,7 @@ class Customer_Index extends React.Component {
                             )}
                           </tr>
                         ))}
-                      {this.state?.user_list?.length?.length === 0 && (
+                      {this.state?.user_list?.length === 0 && (
                         <tr>
                           <td colSpan="5">No records found</td>
                         </tr>

@@ -15,7 +15,7 @@ async function getSmsTemplates(postData) {
   setLoading(true);
   const requestOptions = {
     method: "POST",
-    headers: authHeader("sms", "view"),
+    headers: authHeader("sms_templates", "view"),
     body: JSON.stringify(postData),
   };
 
@@ -37,7 +37,7 @@ async function changeSmsStatus(id, postData) {
   setLoading(true);
   const requestOptions = {
     method: "PUT",
-    headers: authHeader("sms", "edit"),
+    headers: authHeader("sms_templates", "edit"),
     body: JSON.stringify(postData),
   };
   let response;
@@ -58,7 +58,7 @@ async function createSms(postData) {
   setLoading(true);
   const requestOptions = {
     method: "POST",
-    headers: authHeader("sms", "create"),
+    headers: authHeader("sms_templates", "create"),
     body: JSON.stringify(postData),
   };
 
@@ -80,7 +80,7 @@ async function getSmsDetails(id) {
   setLoading(true);
   const requestOptions = {
     method: "GET",
-    headers: authHeader("sms", "view"),
+    headers: authHeader("sms_templates", "view"),
   };
 
   let response;
@@ -101,7 +101,7 @@ async function updateSmsTemplates(postData) {
   setLoading(true);
   const requestOptions = {
     method: "PUT",
-    headers: authHeader("sms", "update"),
+    headers: authHeader("sms_templates", "update"),
     body: JSON.stringify(postData),
   };
 
@@ -123,7 +123,7 @@ async function deleteSmsTemplate(id) {
   setLoading(true);
   const requestOptions = {
     method: "DELETE",
-    headers: authHeader("sms", "delete"),
+    headers: authHeader("sms_templates", "delete"),
   };
   let response;
   try {

@@ -1,12 +1,9 @@
 import { Container, Row, CardBody, CardTitle, Button, Form } from "reactstrap";
-import { useParams } from "react-router-dom";
 import logo from "../img/logo.svg";
 import review from "../img/reviewe.svg";
 import "../css/styles.css";
 
 function KycRecieved() {
-  const { mobile, secret_key } = useParams();
-
   const handleSubmit = () => {
     const link = process.env.REACT_APP_ANDROID_APP_URL;    
     window.open(link, "_blank");

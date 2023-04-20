@@ -45,8 +45,7 @@ class Faq_Edit extends React.Component {
   componentDidMount() {
     setTimeout(() => {
       if (_canAccess(this.props.module_name, this.props.action, "/admin/faq")) {
-        faqService.getFaqDetails(this.state.fields.id).then((res) => {
-          console.log("res", res);
+        faqService.getFaqDetails(this.state.fields.id).then((res) => {          
           if (res.status === false) {
             notify.error(res.message);
           } else {

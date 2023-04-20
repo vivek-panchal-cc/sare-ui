@@ -88,17 +88,17 @@ const routes = [
   { path: '/admin/agents/detailView/:id', exact: true, name: 'Agent Details', component: Agent_Details, module_name: 'agents', action: 'view' },
 
   // sms templates
-  { path: '/admin/sms', exact: true, name: 'Sms Templates', component: Sms_Index, module_name: 'sms', action: 'view' },
-  { path: '/admin/sms/add', exact: true, name: 'Add', component: Sms_Add, module_name: 'sms', action: 'create'},
-  { path: '/admin/sms/edit/:id', exact: true, name: 'Edit', component: Sms_Edit, module_name: 'sms', action: 'update'},
+  { path: '/admin/sms', exact: true, name: 'Sms Templates', component: Sms_Index, module_name: 'sms_templates', action: 'view' },
+  { path: '/admin/sms/add', exact: true, name: 'Add', component: Sms_Add, module_name: 'sms_templates', action: 'create'},
+  { path: '/admin/sms/edit/:id', exact: true, name: 'Edit', component: Sms_Edit, module_name: 'sms_templates', action: 'update'},
 
   // bank details
-  { path: '/admin/bank', exact: true, name: 'Bank Details', component: Bank_Add, module_name: 'bank', action: 'update' },
+  { path: '/admin/bank', exact: true, name: 'Bank Details', component: Bank_Add, module_name: 'bank_details', action: 'update' },
 
   // FAQ
-  { path: '/admin/faq', exact: true, name: 'FAQ', component: FAQ_Index, module_name: 'faq', action: 'view' },
-  { path: '/admin/faq/add', exact: true, name: 'Add', component: FAQ_Add, module_name: 'faq', action: 'create'},
-  { path: '/admin/faq/edit/:id', exact: true, name: 'Edit', component: FAQ_Edit, module_name: 'faq', action: 'update'},
+  { path: '/admin/faq', exact: true, name: 'FAQ', component: FAQ_Index, module_name: 'faqs', action: 'view' },
+  { path: '/admin/faq/add', exact: true, name: 'Add', component: FAQ_Add, module_name: 'faqs', action: 'create'},
+  { path: '/admin/faq/edit/:id', exact: true, name: 'Edit', component: FAQ_Edit, module_name: 'faqs', action: 'update'},
 
   // module_name and action parameter used for ACL mechanisam its required column
   { path: '/admin/user_groups', exact: true, name: 'Groups Management', component: User_Groups_Index, module_name: 'user_groups', action: 'view' },
@@ -116,8 +116,8 @@ const routes = [
   { path: '/admin/cms_pages/edit/:id', exact: true, name: '  Edit', component: CMS_Page_Edit, module_name: 'cms_pages', action: 'update' },
   { path: '/admin/cms_pages/detailview/:id', exact: true, name: 'DetailView', component: CMS_Page_Detail, module_name: 'cms_pages', action: 'view' },
 
-  { path: '/admin/kyc_requests', exact: true, name: 'KycRequests ', component: Kyc_Requests_Index, module_name: 'kyc_request', action: 'view' },
-  { path: '/admin/kyc_requests/detailview/:id', exact: true, name: 'KycRequestDetail', component: Kyc_Requests_Detail, module_name: 'kyc_request', action: 'view' },
+  { path: '/admin/kyc_requests', exact: true, name: 'KycRequests ', component: Kyc_Requests_Index, module_name: 'kyc_requests', action: 'view' },
+  { path: '/admin/kyc_requests/detailview/:id', exact: true, name: 'KycRequestDetail', component: Kyc_Requests_Detail, module_name: 'kyc_requests', action: 'view' },
 
   //  module_name and action parameter used for ACL mechanisam its required column menu management
   { path: '/admin/menu_management', exact: true, name: 'Menu', component: Menu_Management_Index, module_name: 'menu_management', action: 'view' },
