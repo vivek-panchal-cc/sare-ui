@@ -59,12 +59,9 @@ class User_Myprofile extends React.Component {
         if (res.data == null) {
           notify.error("Something Went Wrong!");
           history.push("/admin/my-profile");
-        } else {
+        } else {          
           this.setState({
-            fields: { ...this.state.fields, name: res.data.name },
-          });
-          this.setState({
-            fields: { ...this.state.fields, email: res.data.email },
+            fields: { ...this.state.fields, email: res.data.email, name: res.data.name },
           });
         }
       }
