@@ -12,19 +12,15 @@ import {
   CFormGroup,
   CLabel,
   CInput,
-  CSelect,
+  CSelect, CTooltip, CLink
 } from "@coreui/react";
-import {
-  faSortDown,
-  faSortUp,
-} from "@fortawesome/free-solid-svg-icons";
+import { faSortDown, faSortUp, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { globalConstants } from "../../../../constants/admin/global.constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useParams } from "react-router-dom";
 import { agentService } from "../../../../services/admin";
 import { notify, _loginUsersDetails } from "../../../../_helpers";
 
 const AgentDetailsComponent = (props) => {
-  const { account_number } = useParams();
   const [fields, setFields] = useState({
     pageNo: 1,
     sort_dir: "desc",
@@ -40,11 +36,8 @@ const AgentDetailsComponent = (props) => {
     column: null,
     direction: null,
   });
-//   const [sortedData, setSortedData] = useState([]);
   const [userList, setUserList] = useState([]);
   const [userListFlag, setUserListFlag] = useState(false);
-  const [multiaction, setMultiaction] = useState([]);
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,20 +51,18 @@ const AgentDetailsComponent = (props) => {
         if (res.success === false) {
           notify.error(res.message);
         } else {
-            // setUserList(res.data.result);
-            if (res?.data?.length === 0) {
-                setUserList([]);
-            } else {
-                setUserList(res.data.result);
-            }
-            // setUserListFlag(true);          
+          if (res?.data?.length === 0) {
+            setUserList([]);
+          } else {
+            setUserList(res.data.result);
+          }
         }
       });
   };
 
   const handleSearch = () => {
-    getAgentDetailsView(props.agent.account_number);
-    setUserListFlag(true); 
+    getAgentDetailsView();
+    setUserListFlag(true);
   };
 
   const handleReset = () => {
@@ -87,7 +78,7 @@ const AgentDetailsComponent = (props) => {
       totalPage: 1,
     });
     setUserListFlag(false);
-    getAgentDetailsView(props.agent.account_number);
+    getAgentDetailsView();
   };
 
   const sortData = (column) => {
@@ -120,8 +111,6 @@ const AgentDetailsComponent = (props) => {
         })
       : props.agentDetails;
 
-    //   setSortedData(sortedDataList);
-
   const renderSortIcon = (column) => {
     if (sortOrder.column === column) {
       if (sortOrder.direction === "asc") {
@@ -131,8 +120,7 @@ const AgentDetailsComponent = (props) => {
       }
     }
     return null;
-};
-console.log("userListFlag", userListFlag)
+  };
   return (
     <>
       <CContainer fluid>
@@ -140,7 +128,20 @@ console.log("userListFlag", userListFlag)
           <CCol sm="12">
             <CCard>
               <CCardHeader>
-                <h5>Agent Details</h5>
+                <strong>Agent Details</strong>
+                <div className="card-header-actions">
+                  <CTooltip content={globalConstants.BACK_MSG}>
+                    <CLink
+                      className="btn btn-danger btn-sm"
+                      aria-current="page"
+                      to="/admin/agents"
+                    >
+                      {" "}
+                      <FontAwesomeIcon icon={faArrowLeft} className="mr-1" />
+                      Back
+                    </CLink>
+                  </CTooltip>
+                </div>              
               </CCardHeader>
               <CCardBody>
                 <CRow>
@@ -168,7 +169,7 @@ console.log("userListFlag", userListFlag)
               <CCol xl={12}>
                 <CCard>
                   <CCardHeader>
-                    <h5>Transactions</h5>
+                    <strong>Transactions</strong>
                   </CCardHeader>
                   <CCardBody>
                     <CRow>

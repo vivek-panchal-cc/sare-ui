@@ -36,7 +36,7 @@ class User_Add extends React.Component {
         email: "",
         user_group_id: "",
         mobile_number: "",
-        status: false,
+        status: true,
       },
     };
     if (this.props._renderAccess === false) {
@@ -50,10 +50,9 @@ class User_Add extends React.Component {
   handleChange(e) {
     const { name, value } = e.target;
     if (name === "status") {
-      var fstatus = value === "true" ? false : true;
-      this.setState({ fields: { ...this.state.fields, [name]: fstatus } });
-    } else if (name === 'mobile') {
-      // only allow 9 digit mobile numbers
+      const newStatus = !this.state.fields.status;
+      this.setState({ fields: { ...this.state.fields, [name]: newStatus } });
+    } else if (name === "mobile_number") {
       if (/^\d{0,9}$/.test(value)) {
         this.setState({ fields: { ...this.state.fields, [name]: value } });
       }
@@ -97,7 +96,7 @@ class User_Add extends React.Component {
           <CCol xs="12">
             <CCard>
               <CCardHeader>
-                Add User
+                <b>Add User</b>
                 <div className="card-header-actions">
                   <CTooltip content={globalConstants.BACK_MSG}>
                     <CLink
@@ -153,16 +152,18 @@ class User_Add extends React.Component {
                   </CFormText>
                 </CFormGroup>
                 <CFormGroup>
-                  <CLabel htmlFor="nf-email">Mobile</CLabel>
+                  <CLabel htmlFor="nf-name">Mobile</CLabel>
                   <CInput
-                    type="number"
-                    id="mobile_number"
+                    type="text"
+                    id="mobile"
                     name="mobile_number"
-                    placeholder="Enter Mobile "
-                    min={1}
-                    autoComplete="mobile_number"
+                    placeholder="Enter Mobile "                    
+                    autoComplete="name"
                     onChange={this.handleChange}
-                    onBlur={() => this.validator.showMessageFor("mobile_number")}
+                    value={this.state.fields.mobile_number}
+                    onBlur={() =>
+                      this.validator.showMessageFor("mobile_number")
+                    }
                   />
                   <CFormText className="help-block">
                     {this.validator.message(
@@ -201,7 +202,7 @@ class User_Add extends React.Component {
                         className="mr-1"
                         color="primary"
                         defaultChecked={this.state.fields.status}
-                        onClick={this.handleInputChange}
+                        onClick={this.handleChange}
                       />
                     </CFormGroup>
                   </CCol>

@@ -35,6 +35,7 @@ import {
   faSortUp,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
+import MessagePopup from "./MyComponent";
 import { globalConstants } from "../../../../constants/admin/global.constants";
 
 class Sms_Index extends React.Component {
@@ -194,7 +195,7 @@ class Sms_Index extends React.Component {
   }
 
   // To change the status of sms
-  smsStatusChangeHandler(user_id, status) {    
+  smsStatusChangeHandler(user_id, status) {
     let currentStatus;
     if (status === "0") {
       currentStatus = "1";
@@ -213,6 +214,15 @@ class Sms_Index extends React.Component {
         }
       });
   }
+
+  truncateMessage = (message) => {
+    const words = message.split(" ");
+    if (words.length > 5) {
+      return words.slice(0, 5).join(" ") + "...";
+    } else {
+      return message;
+    }
+  };
 
   handleFieldChange = (inputFieldId, inputFieldValue) => {
     this.setState({ [inputFieldId]: inputFieldValue });
@@ -518,7 +528,7 @@ class Sms_Index extends React.Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {this.state?.sms_list?.length > 0 &&
+                      {this.state?.sms_list?.length > 0 ? (
                         this.state.sms_list.map((u, index) => (
                           <tr key={u.id}>
                             {/* <td>
@@ -541,84 +551,78 @@ class Sms_Index extends React.Component {
                             <td>{index + 1}</td>
                             <td>{u.title}</td>
                             <td>{u.slug}</td>
-                            <td>{u.message}</td>
                             <td>
-                              {current_user.id !== u.id &&
-                                _canAccess("sms_templates", "update") && (
-                                  <CLink
-                                    onClick={() =>
-                                      this.smsStatusChangeHandler(
-                                        u.id,
-                                        u.status
-                                      )
-                                    }
-                                  >
-                                    {u.status === "1" ? "Active" : "Deactive"}
-                                  </CLink>
-                                )}
-                              {current_user.id !== u.id &&
-                                _canAccess("sms_templates", "update") === false && (
-                                  <>
-                                    {u.status === "1" ? "Active" : "Deactive"}
-                                  </>
-                                )}
+                              <MessagePopup message={u.message} />
+                            </td>
+                            <td>
+                              {_canAccess("sms_templates", "update") && (
+                                <CLink
+                                  onClick={() =>
+                                    this.smsStatusChangeHandler(u.id, u.status)
+                                  }
+                                >
+                                  {u.status === "1" ? "Active" : "Deactive"}
+                                </CLink>
+                              )}
+                              {_canAccess("sms_templates", "update") ===
+                                false && (
+                                <>{u.status === "1" ? "Active" : "Deactive"}</>
+                              )}
                             </td>
 
                             {(_canAccess("sms_templates", "update") ||
                               _canAccess("sms_templates", "delete")) && (
                               <>
                                 <td>
-                                  {current_user.id !== u.id && (
-                                    <>
-                                      {_canAccess("sms_templates", "update") && (
-                                        <CTooltip
-                                          content={globalConstants.EDIT_BTN}
-                                        >
-                                          <CLink
-                                            className="btn  btn-md btn-primary"
-                                            aria-current="page"
-                                            to={`/admin/sms/edit/${u.id}`}
-                                          >
-                                            <CIcon name="cil-pencil"></CIcon>{" "}
-                                          </CLink>
-                                        </CTooltip>
-                                      )}
-                                      &nbsp;
-                                      {_canAccess("sms_templates", "delete") && (
-                                        <CTooltip
-                                          content={globalConstants.DELETE_BTN}
-                                        >
-                                          <button
-                                            className="btn  btn-md btn-danger "
-                                            onClick={() =>
-                                              this.openDeletePopup(u.id)
-                                            }
-                                          >
-                                            <CIcon name="cil-trash"></CIcon>
-                                          </button>
-                                        </CTooltip>
-                                      )}
-                                    </>
+                                  {_canAccess("sms_templates", "update") && (
+                                    <CTooltip
+                                      content={globalConstants.EDIT_BTN}
+                                    >
+                                      <CLink
+                                        className="btn  btn-md btn-primary"
+                                        aria-current="page"
+                                        to={`/admin/sms/edit/${u.id}`}
+                                      >
+                                        <CIcon name="cil-pencil"></CIcon>{" "}
+                                      </CLink>
+                                    </CTooltip>
+                                  )}
+                                  &nbsp;
+                                  {_canAccess("sms_templates", "delete") && (
+                                    <CTooltip
+                                      content={globalConstants.DELETE_BTN}
+                                    >
+                                      <button
+                                        className="btn  btn-md btn-danger "
+                                        onClick={() =>
+                                          this.openDeletePopup(u.id)
+                                        }
+                                      >
+                                        <CIcon name="cil-trash"></CIcon>
+                                      </button>
+                                    </CTooltip>
                                   )}
                                 </td>
                               </>
                             )}
                           </tr>
-                        ))}
-                      {this.state?.sms_list?.length?.length === 0 && (
+                        ))
+                      ) : (
                         <tr>
                           <td colSpan="5">No records found</td>
                         </tr>
                       )}
                     </tbody>
                   </table>
-                  <CPagination
-                    activePage={this.state.fields.pageNo}
-                    onActivePageChange={this.pageChange}
-                    pages={this.state.fields.totalPage}
-                    doubleArrows={true}
-                    align="end"
-                  />
+                  {this.state?.sms_list?.length > 0 ? (
+                    <CPagination
+                      activePage={this.state.fields.pageNo}
+                      onActivePageChange={this.pageChange}
+                      pages={this.state.fields.totalPage}
+                      doubleArrows={true}
+                      align="end"
+                    />
+                  ) : null}
                 </div>
               </CCardBody>
             </CCard>

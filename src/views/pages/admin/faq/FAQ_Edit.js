@@ -13,7 +13,7 @@ import {
   CButton,
   CLink,
   CTooltip,
-  CSwitch,
+  CSwitch, CTextarea
 } from "@coreui/react";
 import SimpleReactValidator from "simple-react-validator";
 import {
@@ -141,7 +141,7 @@ class Faq_Edit extends React.Component {
                 </CFormGroup>
                 <CFormGroup>
                   <CLabel htmlFor="nf-name">Answer</CLabel>
-                  <CInput
+                  <CTextarea
                     type="text"
                     id="answer"
                     name="answer"

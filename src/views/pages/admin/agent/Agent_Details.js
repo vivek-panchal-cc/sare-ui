@@ -2,9 +2,9 @@ import React from "react";
 import { notify, history } from "../../../../_helpers";
 import { agentService } from "../../../../services/admin";
 import AgentComponents from "./Agent_Components";
-import "./Draft.css";
+import "../../../../scss/Draft.css";
 
-class Agent_Details extends React.Component {
+class AgentDetails extends React.Component {
   state = {
     agentDetails: [],
     agent: [],
@@ -31,6 +31,7 @@ class Agent_Details extends React.Component {
   // Fetching Agent details.
   getAgentDetails() {
     agentService.getAgentDetails(this.state.id).then((res) => {
+      console.log('Agent res', res)
       if (res.success === false) {
         notify.error(res.message);
       } else {
@@ -59,4 +60,4 @@ class Agent_Details extends React.Component {
     );
   }
 }
-export default Agent_Details;
+export default AgentDetails;

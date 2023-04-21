@@ -94,7 +94,6 @@ class Agent_Index extends React.Component {
           totalRecords: res.data.totalRecords,
           fields: {
             ...this.state.fields,
-            totalPage: res?.data?.totalPage,
           },
           user_list: res.data.result,
         });
@@ -368,7 +367,7 @@ class Agent_Index extends React.Component {
                         />
                       </CCol>
                     </CFormGroup>
-                  </CCol>                  
+                  </CCol>
                   <CCol xl={3}>
                     <CFormGroup row>
                       <CCol xs="12">
@@ -545,7 +544,7 @@ class Agent_Index extends React.Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {this.state?.user_list?.length > 0 &&
+                      {this.state?.user_list?.length > 0 ? (
                         this.state.user_list.map((u, index) => (
                           <tr key={u.customer_account_rel?.account_number}>
                             {/* <td>
@@ -648,21 +647,23 @@ class Agent_Index extends React.Component {
                               </>
                             )}
                           </tr>
-                        ))}
-                      {this.state?.user_list?.length === 0 && (
+                        ))
+                      ) : (
                         <tr>
                           <td colSpan="5">No records found</td>
                         </tr>
                       )}
                     </tbody>
                   </table>
-                  <CPagination
-                    activePage={this.state.fields.pageNo}
-                    onActivePageChange={this.pageChange}
-                    pages={this.state.fields.totalPage}
-                    doubleArrows={true}
-                    align="end"
-                  />
+                  {this.state?.user_list?.length > 0 ? (
+                    <CPagination
+                      activePage={this.state.fields.pageNo}
+                      onActivePageChange={this.pageChange}
+                      pages={this.state.fields.totalPage}
+                      doubleArrows={true}
+                      align="end"
+                    />
+                  ) : null}
                 </div>
               </CCardBody>
             </CCard>

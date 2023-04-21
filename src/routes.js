@@ -7,6 +7,7 @@ const User_Edit = React.lazy(() => import('./views/pages/admin/users/User_Edit')
 
 const Customer_Index = React.lazy(() => import('./views/pages/admin/customer/Customer_Index'));
 const Customer_Edit = React.lazy(() => import('./views/pages/admin/customer/Customer_Edit'));
+const Customer_Details = React.lazy(() => import('./views/pages/admin/customer/Customer_Details'));
 
 const Agent_Index = React.lazy(() => import('./views/pages/admin/agent/Agent_Index'));
 const Agent_Edit = React.lazy(() => import('./views/pages/admin/agent/Agent_Edit'));
@@ -81,6 +82,7 @@ const routes = [
   // customer management
   { path: '/admin/customers', exact: true, name: 'Customers Management', component: Customer_Index, module_name: 'customers', action: 'view' },
   { path: '/admin/customers/edit/:id', exact: true, name: 'Edit', component: Customer_Edit, module_name: 'customers', action: 'update' },
+  { path: '/admin/customers/detailView/:id', exact: true, name: 'Customer Details', component: Customer_Details, module_name: 'customers', action: 'view' },
   
   // agent management
   { path: '/admin/agents', exact: true, name: 'Agents Management', component: Agent_Index, module_name: 'agents', action: 'view' },

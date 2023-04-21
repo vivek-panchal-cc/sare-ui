@@ -150,7 +150,7 @@ class User_Groups_Add extends React.Component {
         <CCol xs="12">
           <CCard>
             <CCardHeader>
-              Add Group
+              <b>Add Group</b>
               <div className="card-header-actions">
               <CTooltip
                   content={globalConstants.BACK_MSG}
