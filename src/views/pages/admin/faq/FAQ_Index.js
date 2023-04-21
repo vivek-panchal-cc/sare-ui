@@ -397,7 +397,7 @@ class FAQ_Index extends React.Component {
               <CCardHeader>
                 <strong>FAQ</strong>
                 <div className="card-header-actions">
-                  {_canAccess("faq", "create") && (
+                  {_canAccess("faqs", "create") && (
                     <CTooltip content={globalConstants.ADD_BTN}>
                       <CLink
                         className="btn btn-dark btn-block"
@@ -415,7 +415,7 @@ class FAQ_Index extends React.Component {
                   {/* <multiActionsBar
                     onClick={this.handleApplyAction}
                     checkBoxData={this.state.multiActions}
-                    module_name={"faq"}
+                    module_name={"faqs"}
                   /> */}
                   <table className="table">
                     <thead>
@@ -503,8 +503,8 @@ class FAQ_Index extends React.Component {
                           </span>
                         </th>  */}
                         <th>Status</th>
-                        {(_canAccess("faq", "update") ||
-                          _canAccess("faq", "delete")) && (
+                        {(_canAccess("faqs", "update") ||
+                          _canAccess("faqs", "delete")) && (
                           <>
                             <th>Action</th>
                           </>
@@ -540,7 +540,7 @@ class FAQ_Index extends React.Component {
                             <td>{u.message}</td>*/}
                             <td>
                               {current_user.id !== u.id &&
-                                _canAccess("faq", "update") && (
+                                _canAccess("faqs", "update") && (
                                   <CLink
                                     onClick={() =>
                                       this.faqStatusChangeHandler(
@@ -553,18 +553,18 @@ class FAQ_Index extends React.Component {
                                   </CLink>
                                 )}
                               {current_user.id !== u.id &&
-                                _canAccess("faq", "update") === false && (
+                                _canAccess("faqs", "update") === false && (
                                   <>{u.status === 1 ? "Active" : "Deactive"}</>
                                 )}
                             </td>
 
-                            {(_canAccess("faq", "update") ||
-                              _canAccess("faq", "delete")) && (
+                            {(_canAccess("faqs", "update") ||
+                              _canAccess("faqs", "delete")) && (
                               <>
                                 <td>
                                   {current_user.id !== u.id && (
                                     <>
-                                      {_canAccess("faq", "update") && (
+                                      {_canAccess("faqs", "update") && (
                                         <CTooltip
                                           content={globalConstants.EDIT_BTN}
                                         >
@@ -578,7 +578,7 @@ class FAQ_Index extends React.Component {
                                         </CTooltip>
                                       )}
                                       &nbsp;
-                                      {_canAccess("faq", "delete") && (
+                                      {_canAccess("faqs", "delete") && (
                                         <CTooltip
                                           content={globalConstants.DELETE_BTN}
                                         >

@@ -29,8 +29,7 @@ const UserGroups = React.lazy(() =>
 
 class User_Edit extends React.Component {
   constructor(props) {
-    super(props);
-    // console.log(this.props);
+    super(props);    
     this.state = {
       fields: {
         name: "",

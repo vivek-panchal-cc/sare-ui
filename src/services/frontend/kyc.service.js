@@ -2,8 +2,7 @@ import {
   notify,
   handleResponse,
   setLoading,
-  frontHeader,
-  authHeaderMutlipart,
+  frontHeader,  
   authHeaderMutlipartFile
 } from "../../_helpers/";
 require("dotenv").config();

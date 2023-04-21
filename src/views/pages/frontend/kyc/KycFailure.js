@@ -1,15 +1,12 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
 import { Button, CardBody, CardTitle, Container, Row } from "reactstrap";
 import { setLoading } from "_helpers";
 import "../css/styles.css";
 import errorBlack from "../img/error-black.svg";
-import errorImage from "../img/error.png";
 import logo from "../img/logo.svg";
 import KycForm from "./KycForm";
 
-function KycFailure({ props }) {
-  const { mobile, secret_key } = useParams();
+function KycFailure({ props }) {  
   const [kycFormLoading, setKycFormLoading] = useState(true);
   let res = props.kycReasons;
   let comments = props.kycReasons.kyc_reasons;  

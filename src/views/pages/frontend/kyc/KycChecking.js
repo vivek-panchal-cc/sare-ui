@@ -12,10 +12,6 @@ import KycSuccess from "./KycSuccess";
 
 function KycChecking() {
   const [isLoading, setIsLoading] = useState(true);
-  const [comment, setComment] = useState("");
-  const [maxUploadFiles, setMaxUploadFiles] = useState(0);
-  const [remainingUploadFiles, setRemainingUploadFiles] = useState(0);
-  const [uploadedFiles, setUploadedFiles] = useState([]);
   const [kycFormLoading, setKycFormLoading] = useState(false);
   const [isKycFailure, setIsKycFailure] = useState(false);
   const [kycReasons, setKycReasons] = useState([]);

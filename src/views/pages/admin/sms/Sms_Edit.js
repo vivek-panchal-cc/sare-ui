@@ -12,21 +12,16 @@ import {
   CCardFooter,
   CButton,
   CLink,
-  CInputCheckbox,
   CTooltip,
-  CSelect,
   CSwitch,
   CTextarea,
 } from "@coreui/react";
 import SimpleReactValidator from "simple-react-validator";
-import { customerService } from "../../../../services/admin/";
 import {
   notify,
   history,
-  capitalize,
   _canAccess,
 } from "../../../../_helpers/index";
-import $ from "jquery";
 import { globalConstants } from "../../../../constants/admin/global.constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faBan, faSave } from "@fortawesome/free-solid-svg-icons";

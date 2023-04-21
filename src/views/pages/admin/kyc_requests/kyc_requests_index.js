@@ -26,26 +26,15 @@ import {
   faSort,
   faSortDown,
   faSortUp,
-  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { kycRequestService } from "../../../../services/admin/kyc_request.service";
 import {
   notify,
   history,
   _canAccess,
-  _loginUsersDetails,
   capitalize,
 } from "../../../../_helpers/index";
 import { globalConstants } from "../../../../constants/admin/global.constants";
-const UserGroups = React.lazy(() =>
-  import("../../../../components/admin/UserGroups")
-);
-const CheckBoxes = React.lazy(() =>
-  import("../../../../components/admin/Checkboxes")
-);
-const MultiActionBar = React.lazy(() =>
-  import("../../../../components/admin/MultiActionBar")
-);
 
 class KycRequest_list extends React.Component {
   constructor(props) {
@@ -298,7 +287,6 @@ class KycRequest_list extends React.Component {
   /****************** * Render Data To Dom ************************/
 
   render() {
-    const current_user = _loginUsersDetails();
     return (
       <>
         <CRow>

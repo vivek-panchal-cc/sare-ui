@@ -16,8 +16,6 @@ import {
   CLink,
   CTooltip
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-
 import SimpleReactValidator from 'simple-react-validator';
 import { menuManagementservice } from '../../../../services/admin/'
 import { notify, history, _canAccess } from '../../../../_helpers/index';

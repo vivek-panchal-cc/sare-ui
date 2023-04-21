@@ -1,14 +1,9 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
 import { Container, Row, CardBody, Form } from "reactstrap";
 import logo from "../img/logo.svg";
 import kycfail from "../img/kycfail.svg";
 import "../css/styles.css";
 
-const KycFail = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [kycToken, setKycToken] = useState("");
-  const { mobile } = useParams();
+const KycFail = () => { 
 
   return (
     <>

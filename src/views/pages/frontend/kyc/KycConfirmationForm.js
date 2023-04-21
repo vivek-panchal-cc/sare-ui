@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import {
   Container,
-  Row,
-  Col,
-  Card,
   CardBody,
   CardTitle,
   Button,
@@ -14,7 +11,6 @@ import {
   Modal,
 } from "reactstrap";
 import logo from "../img/logo.svg";
-import kycComplete from "../img/complete.svg";
 import uploadKYC from "../img/upload.svg";
 import view from "../img/view.svg";
 import "../css/styles.css";
@@ -31,8 +27,7 @@ const KycConfirmationForm = () => {
   });
   const [phoneNumber, setPhoneNumber] = useState("");
   const [idNumber, setIdNumber] = useState("");
-  const [idExpirationDate, setIdExpirationDate] = useState("");
-  const [idFile, setIdFile] = useState(null);
+  const [idExpirationDate, setIdExpirationDate] = useState("");  
   const [idImage, setIdImage] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -68,9 +63,6 @@ const KycConfirmationForm = () => {
     setIdExpirationDate(e.target.value);
   };
 
-  const handleIdFileChange = (event) => {
-    setIdFile(event.target.files[0]);
-  };
 
   return (
     <>

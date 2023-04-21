@@ -2,9 +2,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
   Container,
-  Row,
-  Col,
-  Card,
   CardBody,
   CardTitle,
   Button,
@@ -17,18 +14,13 @@ import {
   ModalHeader,
   ModalFooter,
 } from "reactstrap";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { format } from "date-fns";
 import { kycService } from "../../../../services/frontend/kyc.service";
 import { useParams, useHistory } from "react-router-dom";
-import { notify, setLoading } from "../../../../_helpers/index";
+import { notify } from "../../../../_helpers/index";
 import logo from "../img/logo.svg";
-import view from "../img/view.svg";
-import kycComplete from "../img/complete.svg";
 import uploadKYC from "../img/upload.svg";
 import "../css/styles.css";
-import { flagSet } from "@coreui/icons";
 
 const KycForm = ({ props }) => {
   const [fullName, setFullName] = useState(props?.res?.name);
@@ -192,11 +184,6 @@ const KycForm = ({ props }) => {
     }
   };
 
-  const handleFileClick = (e) => {
-    const imgSrc = e.target.getAttribute("src");
-    setSelectedImageFile(imgSrc);
-    setShowModal(true);
-  };
 
   const clearImage = () => {
     setIdFile("");

@@ -6,15 +6,11 @@ import {
   faUserFriends,
   faCogs,
   faFileAlt,
-  faTasks,
-  faFlag,
-  faCog,
   faSms,
   faPiggyBank,
   faQuestionCircle,
-  faQuestion,
   faHandshake,
-  faUserTie, faBullhorn, faUserSecret
+  faUserSecret
 } from "@fortawesome/free-solid-svg-icons";
 
 const _nav = [
@@ -93,7 +89,7 @@ const _nav = [
     name: "Sms Templates",
     to: "/admin/sms",
     icon: <FontAwesomeIcon icon={faSms} className="c-sidebar-nav-icon" />,
-    module_name: "sms",
+    module_name: "sms_templates",
     id: "sms_sidebar_id",
   },
   {
@@ -101,7 +97,7 @@ const _nav = [
     name: "Bank Details",
     to: "/admin/bank",
     icon: <FontAwesomeIcon icon={faPiggyBank} className="c-sidebar-nav-icon" />,
-    module_name: "bank",
+    module_name: "bank_details",
     id: "bank_sidebar_id",
   },
   {
@@ -111,7 +107,7 @@ const _nav = [
     icon: (
       <FontAwesomeIcon icon={faQuestionCircle} className="c-sidebar-nav-icon" />
     ),
-    module_name: "faq",
+    module_name: "faqs",
     id: "faq_sidebar_id",
   },
   /* {

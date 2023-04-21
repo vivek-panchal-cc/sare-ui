@@ -31,7 +31,6 @@ async function getAgentsList(postData) {
   } catch (error) {
     notify.error("Something went wrong");
     setLoading(false);
-    const response = undefined;
   }
   return handleResponse(response);
 }

@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import { useState } from "react";
-import moment from "moment";
 import { capitalize } from "_helpers";
 // import "./page.css";
 import {
@@ -10,26 +9,19 @@ import {
   CCol,
   CRow,
   CContainer,
-  CTooltip,
-  CLink,
   CFormGroup,
   CLabel,
   CInput,
   CSelect,
 } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
 import {
-  faSort,
   faSortDown,
   faSortUp,
-  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useParams } from "react-router-dom";
 import { agentService } from "../../../../services/admin";
-import { notify, history, _loginUsersDetails } from "../../../../_helpers";
-import { globalConstants } from "../../../../constants/admin/global.constants";
-import FileSaver, { saveAs } from "file-saver";
+import { notify, _loginUsersDetails } from "../../../../_helpers";
 
 const AgentDetailsComponent = (props) => {
   const { account_number } = useParams();
@@ -53,11 +45,6 @@ const AgentDetailsComponent = (props) => {
   const [userListFlag, setUserListFlag] = useState(false);
   const [multiaction, setMultiaction] = useState([]);
 
-  const handleMultiAction = (userId) => {
-    const updatedMultiaction = { ...multiaction };
-    updatedMultiaction[userId] = !updatedMultiaction[userId];
-    setMultiaction(updatedMultiaction);
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -164,7 +151,7 @@ console.log("userListFlag", userListFlag)
                     <br />
                     <b>Mobile Number :</b> {props.agent.mobile_number}
                     <br />
-                    <b>National Id :</b> {props.agent.nation_id}
+                    <b>National Id :</b> {props.agent.national_id}
                     <br />
                     <b>SHOFCO Number :</b> {props.agent.shofco_number}
                   </CCol>
@@ -358,7 +345,7 @@ console.log("userListFlag", userListFlag)
                           </tr>
                         </thead>
                         <tbody>
-                          {userListFlag  ? (
+                          {userListFlag ? (
                             userList?.map((data, index) => (
                               <tr key={index}>
                                 <td>{data.credit_acc}</td>

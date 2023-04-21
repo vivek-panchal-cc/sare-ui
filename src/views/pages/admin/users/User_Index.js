@@ -45,7 +45,7 @@ class User_Index extends React.Component {
 
     this.state = {
       pageNo: 1,
-      sort_dir: 'asc',
+      sort_dir: 'desc',
       sort_field: "name",
       search_name: "",
       search_email: "",
@@ -101,7 +101,7 @@ class User_Index extends React.Component {
     if (type === 'reset') {
       this.setState({
         pageNo: 1,
-        sort_dir: 'asc',
+        sort_dir: 'desc',
         sort_field: "name",
         search_name: "",
         search_email: "",
@@ -159,8 +159,7 @@ class User_Index extends React.Component {
     this.setState({ multiaction: multiactions });
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log("Users Next Props", nextProps)
+  componentWillReceiveProps(nextProps) {    
     const current_user = _loginUsersDetails();
     if (nextProps.users.user_list?.length > 0) {
       let users = nextProps.users.user_list;
