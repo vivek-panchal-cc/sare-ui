@@ -39,6 +39,7 @@ class User_Myprofile extends React.Component {
       fields: {
         name: "",
         email: "",
+        mobile_number: "",
         password: "",
         confirm_password: "",
         showPassword: false,
@@ -59,9 +60,14 @@ class User_Myprofile extends React.Component {
         if (res.data == null) {
           notify.error("Something Went Wrong!");
           history.push("/admin/my-profile");
-        } else {          
+        } else {
           this.setState({
-            fields: { ...this.state.fields, email: res.data.email, name: res.data.name },
+            fields: {
+              ...this.state.fields,
+              email: res.data.email,
+              name: res.data.name,
+              mobile_number: res.data.mobile_number,
+            },
           });
         }
       }
@@ -84,6 +90,10 @@ class User_Myprofile extends React.Component {
     if (name === "status") {
       var fstatus = value === "true" ? false : true;
       this.setState({ fields: { ...this.state.fields, [name]: fstatus } });
+    } else if (name === "mobile_number") {
+      if (/^\d{0,9}$/.test(value)) {
+        this.setState({ fields: { ...this.state.fields, [name]: value } });
+      }
     } else {
       this.setState({ fields: { ...this.state.fields, [name]: value } });
     }
@@ -170,6 +180,38 @@ class User_Myprofile extends React.Component {
                     onChange={this.handleChange}
                     disabled={true}
                   />
+                </CFormGroup>
+                <CFormGroup>
+                  <CLabel htmlFor="nf-name">Mobile</CLabel>
+                  {this.state.fields.mobile_number === null ? (
+                    <CInput
+                      type="text"
+                      id="mobile"
+                      name="mobile_number"
+                      placeholder="Enter Mobile "
+                      autoComplete="name"
+                      onChange={this.handleChange}
+                      value=""                      
+                    />
+                  ) : (
+                    <CInput
+                      type="text"
+                      id="mobile"
+                      name="mobile_number"
+                      placeholder="Enter Mobile "
+                      autoComplete="name"
+                      onChange={this.handleChange}
+                      value={this.state.fields.mobile_number}                      
+                    />
+                  )}
+                  <CFormText className="help-block">
+                    {this.validator.message(
+                      "mobile_number",
+                      this.state.fields.mobile_number,
+                      "required",
+                      { className: "text-danger" }
+                    )}
+                  </CFormText>
                 </CFormGroup>
                 <CFormGroup>
                   <CLabel htmlFor="nf-email">Password</CLabel>

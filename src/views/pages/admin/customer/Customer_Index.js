@@ -74,7 +74,7 @@ class Customer_Index extends React.Component {
   }
 
   getCustomersList() {
-    customerService.getCustomersList(this.state.fields).then((res) => {      
+    customerService.getCustomersList(this.state.fields).then((res) => {
       if (res.success === false) {
         notify.error(res.message);
       } else {
@@ -549,7 +549,7 @@ class Customer_Index extends React.Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {this.state?.user_list?.length > 0 &&
+                      {this.state?.user_list?.length > 0 ? (
                         this.state.user_list.map((u, index) => (
                           <tr key={u.customer_account_rel?.account_number}>
                             {/* <td>
@@ -570,7 +570,14 @@ class Customer_Index extends React.Component {
                               )}{" "}
                             </td> */}
                             <td>{index + 1}</td>
-                            <td>{u.customer_account_rel?.account_number}</td>
+                            {/* <td>{u.customer_account_rel?.account_number}</td> */}
+                            <td>
+                              <a
+                                href={`/admin/customers/detailView/${u.customer_account_rel?.account_number}`}
+                              >
+                                {u.customer_account_rel?.account_number}
+                              </a>
+                            </td>
                             <td>{u.name}</td>
                             <td>{u.mobile_number}</td>
                             <td>
@@ -646,21 +653,23 @@ class Customer_Index extends React.Component {
                               </>
                             )}
                           </tr>
-                        ))}
-                      {this.state?.user_list?.length === 0 && (
+                        ))
+                      ) : (
                         <tr>
                           <td colSpan="5">No records found</td>
                         </tr>
                       )}
                     </tbody>
                   </table>
-                  <CPagination
-                    activePage={this.state.fields.pageNo}
-                    onActivePageChange={this.pageChange}
-                    pages={this.state.fields.totalPage}
-                    doubleArrows={true}
-                    align="end"
-                  />
+                  {this.state?.user_list?.length > 0 ? (
+                    <CPagination
+                      activePage={this.state.fields.pageNo}
+                      onActivePageChange={this.pageChange}
+                      pages={this.state.fields.totalPage}
+                      doubleArrows={true}
+                      align="end"
+                    />
+                  ) : null}
                 </div>
               </CCardBody>
             </CCard>

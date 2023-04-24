@@ -84,7 +84,7 @@ class KycRequest_list extends React.Component {
         // Add a short delay before resolving the promise
         return new Promise((resolve) => setTimeout(() => resolve(res), 0));
       })
-      .then((res) => {        
+      .then((res) => {
         this.setState({ loading: false }); // Set loading to false after the response is received
 
         if (!res.success) {
@@ -95,9 +95,9 @@ class KycRequest_list extends React.Component {
           const multiaction =
             result.length > 0
               ? result.reduce(
-                (acc, page) => ({ ...acc, [page._id]: false }),
-                {}
-              )
+                  (acc, page) => ({ ...acc, [page._id]: false }),
+                  {}
+                )
               : {};
 
           this.setState({
@@ -361,6 +361,7 @@ class KycRequest_list extends React.Component {
                           name="status"
                           value={this.state.fields.status}
                           onChange={this.handleChange}
+                          style={{ cursor: "pointer" }}
                           onKeyPress={(event) => {
                             if (event.key === "Enter") {
                               this.handleSearch();
@@ -368,7 +369,9 @@ class KycRequest_list extends React.Component {
                           }}
                         >
                           <option value="">-- Select Status --</option>
-                          <option value="pending_approval">Pending Approval</option>
+                          <option value="pending_approval">
+                            Pending Approval
+                          </option>
                           <option value="approved">Approved</option>
                           <option value="rejected">Rejected</option>
                         </CSelect>
@@ -412,7 +415,7 @@ class KycRequest_list extends React.Component {
         <CRow>
           <CCol xl={12}>
             <CCard>
-              <CCardHeader>KYC Requests</CCardHeader>
+              <CCardHeader><b>KYC Requests</b></CCardHeader>
               <CCardBody>
                 <div className="position-relative table-responsive">
                   <table className="table">
@@ -430,16 +433,16 @@ class KycRequest_list extends React.Component {
                             </span>
                             {this.state.fields.sort_field !==
                               "account_number" && (
-                                <FontAwesomeIcon icon={faSort} />
-                              )}
+                              <FontAwesomeIcon icon={faSort} />
+                            )}
                             {this.state.fields.sort_dir === "asc" &&
                               this.state.fields.sort_field ===
-                              "account_number" && (
+                                "account_number" && (
                                 <FontAwesomeIcon icon={faSortUp} />
                               )}
                             {this.state.fields.sort_dir === "desc" &&
                               this.state.fields.sort_field ===
-                              "account_number" && (
+                                "account_number" && (
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
@@ -454,21 +457,36 @@ class KycRequest_list extends React.Component {
                             </span>
                             {this.state.fields.sort_field !==
                               "mobile_number" && (
-                                <FontAwesomeIcon icon={faSort} />
-                              )}
+                              <FontAwesomeIcon icon={faSort} />
+                            )}
                             {this.state.fields.sort_dir === "asc" &&
                               this.state.fields.sort_field ===
-                              "mobile_number" && (
+                                "mobile_number" && (
                                 <FontAwesomeIcon icon={faSortUp} />
                               )}
                             {this.state.fields.sort_dir === "desc" &&
                               this.state.fields.sort_field ===
-                              "mobile_number" && (
+                                "mobile_number" && (
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
                         </th>
-                        <th>Name</th>
+                        <th onClick={() => this.handleColumnSort("name")}>
+                          <span className="sortCls">
+                            <span className="table-header-text-mrg">Name</span>
+                            {this.state.fields.sort_field !== "name" && (
+                              <FontAwesomeIcon icon={faSort} />
+                            )}
+                            {this.state.fields.sort_dir === "asc" &&
+                              this.state.fields.sort_field === "name" && (
+                                <FontAwesomeIcon icon={faSortUp} />
+                              )}
+                            {this.state.fields.sort_dir === "desc" &&
+                              this.state.fields.sort_field === "name" && (
+                                <FontAwesomeIcon icon={faSortDown} />
+                              )}
+                          </span>
+                        </th>
                         <th onClick={() => this.handleColumnSort("status")}>
                           <span className="sortCls">
                             <span className="table-header-text-mrg">
@@ -489,14 +507,14 @@ class KycRequest_list extends React.Component {
                         </th>
                         {(_canAccess("cms_pages", "update") ||
                           _canAccess("cms_pages", "delete")) && (
-                            <>
-                              <th>Action</th>
-                            </>
-                          )}
+                          <>
+                            <th>Action</th>
+                          </>
+                        )}
                       </tr>
                     </thead>
                     <tbody>
-                      {this.state.page_list.length > 0 &&
+                      {this.state?.page_list?.length > 0 &&
                         this.state.page_list.map((u, index) => (
                           <tr key={u._id}>
                             <td>{index + 1}</td>
@@ -526,20 +544,22 @@ class KycRequest_list extends React.Component {
                             )}
                           </tr>
                         ))}
-                      {this.state.page_list.length === 0 && (
+                      {this.state?.page_list?.length === 0 && (
                         <tr>
                           <td colSpan="5">No records found</td>
                         </tr>
                       )}
                     </tbody>
                   </table>
-                  <CPagination
-                    activePage={this.state.fields.pageNo}
-                    onActivePageChange={this.pageChange}
-                    pages={this.state.fields.totalPage}
-                    doubleArrows={true}
-                    align="end"
-                  />
+                  {this.state?.page_list?.length > 0 ? (
+                    <CPagination
+                      activePage={this.state.fields.pageNo}
+                      onActivePageChange={this.pageChange}
+                      pages={this.state.fields.totalPage}
+                      doubleArrows={true}
+                      align="end"
+                    />
+                  ) : null}
                 </div>
               </CCardBody>
             </CCard>

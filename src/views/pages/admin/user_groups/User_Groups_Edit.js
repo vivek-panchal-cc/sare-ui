@@ -185,7 +185,7 @@ class User_Groups_Edit extends React.Component {
         <CCol xs="12">
           <CCard>
             <CCardHeader>
-              Edit Group
+              <b>Edit Group</b>
               <div className="card-header-actions">
               <CTooltip
                   content={globalConstants.BACK_MSG}

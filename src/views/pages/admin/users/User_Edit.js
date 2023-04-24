@@ -70,8 +70,8 @@ class User_Edit extends React.Component {
   handleChange(e) {
     const { name, value } = e.target;
     if (name === "status") {
-      var fstatus = value === "true" ? false : true;
-      this.setState({ fields: { ...this.state.fields, [name]: fstatus } });
+      const newStatus = !this.state.fields.status;
+      this.setState({ fields: { ...this.state.fields, [name]: newStatus } });
     } else if (name === 'mobile_number') {
       // only allow 9 digit mobile numbers
       if (/^\d{0,9}$/.test(value)) {
@@ -117,7 +117,7 @@ class User_Edit extends React.Component {
           <CCol xs="12">
             <CCard>
               <CCardHeader>
-                Edit User
+                <b>Edit User</b>
                 <div className="card-header-actions">
                   <CTooltip content={globalConstants.BACK_MSG}>
                     <CLink
@@ -252,7 +252,7 @@ class User_Edit extends React.Component {
                           name="status"
                           value={this.state.fields.status}
                           defaultChecked
-                          onChange={this.handleInputChange}
+                          onChange={this.handleChange}
                         />
                       )}
 
@@ -263,7 +263,7 @@ class User_Edit extends React.Component {
                           id="status"
                           name="status"
                           value={this.state.fields.status}
-                          onChange={this.handleInputChange}
+                          onChange={this.handleChange}
                         />
                       )}
                     </CFormGroup>

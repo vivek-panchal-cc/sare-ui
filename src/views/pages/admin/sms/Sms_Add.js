@@ -98,7 +98,7 @@ class Sms_Add extends React.Component {
           <CCol xs="12">
             <CCard>
               <CCardHeader>
-                <strong>Add SMS template</strong>
+                <strong>Add SMS Template</strong>
                 <div className="card-header-actions">
                   <CTooltip content={globalConstants.BACK_MSG}>
                     <CLink

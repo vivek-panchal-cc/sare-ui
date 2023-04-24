@@ -30,6 +30,7 @@ import {
 } from "../../../../_helpers/index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { globalConstants } from "../../../../constants/admin/global.constants";
+import MessagePopup from "./MyComponent";
 
 class FAQ_Index extends React.Component {
   constructor(props) {
@@ -73,12 +74,12 @@ class FAQ_Index extends React.Component {
         notify.error(res.message);
       } else {
         this.setState({
-          totalRecords: res.data.totalRecords,
+          totalRecords: res?.data?.totalRecords,
           fields: {
             ...this.state.fields,
-            totalPage: res.data.totalPage,
+            totalPage: res?.data?.totalPage,
           },
-          faq_list: res.data.result,
+          faq_list: res?.data?.result,
         });
 
         /* Multi delete checkbox code */
@@ -155,7 +156,7 @@ class FAQ_Index extends React.Component {
             sort_dir: "desc",
             sort_field: "name",
             question: "",
-            answer: "",            
+            answer: "",
             status: "",
             totalPage: 1,
           },
@@ -316,25 +317,6 @@ class FAQ_Index extends React.Component {
                       </CCol>
                     </CFormGroup>
                   </CCol>
-                  {/* <CCol xl={3}>
-                    <CFormGroup row>
-                      <CCol xs="12">
-                        <CLabel htmlFor="name">Slug</CLabel>
-                        <CInput
-                          id="name"
-                          placeholder="Search Slug"
-                          name="slug"
-                          value={this.state.fields.slug}
-                          onChange={this.handleChange}
-                          onKeyPress={(event) => {
-                            if (event.key === "Enter") {
-                              this.handleSearch("search");
-                            }
-                          }}
-                        />
-                      </CCol>
-                    </CFormGroup>
-                  </CCol> */}
                   <CCol xl={3}>
                     <CFormGroup row>
                       <CCol xs="12">
@@ -512,7 +494,7 @@ class FAQ_Index extends React.Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {this.state?.faq_list?.length > 0 &&
+                      {this.state?.faq_list?.length > 0 ? (
                         this.state.faq_list.map((u, index) => (
                           <tr key={u.id}>
                             {/* <td>
@@ -534,85 +516,82 @@ class FAQ_Index extends React.Component {
                             </td> */}
                             <td>{index + 1}</td>
                             <td>{u.question}</td>
-                            <td>{u.answer}</td>
-                            {/* <td>{u.title}</td>
-                            <td>{u.slug}</td>
-                            <td>{u.message}</td>*/}
                             <td>
-                              {current_user.id !== u.id &&
-                                _canAccess("faqs", "update") && (
-                                  <CLink
-                                    onClick={() =>
-                                      this.faqStatusChangeHandler(
-                                        u.id,
-                                        u.status
-                                      )
-                                    }
-                                  >
-                                    {u.status === 1 ? "Active" : "Deactive"}
-                                  </CLink>
-                                )}
-                              {current_user.id !== u.id &&
-                                _canAccess("faqs", "update") === false && (
-                                  <>{u.status === 1 ? "Active" : "Deactive"}</>
-                                )}
+                              <MessagePopup message={u.answer} />
+                            </td>
+
+                            <td>
+                              {_canAccess("faqs", "update") && (
+                                <CLink
+                                  onClick={() =>
+                                    this.faqStatusChangeHandler(u.id, u.status)
+                                  }
+                                >
+                                  {u.status === 1 ? "Active" : "Deactive"}
+                                </CLink>
+                              )}
+                              {_canAccess("faqs", "update") === false && (
+                                <>{u.status === 1 ? "Active" : "Deactive"}</>
+                              )}
                             </td>
 
                             {(_canAccess("faqs", "update") ||
                               _canAccess("faqs", "delete")) && (
                               <>
                                 <td>
-                                  {current_user.id !== u.id && (
-                                    <>
-                                      {_canAccess("faqs", "update") && (
-                                        <CTooltip
-                                          content={globalConstants.EDIT_BTN}
-                                        >
-                                          <CLink
-                                            className="btn  btn-md btn-primary"
-                                            aria-current="page"
-                                            to={`/admin/faq/edit/${u.id}`}
-                                          >
-                                            <CIcon name="cil-pencil"></CIcon>{" "}
-                                          </CLink>
-                                        </CTooltip>
-                                      )}
-                                      &nbsp;
-                                      {_canAccess("faqs", "delete") && (
-                                        <CTooltip
-                                          content={globalConstants.DELETE_BTN}
-                                        >
-                                          <button
-                                            className="btn  btn-md btn-danger "
-                                            onClick={() =>
-                                              this.openDeletePopup(u.id)
-                                            }
-                                          >
-                                            <CIcon name="cil-trash"></CIcon>
-                                          </button>
-                                        </CTooltip>
-                                      )}
-                                    </>
+                                  {/* {current_user.id !== u.id && (
+                                    <> */}
+                                  {_canAccess("faqs", "update") && (
+                                    <CTooltip
+                                      content={globalConstants.EDIT_BTN}
+                                    >
+                                      <CLink
+                                        className="btn  btn-md btn-primary"
+                                        aria-current="page"
+                                        to={`/admin/faq/edit/${u.id}`}
+                                      >
+                                        <CIcon name="cil-pencil"></CIcon>{" "}
+                                      </CLink>
+                                    </CTooltip>
                                   )}
+                                  &nbsp;
+                                  {_canAccess("faqs", "delete") && (
+                                    <CTooltip
+                                      content={globalConstants.DELETE_BTN}
+                                    >
+                                      <button
+                                        className="btn  btn-md btn-danger "
+                                        onClick={() =>
+                                          this.openDeletePopup(u.id)
+                                        }
+                                      >
+                                        <CIcon name="cil-trash"></CIcon>
+                                      </button>
+                                    </CTooltip>
+                                  )}
+                                  {/* </>
+                                  )} */}
                                 </td>
                               </>
                             )}
                           </tr>
-                        ))}
-                      {this.state?.faq_list?.length?.length === 0 && (
+                        ))
+                      ) : (
                         <tr>
                           <td colSpan="5">No records found</td>
                         </tr>
                       )}
                     </tbody>
                   </table>
-                  <CPagination
-                    activePage={this.state.fields.pageNo}
-                    onActivePageChange={this.pageChange}
-                    pages={this.state.fields.totalPage}
-                    doubleArrows={true}
-                    align="end"
-                  />
+                  {this.state?.faq_list?.length > 0 ? (
+                    <CPagination
+                      activePage={this.state.fields.pageNo}
+                      onActivePageChange={this.pageChange}
+                      pages={this.state.fields.totalPage}
+                      doubleArrows={true}
+                      align="end"
+                    />
+                  ) : null}
                 </div>
               </CCardBody>
             </CCard>

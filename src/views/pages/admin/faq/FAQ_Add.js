@@ -14,7 +14,7 @@ import {
   CButton,
   CLink,
   CSwitch,
-  CTooltip,
+  CTooltip, CTextarea
 } from "@coreui/react";
 import SimpleReactValidator from "simple-react-validator";
 import { faqService } from "../../../../services/admin/faq.service";
@@ -129,7 +129,7 @@ class Sms_Add extends React.Component {
                 </CFormGroup>
                 <CFormGroup>
                   <CLabel htmlFor="nf-name">Answer</CLabel>
-                  <CInput
+                  <CTextarea
                     type="text"
                     id="answer"
                     name="answer"
