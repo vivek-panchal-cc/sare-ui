@@ -118,8 +118,8 @@ const routes = [
   { path: '/admin/cms_pages/edit/:id', exact: true, name: '  Edit', component: CMS_Page_Edit, module_name: 'cms_pages', action: 'update' },
   { path: '/admin/cms_pages/detailview/:id', exact: true, name: 'DetailView', component: CMS_Page_Detail, module_name: 'cms_pages', action: 'view' },
 
-  { path: '/admin/kyc_requests', exact: true, name: 'KycRequests ', component: Kyc_Requests_Index, module_name: 'kyc_requests', action: 'view' },
-  { path: '/admin/kyc_requests/detailview/:id', exact: true, name: 'KycRequestDetail', component: Kyc_Requests_Detail, module_name: 'kyc_requests', action: 'view' },
+  { path: '/admin/kyc_requests', exact: true, name: 'Kyc Requests ', component: Kyc_Requests_Index, module_name: 'kyc_requests', action: 'view' },
+  { path: '/admin/kyc_requests/detailview/:id', exact: true, name: 'Kyc Request Details', component: Kyc_Requests_Detail, module_name: 'kyc_requests', action: 'view' },
 
   //  module_name and action parameter used for ACL mechanisam its required column menu management
   { path: '/admin/menu_management', exact: true, name: 'Menu', component: Menu_Management_Index, module_name: 'menu_management', action: 'view' },

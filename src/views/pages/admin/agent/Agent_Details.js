@@ -8,6 +8,8 @@ class AgentDetails extends React.Component {
   state = {
     agentDetails: [],
     agent: [],
+    page: [],
+    totalPage: [],
     id: this.props.match.params.id,
   };
 
@@ -23,7 +25,11 @@ class AgentDetails extends React.Component {
         notify.error(res.message);
         history.push("/admin/agents");
       } else {
-        this.setState({ agentDetails: res.data.result });
+        this.setState({
+          agentDetails: res.data.result,
+          page: res.data.page,
+          totalPage: res.data.totalPage,
+        });
       }
     });
   }
@@ -31,7 +37,6 @@ class AgentDetails extends React.Component {
   // Fetching Agent details.
   getAgentDetails() {
     agentService.getAgentDetails(this.state.id).then((res) => {
-      console.log('Agent res', res)
       if (res.success === false) {
         notify.error(res.message);
       } else {
@@ -54,6 +59,8 @@ class AgentDetails extends React.Component {
           <AgentComponents
             agent={this.state.agent}
             agentDetails={this.state.agentDetails}
+            page={this.state.page}
+            totalPage={this.state.totalPage}
           />
         }
       </div>

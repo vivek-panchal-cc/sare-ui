@@ -18,10 +18,13 @@ const KYCDetailsPopup = ({ kycDetail, onClose }) => {
       </CModalHeader>
       <CModalBody>
         <p>
-          Status:{" "}
+          <b>Status :</b>{" "}
           {kycDetail.status.charAt(0).toUpperCase() + kycDetail.status.slice(1)}
         </p>
-        <p>Comment: {kycDetail.admin_comment}</p>
+        <p>
+          <b>Comment :</b>{" "}
+          {kycDetail.admin_comment}
+        </p>
         {/* Add more fields here as needed */}
       </CModalBody>
       <CModalFooter>

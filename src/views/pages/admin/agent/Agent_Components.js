@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import { useState } from "react";
 import { capitalize } from "_helpers";
-// import "./page.css";
 import {
   CCard,
   CCardBody,
@@ -12,15 +11,23 @@ import {
   CFormGroup,
   CLabel,
   CInput,
-  CSelect, CTooltip, CLink
+  CSelect,
+  CTooltip,
+  CLink,
 } from "@coreui/react";
-import { faSortDown, faSortUp, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSortDown,
+  faSortUp,
+  faArrowLeft,
+} from "@fortawesome/free-solid-svg-icons";
 import { globalConstants } from "../../../../constants/admin/global.constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { agentService } from "../../../../services/admin";
-import { notify, _loginUsersDetails } from "../../../../_helpers";
+import { notify } from "../../../../_helpers";
+import "../customer/styles.css";
 
 const AgentDetailsComponent = (props) => {
+  const { agent, agentDetails } = props;
   const [fields, setFields] = useState({
     pageNo: 1,
     sort_dir: "desc",
@@ -45,19 +52,17 @@ const AgentDetailsComponent = (props) => {
   };
 
   const getAgentDetailsView = () => {
-    agentService
-      .agentDetailsView(props.agent.account_number, fields)
-      .then((res) => {
-        if (res.success === false) {
-          notify.error(res.message);
+    agentService.agentDetailsView(agent.account_number, fields).then((res) => {
+      if (res.success === false) {
+        notify.error(res.message);
+      } else {
+        if (res?.data?.length === 0) {
+          setUserList([]);
         } else {
-          if (res?.data?.length === 0) {
-            setUserList([]);
-          } else {
-            setUserList(res.data.result);
-          }
+          setUserList(res.data.result);
         }
-      });
+      }
+    });
   };
 
   const handleSearch = () => {
@@ -94,11 +99,11 @@ const AgentDetailsComponent = (props) => {
   };
 
   const sortedData =
-    props.agentDetails &&
-    props.agentDetails?.length > 0 &&
+    agentDetails &&
+    agentDetails?.length > 0 &&
     sortOrder.column &&
     sortOrder.direction
-      ? props.agentDetails.sort((a, b) => {
+      ? agentDetails.sort((a, b) => {
           const columnA = a[sortOrder.column];
           const columnB = b[sortOrder.column];
           if (columnA < columnB) {
@@ -109,7 +114,7 @@ const AgentDetailsComponent = (props) => {
           }
           return 0;
         })
-      : props.agentDetails;
+      : agentDetails;
 
   const renderSortIcon = (column) => {
     if (sortOrder.column === column) {
@@ -141,25 +146,102 @@ const AgentDetailsComponent = (props) => {
                       Back
                     </CLink>
                   </CTooltip>
-                </div>              
+                </div>
               </CCardHeader>
               <CCardBody>
                 <CRow>
                   <CCol sm="12">
-                    <b>Account Number :</b> {props.agent.account_number}
-                    <br />
-                    <b>Name :</b> {props.agent.name}
-                    <br />
-                    <b>Mobile Number :</b> {props.agent.mobile_number}
-                    <br />
-                    <b>National Id :</b> {props.agent.national_id}
-                    <br />
-                    <b>SHOFCO Number :</b> {props.agent.shofco_number}
-                  </CCol>
-                  <CCol sm="12">
-                    {/* <b>Customer Type :</b> {props.agent.customer_type} */}
-                    <b>Status :</b>{" "}
-                    {props.agent.status === "0" ? "Deactive" : "Active"}
+                    <table className="customTable">
+                      <tbody>
+                        <tr>
+                          <td>
+                            <b>Account Number :</b>{" "}
+                          </td>
+                          <td>
+                            {agent.account_number
+                              ? agent.account_number
+                              : "N/A"}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>Name :</b>
+                          </td>
+                          <td>{agent.name ? agent.name : "N/A"}</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>Mobile Number :</b>
+                          </td>
+                          <td>
+                            {agent.mobile_number ? agent.mobile_number : "N/A"}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>National Id :</b>
+                          </td>
+                          <td>
+                            {agent.national_id ? agent.national_id : "N/A"}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>SHOFCO Number :</b>
+                          </td>
+                          <td>
+                            {agent.shofco_number ? agent.shofco_number : "N/A"}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>Status :</b>
+                          </td>
+                          <td>
+                            {agent.status === "0" ? "Deactive" : "Active"}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>Kyc :</b>
+                          </td>
+                          <td>
+                            {agent.kyc_id ? (
+                              <a
+                                href={`/admin/kyc_requests/detailview/${agent.kyc_id}`}
+                              >
+                                {agent.kyc_token}
+                              </a>
+                            ) : (
+                              "N/A"
+                            )}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>Kyc Status :</b>
+                          </td>
+                          <td>
+                            {agent.kyc_status
+                              ? (() => {
+                                  switch (agent.kyc_status) {
+                                    case "pending_approval":
+                                      return "Pending Approval";
+                                    case "pending":
+                                      return "Pending";
+                                    case "approved":
+                                      return "Approved";
+                                    case "rejected":
+                                      return "Rejected";
+                                    default:
+                                      return "N/A";
+                                  }
+                                })()
+                              : "N/A"}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </CCol>
                 </CRow>
               </CCardBody>
@@ -185,7 +267,7 @@ const AgentDetailsComponent = (props) => {
                               onChange={handleChange}
                               onKeyPress={(event) => {
                                 if (event.key === "Enter") {
-                                  handleSearch("search");
+                                  handleSearch();
                                 }
                               }}
                             />
@@ -204,7 +286,7 @@ const AgentDetailsComponent = (props) => {
                               onChange={handleChange}
                               onKeyPress={(event) => {
                                 if (event.key === "Enter") {
-                                  handleSearch("search");
+                                  handleSearch();
                                 }
                               }}
                             />
@@ -224,7 +306,7 @@ const AgentDetailsComponent = (props) => {
                               style={{ cursor: "pointer" }}
                               onKeyPress={(event) => {
                                 if (event.key === "Enter") {
-                                  handleSearch("search");
+                                  handleSearch();
                                 }
                               }}
                             >
@@ -248,7 +330,7 @@ const AgentDetailsComponent = (props) => {
                               style={{ cursor: "pointer" }}
                               onKeyPress={(event) => {
                                 if (event.key === "Enter") {
-                                  handleSearch("search");
+                                  handleSearch();
                                 }
                               }}
                             />
@@ -268,7 +350,7 @@ const AgentDetailsComponent = (props) => {
                               style={{ cursor: "pointer" }}
                               onKeyPress={(event) => {
                                 if (event.key === "Enter") {
-                                  handleSearch("search");
+                                  handleSearch();
                                 }
                               }}
                             />
@@ -347,30 +429,35 @@ const AgentDetailsComponent = (props) => {
                         </thead>
                         <tbody>
                           {userListFlag ? (
-                            userList?.map((data, index) => (
-                              <tr key={index}>
-                                <td>{data.credit_acc}</td>
-                                <td>{data.ref_id}</td>
-                                <td>{data.amount}</td>
-                                <td>{capitalize(data.status)}</td>
-                                <td>
-                                  {new Date(data.created_at).toLocaleDateString(
-                                    "en-GB",
-                                    {
+                            userList?.length > 0 ? (
+                              userList?.map((data) => (
+                                <tr key={data.id}>
+                                  <td>{data.credit_acc}</td>
+                                  <td>{data.ref_id}</td>
+                                  <td>{data.amount}</td>
+                                  <td>{capitalize(data.status)}</td>
+                                  <td>
+                                    {new Date(
+                                      data.created_at
+                                    ).toLocaleDateString("en-GB", {
                                       day: "2-digit",
                                       month: "2-digit",
                                       year: "numeric",
-                                    }
-                                  )}{" "}
-                                  {new Date(data.created_at).toLocaleTimeString(
-                                    "en-US"
-                                  )}
-                                </td>
+                                    })}{" "}
+                                    {new Date(
+                                      data.created_at
+                                    ).toLocaleTimeString("en-US")}
+                                  </td>
+                                </tr>
+                              ))
+                            ) : (
+                              <tr>
+                                <td colSpan="5">No records found</td>
                               </tr>
-                            ))
+                            )
                           ) : sortedData?.length > 0 ? (
-                            sortedData?.map((data, index) => (
-                              <tr key={index}>
+                            sortedData?.map((data) => (
+                              <tr key={data.id}>
                                 <td>{data.credit_acc}</td>
                                 <td>{data.ref_id}</td>
                                 <td>{data.amount}</td>

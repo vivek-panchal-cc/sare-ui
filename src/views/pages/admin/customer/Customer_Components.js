@@ -10,24 +10,13 @@ import {
   CTooltip,
   CLink,
 } from "@coreui/react";
-import { _loginUsersDetails } from "../../../../_helpers";
 import { globalConstants } from "../../../../constants/admin/global.constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import './styles.css'
 
 const CustomerDetailsComponent = (props) => {
-  const [fields, setFields] = useState({
-    pageNo: 1,
-    sort_dir: "desc",
-    sort_field: "name",
-    credit_acc: "",
-    ref_id: "",
-    status: "",
-    from: "",
-    to: "",
-    totalPage: 1,
-  });
-
+  const { customer } = props;
   return (
     <>
       <CContainer fluid>
@@ -53,25 +42,123 @@ const CustomerDetailsComponent = (props) => {
               <CCardBody>
                 <CRow>
                   <CCol sm="12">
-                    <b>Account Number :</b> {props.customer.account_number}
-                    <br />
-                    <b>Name :</b> {props.customer.name}
-                    <br />
-                    <b>Mobile Number :</b> {props.customer.mobile_number}
-                    <br />
-                    <b>National Id :</b> {props.customer.national_id}
-                    <br />
-                    <b>SHOFCO Number :</b> {props.customer.shofco_number}
-                    <br />
-                    <b>Customer Type :</b>{" "}
-                    {props.customer.customer_type === "individual"
-                      ? "Individual"
-                      : props.customer.customer_type === "business"
-                      ? "Business"
-                      : "Agent"}
-                    <br />
-                    <b>Status :</b>{" "}
-                    {props.customer.status === "0" ? "Deactive" : "Active"}
+                    <table className="customTable">
+                      <tbody>
+                        <tr>
+                          <td>
+                            <b>Account Number :</b>
+                          </td>
+                          <td>
+                            {customer.account_number
+                              ? customer.account_number
+                              : "N/A"}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>Name :</b>
+                          </td>
+                          <td>
+                            {customer.name ? customer.name : "N/A"}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>Mobile Number :</b>
+                          </td>
+                          <td>
+                            {customer.mobile_number
+                              ? customer.mobile_number
+                              : "N/A"}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>National Id :</b>
+                          </td>
+                          <td>
+                            {customer.national_id
+                              ? customer.national_id
+                              : "N/A"}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>SHOFCO Number :</b>
+                          </td>
+                          <td>
+                            {customer.shofco_number
+                              ? customer.shofco_number
+                              : "N/A"}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>Customer Type :</b>
+                          </td>
+                          <td>
+                            {customer.customer_type
+                              ? customer.customer_type === "individual"
+                                ? "Individual"
+                                : customer.customer_type === "business"
+                                ? "Business"
+                                : "Agent"
+                              : "N/A"}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>Status :</b>
+                          </td>
+                          <td>
+                            {customer.status
+                              ? customer.status === "0"
+                                ? "Deactive"
+                                : "Active"
+                              : "N/A"}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>Kyc :</b>
+                          </td>
+                          <td>
+                            {customer.kycId ? (
+                              <a
+                                href={`/admin/kyc_requests/detailview/${customer.kycId}`}
+                              >
+                                {customer.kyc_token}
+                              </a>
+                            ) : (
+                              "N/A"
+                            )}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>Kyc Status :</b>
+                          </td>
+                          <td>
+                            {customer.kyc_status
+                              ? (() => {
+                                  switch (customer.kyc_status) {
+                                    case "pending_approval":
+                                      return "Pending Approval";
+                                    case "pending":
+                                      return "Pending";
+                                    case "approved":
+                                      return "Approved";
+                                    case "rejected":
+                                      return "Rejected";
+                                    default:
+                                      return "N/A";
+                                  }
+                                })()
+                              : "N/A"}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </CCol>
                 </CRow>
               </CCardBody>

@@ -24,6 +24,8 @@ import {
   CSelect,
   CTextarea,
 } from "@coreui/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import KYCDetailsPopup from "./kycDetailsPopup";
 import ReactHtmlParser from "react-html-parser";
 import { capitalize } from "_helpers";
@@ -32,6 +34,7 @@ import { notify, history } from "../../../../_helpers/index";
 import CIcon from "@coreui/icons-react";
 import { kycRequestService } from "../../../../services/admin/kyc_request.service";
 import FileSaver, { saveAs } from "file-saver";
+import "../customer/styles.css";
 
 const KycDetailComponent = (props) => {
   const [isKycModalOpen, setKycModalOpen] = useState(false);
@@ -78,7 +81,7 @@ const KycDetailComponent = (props) => {
     if (kycFile && typeof kycFile.file == "string") {
       let img = kycFile.file?.split(".");
       if (img.length > 1) {
-        imageFile = img.join(".").split("/").pop();        
+        imageFile = img.join(".").split("/").pop();
       } else {
         console.log("File name doesn't contain a period.");
       }
@@ -93,141 +96,126 @@ const KycDetailComponent = (props) => {
           <CCol sm="12">
             <CCard>
               <CCardHeader>
-                <h5>Kyc Details</h5>
+                <strong>Kyc Details</strong>
+                <div className="card-header-actions">
+                  <CTooltip content={globalConstants.BACK_MSG}>
+                    <CLink
+                      className="btn btn-danger btn-sm"
+                      aria-current="page"
+                      to="/admin/kyc_requests"
+                    >
+                      {" "}
+                      <FontAwesomeIcon icon={faArrowLeft} className="mr-1" />
+                      Back
+                    </CLink>
+                  </CTooltip>
+                </div>
               </CCardHeader>
               <CCardBody>
                 <CRow>
                   <CCol sm="12">
-                    <b>Account Number :</b> {props.kycDetail.account_number}
-                    <br />
-                    <b>Name :</b> {props.kycDetail.name}
-                  </CCol>
-                  <CCol sm="12">
-                    <b>Email :</b> {props.kycDetail.email}
-                    <br />
-                    <b>Phone Number :</b> {props.kycDetail.mobile_number}
-                  </CCol>
-                  <CCol sm="12">
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <b>Home Address :&nbsp;</b>{" "}
-                      {props.kycDetail.house_number
-                        ? props.kycDetail.house_number + ", "
-                        : ""}
-                      {props.kycDetail.street_name
-                        ? props.kycDetail.street_name + ", "
-                        : ""}
-                      {props.kycDetail.landmark
-                        ? props.kycDetail.landmark + ", "
-                        : ""}
-                      {props.kycDetail.city ? props.kycDetail.city + ", " : ""}
-                      {props.kycDetail.pincode
-                        ? props.kycDetail.pincode + ""
-                        : ""}
-                    </div>
-                    {props.kycDetail.status === "pending_approval" && (
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <b>Status :&nbsp;</b>{" "}
-                        {(() => {
-                          switch (props.kycDetail.status) {
-                            case "pending":
-                              return "Pending";
-                            case "inprogress":
-                              return "In Progress";
-                            case "rejected":
-                              return "Rejected";
-                            case "approved":
-                              return "Approved";
-                            case "pending_approval":
-                              return "Pending Approval";
-                            default:
-                              return "";
-                          }
-                        })()}
-                        <button
-                          style={{
-                            border: "none",
-                            backgroundColor: "transparent",
-                            padding: 0,
-                            margin: "0 0 0 10px",
-                            outline: "none",
-                          }}
-                          onClick={toggle}
-                        >
-                          <i className="fa fa-pencil"></i>
-                        </button>
-                      </div>
-                    )}
-                    {(props.kycDetail.status === "pending" ||
-                      props.kycDetail.status === "inprogress") && (
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <b>Status :&nbsp;</b>{" "}
-                        {(() => {
-                          switch (props.kycDetail.status) {
-                            case "pending":
-                              return "Pending";
-                            case "inprogress":
-                              return "In Progress";
-                            case "rejected":
-                              return "Rejected";
-                            case "approved":
-                              return "Approved";
-                            case "pending_approval":
-                              return "Pending Approval";
-                            default:
-                              return "";
-                          }
-                        })()}
-                      </div>
-                    )}
-                    {props.kycDetail.status === "approved" ||
-                    props.kycDetail.status === "rejected" ? (
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <b>Status :&nbsp;</b>{" "}
-                        {(() => {
-                          switch (props.kycDetail.status) {
-                            case "pending":
-                              return "Pending";
-                            case "inprogress":
-                              return "In Progress";
-                            case "rejected":
-                              return "Rejected";
-                            case "approved":
-                              return "Approved";
-                            case "pending_approval":
-                              return "Pending Approval";
-                            default:
-                              return "";
-                          }
-                        })()}
-                        <button
-                          style={{
-                            border: "none",
-                            backgroundColor: "transparent",
-                            padding: 0,
-                            margin: "0 0 0 10px",
-                            outline: "none",
-                          }}
-                          onClick={() => setKYCPopupOpen(true)}
-                        >
-                          <i className="fa fa-eye"></i>
-                        </button>
-                      </div>
-                    ) : null}
+                    <table className="customTable">
+                      <tbody>
+                        <tr>
+                          <td>
+                            <b>Account Number :</b>
+                          </td>
+                          <td>{props.kycDetail.account_number}</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>Name :</b>
+                          </td>
+                          <td>{props.kycDetail.name}</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>Email :</b>
+                          </td>
+                          <td>{props.kycDetail.email}</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>Phone Number :</b>
+                          </td>
+                          <td>{props.kycDetail.mobile_number}</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>Home Address :</b>
+                          </td>
+                          <td>
+                            {props.kycDetail.house_number
+                              ? props.kycDetail.house_number + ", "
+                              : ""}
+                            {props.kycDetail.street_name
+                              ? props.kycDetail.street_name + ", "
+                              : ""}
+                            {props.kycDetail.landmark
+                              ? props.kycDetail.landmark + ", "
+                              : ""}
+                            {props.kycDetail.city
+                              ? props.kycDetail.city + ", "
+                              : ""}
+                            {props.kycDetail.pincode
+                              ? props.kycDetail.pincode
+                              : ""}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>Status :</b>
+                          </td>
+                          <td>
+                            {(() => {
+                              switch (props.kycDetail.status) {
+                                case "pending":
+                                  return "Pending";
+                                case "inprogress":
+                                  return "In Progress";
+                                case "rejected":
+                                  return "Rejected";
+                                case "approved":
+                                  return "Approved";
+                                case "pending_approval":
+                                  return "Pending Approval";
+                                default:
+                                  return "";
+                              }
+                            })()}
+                            {props.kycDetail.status === "pending_approval" && (
+                              <button
+                                style={{
+                                  border: "none",
+                                  backgroundColor: "transparent",
+                                  padding: 0,
+                                  margin: "0 0 0 10px",
+                                  outline: "none",
+                                }}
+                                onClick={toggle}
+                              >
+                                <i className="fa fa-pencil"></i>
+                              </button>
+                            )}
+                            {(props.kycDetail.status === "approved" ||
+                              props.kycDetail.status === "rejected") && (
+                              <button
+                                style={{
+                                  border: "none",
+                                  backgroundColor: "transparent",
+                                  padding: 0,
+                                  margin: "0 0 0 10px",
+                                  outline: "none",
+                                }}
+                                onClick={() => setKYCPopupOpen(true)}
+                              >
+                                <i className="fa fa-eye"></i>
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </CCol>
                 </CRow>
                 {isKYCPopupOpen && (
@@ -255,7 +243,7 @@ const KycDetailComponent = (props) => {
           <CCol sm="12">
             <CCard>
               <CCardHeader>
-                <h5>Kyc Files</h5>
+                <strong>Kyc Files</strong>
               </CCardHeader>
               <CCardBody>
                 <div className="position-relative table-responsive">
@@ -305,7 +293,7 @@ const KycDetailComponent = (props) => {
           <CCol sm="12">
             <CCard>
               <CCardHeader>
-                <h5>Kyc Reasons</h5>
+                <strong>Kyc Reasons</strong>
               </CCardHeader>
               <CCardBody>
                 <div className="position-relative table-responsive">
@@ -321,7 +309,9 @@ const KycDetailComponent = (props) => {
                       {props.kycDetail.kyc_reasons?.length > 0 &&
                         props.kycDetail.kyc_reasons.map((kyc_reason, index) => (
                           <tr key={index}>
-                            <td>{kyc_reason.comment}</td>
+                            <td>
+                              {kyc_reason.comment ? kyc_reason.comment : "N/A"}
+                            </td>
                             <td>{capitalize(kyc_reason.comment_type)}</td>
                             <td>{kyc_reason.created_at}</td>
                           </tr>

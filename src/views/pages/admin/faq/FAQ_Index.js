@@ -515,7 +515,9 @@ class FAQ_Index extends React.Component {
                               )}{" "}
                             </td> */}
                             <td>{index + 1}</td>
-                            <td>{u.question}</td>
+                            <td>
+                              <MessagePopup message={u.question} />
+                            </td>
                             <td>
                               <MessagePopup message={u.answer} />
                             </td>
