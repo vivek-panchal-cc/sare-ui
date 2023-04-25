@@ -10,7 +10,7 @@ import {
   faPiggyBank,
   faQuestionCircle,
   faHandshake,
-  faUserSecret
+  faUserSecret, faEnvelope
 } from "@fortawesome/free-solid-svg-icons";
 
 const _nav = [
@@ -49,6 +49,14 @@ const _nav = [
     icon: <FontAwesomeIcon icon={faUserSecret} className="c-sidebar-nav-icon" />,
     module_name: "agents",
     id: "agents_sidebar_id",
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Push Notifications",
+    to: "/admin/notifications",
+    icon: <FontAwesomeIcon icon={faEnvelope} className="c-sidebar-nav-icon" />,
+    module_name: "notifications",
+    id: "notifications_sidebar_id",
   },
   {
     _tag: "CSidebarNavTitle",
