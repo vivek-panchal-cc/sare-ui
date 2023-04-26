@@ -28,6 +28,10 @@ class Dashboard extends React.Component {
       inactive_agents: 0,
       inactive_business: 0,
       inactive_individuals: 0,
+      weekly_amount: 0,
+      monthly_amount: 0,
+      total_pending_rejected: 0,
+      total_approved: 0,
     };
   }
 
@@ -62,6 +66,10 @@ class Dashboard extends React.Component {
           inactive_agents: res.data.inactive_agents,
           inactive_business: res.data.inactive_business,
           inactive_individuals: res.data.inactive_individuals,
+          weekly_amount: res.data.weekly_amount,
+          monthly_amount: res.data.monthly_amount,
+          total_pending_rejected: res.data.total_pending_rejected,
+          total_approved: res.data.total_approved,
         });
       }
     });
@@ -75,27 +83,69 @@ class Dashboard extends React.Component {
             <CCard className="dashboard-card">
               <CCardBody>
                 <CCardTitle className="dashboard-card-title">
-                  Total Individual Users
+                  Individual Customers
                 </CCardTitle>
                 <CCardText>
                   <h4 className="dashboard-card-number">
-                    {this.state.customer_total}
+                    {this.state.customer_total
+                      ? this.state.customer_total
+                      : "0"}
                   </h4>
                   <div className="dashboard-table-container">
                     <table className="custom-table">
                       <thead>
                         <tr>
                           <th>Active</th>
-                          <th>Deactive</th>
+                          <th>Inactive</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
                           <td className="activeStatus">
-                            {this.state.active_individuals}
+                            {this.state.active_individuals
+                              ? this.state.active_individuals
+                              : "0"}
                           </td>
                           <td className="inactiveStatus">
-                            {this.state.inactive_individuals}
+                            {this.state.inactive_individuals
+                              ? this.state.inactive_individuals
+                              : "0"}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </CCardText>
+              </CCardBody>
+            </CCard>
+          </CCol>
+          <CCol sm={4}>
+            <CCard className="dashboard-card">
+              <CCardBody>
+                <CCardTitle className="dashboard-card-title">Agents</CCardTitle>
+                <CCardText>
+                  <h4 className="dashboard-card-number">
+                    {this.state.agent_total ? this.state.agent_total : "0"}
+                  </h4>
+                  <div className="dashboard-table-container">
+                    <table className="custom-table">
+                      <thead>
+                        <tr>
+                          <th>Active</th>
+                          <th>Inactive</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td className="activeStatus">
+                            {this.state.active_agents
+                              ? this.state.active_agents
+                              : "0"}
+                          </td>
+                          <td className="inactiveStatus">
+                            {this.state.inactive_agents
+                              ? this.state.inactive_agents
+                              : "0"}
                           </td>
                         </tr>
                       </tbody>
@@ -109,64 +159,33 @@ class Dashboard extends React.Component {
             <CCard className="dashboard-card">
               <CCardBody>
                 <CCardTitle className="dashboard-card-title">
-                  Total Registered Agents
+                  Business Customers
                 </CCardTitle>
                 <CCardText>
                   <h4 className="dashboard-card-number">
-                    {this.state.agent_total}
+                    {this.state.business_customer_total
+                      ? this.state.business_customer_total
+                      : "0"}
                   </h4>
                   <div className="dashboard-table-container">
                     <table className="custom-table">
                       <thead>
                         <tr>
                           <th>Active</th>
-                          <th>Deactive</th>
+                          <th>Inactive</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
                           <td className="activeStatus">
-                            {this.state.active_agents}
+                            {this.state.active_business
+                              ? this.state.active_business
+                              : "0"}
                           </td>
                           <td className="inactiveStatus">
-                            {this.state.inactive_agents}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </CCardText>
-              </CCardBody>
-            </CCard>
-          </CCol>
-          <CCol sm={4}>
-            <CCard className="dashboard-card">
-              <CCardBody>
-                <CCardTitle
-                  className="dashboard-card-title"
-                  style={{ fontSize: "22px" }}
-                >
-                  Total Customers Business
-                </CCardTitle>
-                <CCardText>
-                  <h4 className="dashboard-card-number">
-                    {this.state.business_customer_total}
-                  </h4>
-                  <div className="dashboard-table-container">
-                    <table className="custom-table">
-                      <thead>
-                        <tr>
-                          <th>Active</th>
-                          <th>Deactive</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td className="activeStatus">
-                            {this.state.active_business}
-                          </td>
-                          <td className="inactiveStatus">
-                            {this.state.inactive_business}
+                            {this.state.inactive_business
+                              ? this.state.inactive_business
+                              : "0"}
                           </td>
                         </tr>
                       </tbody>
@@ -182,12 +201,36 @@ class Dashboard extends React.Component {
             <CCard className="dashboard-card">
               <CCardBody>
                 <CCardTitle className="dashboard-card-title">
-                  Last Week / Month Transaction
+                  Transactions
                 </CCardTitle>
                 <CCardText>
                   <h4 className="dashboard-card-number">
-                    {this.state.transaction_total}
+                    {/* {this.state.transaction_total} */}
                   </h4>
+                  <div className="dashboard-table-container">
+                    <table className="custom-table">
+                      <thead>
+                        <tr>
+                          <th>Weekly Amount</th>
+                          <th>Monthly Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td style={{ fontSize: "medium" }}>
+                            {this.state.weekly_amount
+                              ? this.state.weekly_amount
+                              : "0"}
+                          </td>
+                          <td style={{ fontSize: "medium" }}>
+                            {this.state.monthly_amount
+                              ? this.state.monthly_amount
+                              : "0"}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </CCardText>
               </CCardBody>
             </CCard>
@@ -196,12 +239,38 @@ class Dashboard extends React.Component {
             <CCard className="dashboard-card">
               <CCardBody>
                 <CCardTitle className="dashboard-card-title">
-                  Pending KYC <br /> Process
+                  KYC Process
                 </CCardTitle>
                 <CCardText>
                   <h4 className="dashboard-card-number">
-                    {this.state.pending_kyc_total}
+                    {this.state.pending_kyc_total
+                      ? this.state.pending_kyc_total
+                      : "0"}
                   </h4>
+                  <div className="dashboard-table-container">
+                    <table className="custom-table">
+                      <thead>
+                        <tr>
+                          <th>Pending/Rejected</th>
+                          <th>Approved</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td style={{ fontSize: "medium" }}>
+                            {this.state.total_pending_rejected
+                              ? this.state.total_pending_rejected
+                              : "0"}
+                          </td>
+                          <td style={{ fontSize: "medium" }}>
+                            {this.state.total_approved
+                              ? this.state.total_approved
+                              : "0"}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </CCardText>
               </CCardBody>
             </CCard>
