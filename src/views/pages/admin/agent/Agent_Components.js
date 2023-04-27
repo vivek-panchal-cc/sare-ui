@@ -24,10 +24,17 @@ import {
   faSortUp,
   faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
+import CIcon from "@coreui/icons-react";
+import {
+  faBan,
+  faSave,
+  faEye,
+  faEyeSlash,
+} from "@fortawesome/free-solid-svg-icons";
 import { globalConstants } from "../../../../constants/admin/global.constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { agentService } from "../../../../services/admin";
-import { notify } from "../../../../_helpers";
+import { notify, _canAccess } from "../../../../_helpers";
 import AgentTransactionDetails from "./Agent_Transaction_Details";
 import "../customer/styles.css";
 
@@ -38,6 +45,7 @@ const AgentDetailsComponent = (props) => {
   );
   const [selectedData, setSelectedData] = useState(null);
   const [isTransactionPopupOpen, setTransactionPopupOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(0);
   const [fields, setFields] = useState({
     pageNo: 1,
     sort_dir: "desc",
@@ -77,6 +85,11 @@ const AgentDetailsComponent = (props) => {
       return newState;
     });
     setSelectedData(null);
+  };
+
+  const seeTransactions = (data) => {
+    setTransactionPopupOpen(true);
+    setSelectedId(data);
   };
 
   const getAgentDetailsView = () => {
@@ -154,6 +167,7 @@ const AgentDetailsComponent = (props) => {
     }
     return null;
   };
+
   return (
     <>
       <CContainer fluid>
@@ -183,7 +197,7 @@ const AgentDetailsComponent = (props) => {
                       <tbody>
                         <tr>
                           <td>
-                            <b>Account Number :</b>{" "}
+                            <b>Account Number</b>{" "}
                           </td>
                           <td>
                             {agent.account_number
@@ -193,13 +207,13 @@ const AgentDetailsComponent = (props) => {
                         </tr>
                         <tr>
                           <td>
-                            <b>Name :</b>
+                            <b>Name</b>
                           </td>
                           <td>{agent.name ? agent.name : "N/A"}</td>
                         </tr>
                         <tr>
                           <td>
-                            <b>Mobile Number :</b>
+                            <b>Mobile Number</b>
                           </td>
                           <td>
                             {agent.mobile_number ? agent.mobile_number : "N/A"}
@@ -207,7 +221,7 @@ const AgentDetailsComponent = (props) => {
                         </tr>
                         <tr>
                           <td>
-                            <b>National Id :</b>
+                            <b>National ID</b>
                           </td>
                           <td>
                             {agent.national_id ? agent.national_id : "N/A"}
@@ -215,7 +229,7 @@ const AgentDetailsComponent = (props) => {
                         </tr>
                         <tr>
                           <td>
-                            <b>SHOFCO Number :</b>
+                            <b>SHOFCO Number</b>
                           </td>
                           <td>
                             {agent.shofco_number ? agent.shofco_number : "N/A"}
@@ -223,7 +237,7 @@ const AgentDetailsComponent = (props) => {
                         </tr>
                         <tr>
                           <td>
-                            <b>Status :</b>
+                            <b>Status</b>
                           </td>
                           <td>
                             {agent.status === "0" ? "Deactive" : "Active"}
@@ -231,7 +245,7 @@ const AgentDetailsComponent = (props) => {
                         </tr>
                         <tr>
                           <td>
-                            <b>Kyc :</b>
+                            <b>KYC Token</b>
                           </td>
                           <td>
                             {agent.kyc_id ? (
@@ -247,7 +261,7 @@ const AgentDetailsComponent = (props) => {
                         </tr>
                         <tr>
                           <td>
-                            <b>Kyc Status :</b>
+                            <b>KYC Status :</b>
                           </td>
                           <td>
                             {agent.kyc_status
@@ -447,31 +461,26 @@ const AgentDetailsComponent = (props) => {
                             >
                               Status {renderSortIcon("status")}
                             </th>
+                            {(_canAccess("agents", "update") ||
+                              _canAccess("agents", "delete")) && (
+                              <>
+                                <th>Action</th>
+                              </>
+                            )}
                           </tr>
                         </thead>
                         <tbody>
+                          {isTransactionPopupOpen && (
+                            <AgentTransactionDetails
+                              transactionDetails={selectedId}
+                              onClose={() => setTransactionPopupOpen(false)}
+                            />
+                          )}
                           {userListFlag ? (
                             userList?.length > 0 ? (
                               userList?.map((data, index) => (
                                 <tr key={data.id}>
-                                  <td>
-                                    {/* <a
-                                      style={{ cursor: "pointer" }}
-                                      onClick={() =>
-                                        setTransactionPopupOpen(true)
-                                      }
-                                    > */}
-                                      {data.ref_id}
-                                    {/* </a> */}
-                                  </td>
-                                  {isTransactionPopupOpen && (
-                                    <AgentTransactionDetails
-                                      transactionDetails={data.id}
-                                      onClose={() =>
-                                        setTransactionPopupOpen(false)
-                                      }
-                                    />
-                                  )}
+                                  <td>{data.ref_id}</td>
                                   <td>{data.credit_acc}</td>
                                   <td>{data.amount}</td>
                                   <td>
@@ -487,6 +496,29 @@ const AgentDetailsComponent = (props) => {
                                     ).toLocaleTimeString("en-US")}
                                   </td>
                                   <td>{capitalize(data.status)}</td>
+                                  {_canAccess("agents", "update") && (
+                                    <>
+                                      <td>
+                                        {_canAccess("agents", "update") && (
+                                          <CTooltip
+                                            content={
+                                              globalConstants.Details_BTN
+                                            }
+                                          >
+                                            <CLink
+                                              className="btn  btn-md btn-primary"
+                                              aria-current="page"
+                                              onClick={() =>
+                                                seeTransactions(data)
+                                              }
+                                            >
+                                              <FontAwesomeIcon icon={faEye} />
+                                            </CLink>
+                                          </CTooltip>
+                                        )}
+                                      </td>
+                                    </>
+                                  )}
                                 </tr>
                               ))
                             ) : (
@@ -497,24 +529,7 @@ const AgentDetailsComponent = (props) => {
                           ) : sortedData?.length > 0 ? (
                             sortedData?.map((data, index) => (
                               <tr key={data.id}>
-                                <td>
-                                  {/* <a
-                                    style={{ cursor: "pointer" }}
-                                    onClick={() =>
-                                      setTransactionPopupOpen(true)
-                                    }
-                                  > */}
-                                    {data.ref_id}
-                                  {/* </a> */}
-                                </td>
-                                {isTransactionPopupOpen && (
-                                  <AgentTransactionDetails
-                                    transactionDetails={data.id}
-                                    onClose={() =>
-                                      setTransactionPopupOpen(false)
-                                    }
-                                  />
-                                )}
+                                <td>{data.ref_id}</td>
                                 <td>{data.credit_acc}</td>
                                 <td>{data.amount}</td>
                                 <td>
@@ -531,6 +546,27 @@ const AgentDetailsComponent = (props) => {
                                   )}
                                 </td>
                                 <td>{capitalize(data.status)}</td>
+                                {_canAccess("agents", "update") && (
+                                  <>
+                                    <td>
+                                      {_canAccess("agents", "update") && (
+                                        <CTooltip
+                                          content={globalConstants.Details_BTN}
+                                        >
+                                          <CLink
+                                            className="btn  btn-md btn-primary"
+                                            aria-current="page"
+                                            onClick={() =>
+                                              seeTransactions(data)
+                                            }
+                                          >
+                                            <FontAwesomeIcon icon={faEye} />
+                                          </CLink>
+                                        </CTooltip>
+                                      )}
+                                    </td>
+                                  </>
+                                )}
                               </tr>
                             ))
                           ) : (

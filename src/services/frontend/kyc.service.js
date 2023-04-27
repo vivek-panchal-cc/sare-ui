@@ -26,7 +26,7 @@ function checkStatus(postData) {
   };
 
   return fetch(
-    `${process.env.REACT_APP_KYC_API}kyc/checkStatus`,
+    `${process.env.REACT_APP_API_URL}kyc/checkStatus`,
     requestOptions
   )
     .catch(() => {
@@ -48,7 +48,7 @@ async function validateOtp(postData) {
   let response;
   try {
     response = await fetch(
-      `${process.env.REACT_APP_KYC_API}kyc/validateOTP`,
+      `${process.env.REACT_APP_API_URL}kyc/validateOTP`,
       requestOptions
     );
   } catch (error) {
@@ -67,7 +67,7 @@ function resendOtp(postData) {
     body: JSON.stringify(postData),
   };
 
-  return fetch(`${process.env.REACT_APP_KYC_API}kyc/resendOTP`, requestOptions)
+  return fetch(`${process.env.REACT_APP_API_URL}kyc/resendOTP`, requestOptions)
     .catch(() => {
       notify.error("Something went wrong");
       setLoading(false);
@@ -85,7 +85,7 @@ function getKycDetails(postData) {
   };  
 
   return fetch(
-    `${process.env.REACT_APP_KYC_API}kyc/getKycDetails`,
+    `${process.env.REACT_APP_API_URL}kyc/getKycDetails`,
     requestOptions
   )
     .catch(() => {
@@ -103,7 +103,7 @@ function uploadFile(postData) {
     body: postData,
   };
 
-  return fetch(`${process.env.REACT_APP_KYC_API}kyc/uploadFile`, requestOptions)
+  return fetch(`${process.env.REACT_APP_API_URL}kyc/uploadFile`, requestOptions)
     .catch(() => {
       notify.error("Something went wrong");
       setLoading(false);
@@ -121,7 +121,7 @@ async function store(postData) {
 
   let response;
   try {    
-    response = await fetch(`${process.env.REACT_APP_KYC_API}kyc/store`, requestOptions);
+    response = await fetch(`${process.env.REACT_APP_API_URL}kyc/store`, requestOptions);
   } catch (error) {
     notify.error("Something went wrong");
     setLoading(false);
