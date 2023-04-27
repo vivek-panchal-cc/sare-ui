@@ -521,7 +521,7 @@ class KycRequest_list extends React.Component {
                             {/* <td>  {_canAccess('cms_pages', 'view') && <CLink to={`/admin/cms_pages/detailview/${u._id}`}>{u.title}</CLink>}</td> */}
                             <td>{u.account_number}</td>
                             <td>{u.mobile_number}</td>
-                            <td>{u.name}</td>
+                            <td>{u.name ? u.name : "-"}</td>
                             <td>{capitalize(u.status.replaceAll("_", " "))}</td>
                             {_canAccess("cms_pages", "update") && (
                               <>

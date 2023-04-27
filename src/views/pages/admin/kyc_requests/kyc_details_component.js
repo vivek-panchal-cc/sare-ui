@@ -118,31 +118,31 @@ const KycDetailComponent = (props) => {
                       <tbody>
                         <tr>
                           <td>
-                            <b>Account Number :</b>
+                            <b>Account Number</b>
                           </td>
                           <td>{props.kycDetail.account_number}</td>
                         </tr>
                         <tr>
                           <td>
-                            <b>Name :</b>
+                            <b>Name</b>
                           </td>
                           <td>{props.kycDetail.name}</td>
                         </tr>
                         <tr>
                           <td>
-                            <b>Email :</b>
+                            <b>Email</b>
                           </td>
                           <td>{props.kycDetail.email}</td>
                         </tr>
                         <tr>
                           <td>
-                            <b>Phone Number :</b>
+                            <b>Phone Number</b>
                           </td>
                           <td>{props.kycDetail.mobile_number}</td>
                         </tr>
                         <tr>
                           <td>
-                            <b>Home Address :</b>
+                            <b>Home Address</b>
                           </td>
                           <td>
                             {props.kycDetail.house_number
@@ -164,7 +164,7 @@ const KycDetailComponent = (props) => {
                         </tr>
                         <tr>
                           <td>
-                            <b>Status :</b>
+                            <b>Status</b>
                           </td>
                           <td>
                             {(() => {

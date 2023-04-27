@@ -46,7 +46,7 @@ const CustomerDetailsComponent = (props) => {
                       <tbody>
                         <tr>
                           <td>
-                            <b>Account Number :</b>
+                            <b>Account Number</b>
                           </td>
                           <td>
                             {customer.account_number
@@ -56,7 +56,7 @@ const CustomerDetailsComponent = (props) => {
                         </tr>
                         <tr>
                           <td>
-                            <b>Name :</b>
+                            <b>Name</b>
                           </td>
                           <td>
                             {customer.name ? customer.name : "N/A"}
@@ -64,7 +64,7 @@ const CustomerDetailsComponent = (props) => {
                         </tr>
                         <tr>
                           <td>
-                            <b>Mobile Number :</b>
+                            <b>Mobile Number</b>
                           </td>
                           <td>
                             {customer.mobile_number
@@ -74,7 +74,7 @@ const CustomerDetailsComponent = (props) => {
                         </tr>
                         <tr>
                           <td>
-                            <b>National Id :</b>
+                            <b>National ID</b>
                           </td>
                           <td>
                             {customer.national_id
@@ -84,7 +84,7 @@ const CustomerDetailsComponent = (props) => {
                         </tr>
                         <tr>
                           <td>
-                            <b>SHOFCO Number :</b>
+                            <b>SHOFCO Number</b>
                           </td>
                           <td>
                             {customer.shofco_number
@@ -94,7 +94,7 @@ const CustomerDetailsComponent = (props) => {
                         </tr>
                         <tr>
                           <td>
-                            <b>Customer Type :</b>
+                            <b>Customer Type</b>
                           </td>
                           <td>
                             {customer.customer_type
@@ -108,7 +108,7 @@ const CustomerDetailsComponent = (props) => {
                         </tr>
                         <tr>
                           <td>
-                            <b>Status :</b>
+                            <b>Status</b>
                           </td>
                           <td>
                             {customer.status
@@ -120,7 +120,7 @@ const CustomerDetailsComponent = (props) => {
                         </tr>
                         <tr>
                           <td>
-                            <b>Kyc :</b>
+                            <b>KYC Token</b>
                           </td>
                           <td>
                             {customer.kycId ? (
@@ -136,7 +136,7 @@ const CustomerDetailsComponent = (props) => {
                         </tr>
                         <tr>
                           <td>
-                            <b>Kyc Status :</b>
+                            <b>KYC Status</b>
                           </td>
                           <td>
                             {customer.kyc_status

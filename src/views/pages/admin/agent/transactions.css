@@ -1,0 +1,23 @@
+.agentCustomTable {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.agentCustomTable td:first-child {
+  width: 40%;
+}
+
+.agentCustomTable td {
+  /* border: 1px solid black; */
+  border: none;
+  padding: 8px;
+}
+
+.agentCustomTable tbody tr {
+  /* border: 1px solid black; */
+  border: none;
+}
+
+.agentCustomTable td:nth-child(2) {
+  width: auto;
+}
