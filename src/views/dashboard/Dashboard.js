@@ -20,7 +20,7 @@ class Dashboard extends React.Component {
       customer_total: 0,
       agent_total: 0,
       transaction_total: 0,
-      pending_kyc_total: 0,
+      total_kyc: 0,
       business_customer_total: 0,
       active_agents: 0,
       active_business: 0,
@@ -58,7 +58,7 @@ class Dashboard extends React.Component {
           customer_total: res.data.total_individuals,
           agent_total: res.data.total_agents,
           transaction_total: res.data.transaction_total,
-          pending_kyc_total: res.data.pending_kyc_total,
+          total_kyc: res.data.total_kyc,
           business_customer_total: res.data.total_business,
           active_agents: res.data.active_agents,
           active_business: res.data.active_business,
@@ -243,8 +243,8 @@ class Dashboard extends React.Component {
                 </CCardTitle>
                 <CCardText>
                   <h4 className="dashboard-card-number">
-                    {this.state.pending_kyc_total
-                      ? this.state.pending_kyc_total
+                    {this.state.total_kyc
+                      ? this.state.total_kyc
                       : "0"}
                   </h4>
                   <div className="dashboard-table-container">
