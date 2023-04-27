@@ -291,7 +291,7 @@ class Push_Notifications_Index extends React.Component {
                           <option value="">-- Select Status --</option>
                           <option value="send">Send</option>
                           <option value="schedule">Schedule</option>
-                          <option value="inprogress">In-Progress</option>
+                          <option value="inprogress">In Progress</option>
                         </CSelect>
                       </CCol>
                     </CFormGroup>

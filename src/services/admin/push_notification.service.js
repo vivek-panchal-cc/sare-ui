@@ -52,18 +52,18 @@ async function deleteNotification(id) {
   return handleResponse(response);
 }
 
-async function updateNotification(postData) {
+async function updateNotification(postData, id) {
   setLoading(true);
   const requestOptions = {
-    method: "PUT",
-    headers: authHeader("notifications", "update"),
-    body: JSON.stringify(postData),
+    method: "POST",
+    headers: authHeaderFile("notifications", "update"),
+    body: postData,
   };
 
   let response;
   try {
     response = await fetch(
-      `${process.env.REACT_APP_API_URL}api/notifications/${postData.id}`,
+      `${process.env.REACT_APP_API_URL}api/notifications/${id}`,
       requestOptions
     );
   } catch (error) {
