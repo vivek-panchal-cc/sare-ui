@@ -49,7 +49,7 @@ class Customer_Index extends React.Component {
       fields: {
         pageNo: 1,
         direction: "desc",
-        sort: "name",
+        sort: "account_number",
         name: "",
         mobile_number: "",
         customer_type: "",
@@ -95,20 +95,15 @@ class Customer_Index extends React.Component {
           for (var key in users) {
             if (
               globalConstants.DEVELOPER_PERMISSION_USER_ID.indexOf(
-                users[key].customer_account_rel?.account_number
+                users[key].account_number
               ) > -1
             ) {
               continue;
             }
-            if (
-              current_user.user_group_id ===
-              users[key].customer_account_rel?.account_number
-            ) {
+            if (current_user.user_group_id === users[key].account_number) {
               continue;
             }
-            multiaction[
-              users[key].customer_account_rel?.account_number
-            ] = false;
+            multiaction[users[key].account_number] = false;
           }
 
           this.setState({ multiaction: multiaction });
@@ -164,7 +159,7 @@ class Customer_Index extends React.Component {
           fields: {
             pageNo: 1,
             direction: "desc",
-            sort: "name",
+            sort: "account_number",
             name: "",
             mobile_number: "",
             customer_type: "",
@@ -551,34 +546,36 @@ class Customer_Index extends React.Component {
                     <tbody>
                       {this.state?.user_list?.length > 0 ? (
                         this.state.user_list.map((u, index) => (
-                          <tr key={u.customer_account_rel?.account_number}>
+                          <tr key={u.account_number}>
                             {/* <td>
                               {" "}
                               {current_user.id !==
-                                u.customer_account_rel?.account_number && (
+                                u.account_number && (
                                 <CheckBoxes
                                   handleCheckFieldElement={
                                     this.handleCheckFieldElement
                                   }
-                                  _id={u.customer_account_rel?.account_number}
+                                  _id={u.account_number}
                                   _isChecked={
                                     this.state.multiaction[
-                                      u.customer_account_rel?.account_number
+                                      u.account_number
                                     ]
                                   }
                                 />
                               )}{" "}
                             </td> */}
                             <td>{index + 1}</td>
-                            {/* <td>{u.customer_account_rel?.account_number}</td> */}
+                            {/* <td>{u.account_number}</td> */}
                             <td>
                               <a
-                                href={`/admin/customers/detailView/${u.customer_account_rel?.account_number}`}
+                                href={`/admin/customers/detailView/${u.account_number}`}
                               >
-                                {u.customer_account_rel?.account_number}
+                                {u.account_number}
                               </a>
                             </td>
-                            <td>{u.name}</td>
+                            <td style={u.name ? {} : { textAlign: "left" }}>
+                              {u.name ? u.name : "-"}
+                            </td>
                             <td>{u.mobile_number}</td>
                             <td>
                               {u.customer_type.charAt(0).toUpperCase() +
@@ -586,13 +583,12 @@ class Customer_Index extends React.Component {
                             </td>
                             {/* <td>{u.status === "1" ? "Active" : "In-Active"}</td> */}
                             <td>
-                              {current_user.id !==
-                                u.customer_account_rel?.account_number &&
+                              {current_user.id !== u.account_number &&
                                 _canAccess("customers", "update") && (
                                   <CLink
                                     onClick={() =>
                                       this.customerStatusChangedHandler(
-                                        u.customer_account_rel?.account_number,
+                                        u.account_number,
                                         u.status
                                       )
                                     }
@@ -600,8 +596,7 @@ class Customer_Index extends React.Component {
                                     {u.status === "1" ? "Active" : "Deactive"}
                                   </CLink>
                                 )}
-                              {current_user.id !==
-                                u.customer_account_rel?.account_number &&
+                              {current_user.id !== u.account_number &&
                                 _canAccess("customers", "update") === false && (
                                   <>
                                     {u.status === "1" ? "Active" : "Deactive"}
@@ -613,8 +608,7 @@ class Customer_Index extends React.Component {
                               _canAccess("customers", "delete")) && (
                               <>
                                 <td>
-                                  {current_user.id !==
-                                    u.customer_account_rel?.account_number && (
+                                  {current_user.id !== u.account_number && (
                                     <>
                                       {_canAccess("customers", "update") && (
                                         <CTooltip
@@ -623,7 +617,7 @@ class Customer_Index extends React.Component {
                                           <CLink
                                             className="btn  btn-md btn-primary"
                                             aria-current="page"
-                                            to={`/admin/customers/edit/${u.customer_account_rel?.account_number}`}
+                                            to={`/admin/customers/edit/${u.account_number}`}
                                           >
                                             <CIcon name="cil-pencil"></CIcon>{" "}
                                           </CLink>
@@ -638,8 +632,7 @@ class Customer_Index extends React.Component {
                                             className="btn  btn-md btn-danger "
                                             onClick={() =>
                                               this.openDeletePopup(
-                                                u.customer_account_rel
-                                                  ?.account_number
+                                                u.account_number
                                               )
                                             }
                                           >

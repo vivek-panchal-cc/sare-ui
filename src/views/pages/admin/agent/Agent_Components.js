@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import { useState } from "react";
 import { capitalize } from "_helpers";
@@ -14,6 +15,9 @@ import {
   CSelect,
   CTooltip,
   CLink,
+  CModal,
+  CModalBody,
+  CModalHeader,
 } from "@coreui/react";
 import {
   faSortDown,
@@ -24,10 +28,16 @@ import { globalConstants } from "../../../../constants/admin/global.constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { agentService } from "../../../../services/admin";
 import { notify } from "../../../../_helpers";
+import AgentTransactionDetails from "./Agent_Transaction_Details";
 import "../customer/styles.css";
 
 const AgentDetailsComponent = (props) => {
   const { agent, agentDetails } = props;
+  const [popupStates, setPopupStates] = useState(
+    Array(agentDetails.length).fill(false)
+  );
+  const [selectedData, setSelectedData] = useState(null);
+  const [isTransactionPopupOpen, setTransactionPopupOpen] = useState(false);
   const [fields, setFields] = useState({
     pageNo: 1,
     sort_dir: "desc",
@@ -49,6 +59,24 @@ const AgentDetailsComponent = (props) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFields((prevFields) => ({ ...prevFields, [name]: value }));
+  };
+
+  const handleRefClick = (index) => {
+    setSelectedData(index);
+    setPopupStates((prevStates) => {
+      const newState = [...prevStates];
+      newState[index] = true;
+      return newState;
+    });
+  };
+
+  const handlePopupClose = (index) => {
+    setPopupStates((prevStates) => {
+      const newState = [...prevStates];
+      newState[index] = false;
+      return newState;
+    });
+    setSelectedData(null);
   };
 
   const getAgentDetailsView = () => {
@@ -258,25 +286,6 @@ const AgentDetailsComponent = (props) => {
                       <CCol xl={2}>
                         <CFormGroup row>
                           <CCol xs="12">
-                            <CLabel htmlFor="credit_acc">Account Number</CLabel>
-                            <CInput
-                              id="credit_acc"
-                              placeholder="Search Account Number"
-                              name="credit_acc"
-                              value={fields.credit_acc}
-                              onChange={handleChange}
-                              onKeyPress={(event) => {
-                                if (event.key === "Enter") {
-                                  handleSearch();
-                                }
-                              }}
-                            />
-                          </CCol>
-                        </CFormGroup>
-                      </CCol>
-                      <CCol xl={2}>
-                        <CFormGroup row>
-                          <CCol xs="12">
                             <CLabel htmlFor="ref_id">Reference Id</CLabel>
                             <CInput
                               id="ref_id"
@@ -296,24 +305,19 @@ const AgentDetailsComponent = (props) => {
                       <CCol xl={2}>
                         <CFormGroup row>
                           <CCol xs="12">
-                            <CLabel htmlFor="status">Status</CLabel>
-                            <CSelect
-                              id="status"
-                              placeholder="Status"
-                              name="status"
-                              value={fields.status}
+                            <CLabel htmlFor="credit_acc">Account Number</CLabel>
+                            <CInput
+                              id="credit_acc"
+                              placeholder="Search Account Number"
+                              name="credit_acc"
+                              value={fields.credit_acc}
                               onChange={handleChange}
-                              style={{ cursor: "pointer" }}
                               onKeyPress={(event) => {
                                 if (event.key === "Enter") {
                                   handleSearch();
                                 }
                               }}
-                            >
-                              <option value="">-- Select Status --</option>
-                              <option value="success">Success</option>
-                              <option value="fail">Fail</option>
-                            </CSelect>
+                            />
                           </CCol>
                         </CFormGroup>
                       </CCol>
@@ -357,10 +361,28 @@ const AgentDetailsComponent = (props) => {
                           </CCol>
                         </CFormGroup>
                       </CCol>
-
                       <CCol xl={2}>
                         <CFormGroup row>
-                          <CCol xs="12"></CCol>
+                          <CCol xs="12">
+                            <CLabel htmlFor="status">Status</CLabel>
+                            <CSelect
+                              id="status"
+                              placeholder="Status"
+                              name="status"
+                              value={fields.status}
+                              onChange={handleChange}
+                              style={{ cursor: "pointer" }}
+                              onKeyPress={(event) => {
+                                if (event.key === "Enter") {
+                                  handleSearch();
+                                }
+                              }}
+                            >
+                              <option value="">-- Select Status --</option>
+                              <option value="success">Success</option>
+                              <option value="fail">Fail</option>
+                            </CSelect>
+                          </CCol>
                         </CFormGroup>
                       </CCol>
                     </CRow>
@@ -396,16 +418,16 @@ const AgentDetailsComponent = (props) => {
                         <thead>
                           <tr>
                             <th
-                              onClick={() => sortData("credit_acc")}
-                              style={{ cursor: "pointer" }}
-                            >
-                              Account Number {renderSortIcon("credit_acc")}
-                            </th>
-                            <th
                               onClick={() => sortData("ref_id")}
                               style={{ cursor: "pointer" }}
                             >
                               Reference Id {renderSortIcon("ref_id")}
+                            </th>
+                            <th
+                              onClick={() => sortData("credit_acc")}
+                              style={{ cursor: "pointer" }}
+                            >
+                              Account Number {renderSortIcon("credit_acc")}
                             </th>
                             <th
                               onClick={() => sortData("amount")}
@@ -414,28 +436,44 @@ const AgentDetailsComponent = (props) => {
                               Amount {renderSortIcon("amount")}
                             </th>
                             <th
-                              onClick={() => sortData("status")}
-                              style={{ cursor: "pointer" }}
-                            >
-                              Status {renderSortIcon("status")}
-                            </th>
-                            <th
                               onClick={() => sortData("created_at")}
                               style={{ cursor: "pointer" }}
                             >
                               Transaction Date {renderSortIcon("created_at")}
+                            </th>
+                            <th
+                              onClick={() => sortData("status")}
+                              style={{ cursor: "pointer" }}
+                            >
+                              Status {renderSortIcon("status")}
                             </th>
                           </tr>
                         </thead>
                         <tbody>
                           {userListFlag ? (
                             userList?.length > 0 ? (
-                              userList?.map((data) => (
+                              userList?.map((data, index) => (
                                 <tr key={data.id}>
+                                  <td>
+                                    {/* <a
+                                      style={{ cursor: "pointer" }}
+                                      onClick={() =>
+                                        setTransactionPopupOpen(true)
+                                      }
+                                    > */}
+                                      {data.ref_id}
+                                    {/* </a> */}
+                                  </td>
+                                  {isTransactionPopupOpen && (
+                                    <AgentTransactionDetails
+                                      transactionDetails={data.id}
+                                      onClose={() =>
+                                        setTransactionPopupOpen(false)
+                                      }
+                                    />
+                                  )}
                                   <td>{data.credit_acc}</td>
-                                  <td>{data.ref_id}</td>
                                   <td>{data.amount}</td>
-                                  <td>{capitalize(data.status)}</td>
                                   <td>
                                     {new Date(
                                       data.created_at
@@ -448,6 +486,7 @@ const AgentDetailsComponent = (props) => {
                                       data.created_at
                                     ).toLocaleTimeString("en-US")}
                                   </td>
+                                  <td>{capitalize(data.status)}</td>
                                 </tr>
                               ))
                             ) : (
@@ -456,12 +495,28 @@ const AgentDetailsComponent = (props) => {
                               </tr>
                             )
                           ) : sortedData?.length > 0 ? (
-                            sortedData?.map((data) => (
+                            sortedData?.map((data, index) => (
                               <tr key={data.id}>
+                                <td>
+                                  {/* <a
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() =>
+                                      setTransactionPopupOpen(true)
+                                    }
+                                  > */}
+                                    {data.ref_id}
+                                  {/* </a> */}
+                                </td>
+                                {isTransactionPopupOpen && (
+                                  <AgentTransactionDetails
+                                    transactionDetails={data.id}
+                                    onClose={() =>
+                                      setTransactionPopupOpen(false)
+                                    }
+                                  />
+                                )}
                                 <td>{data.credit_acc}</td>
-                                <td>{data.ref_id}</td>
                                 <td>{data.amount}</td>
-                                <td>{capitalize(data.status)}</td>
                                 <td>
                                   {new Date(data.created_at).toLocaleDateString(
                                     "en-GB",
@@ -475,6 +530,7 @@ const AgentDetailsComponent = (props) => {
                                     "en-US"
                                   )}
                                 </td>
+                                <td>{capitalize(data.status)}</td>
                               </tr>
                             ))
                           ) : (
