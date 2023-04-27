@@ -41,7 +41,7 @@ import "../customer/styles.css";
 const AgentDetailsComponent = (props) => {
   const { agent, agentDetails } = props;
   const [popupStates, setPopupStates] = useState(
-    Array(agentDetails.length).fill(false)
+    Array(agentDetails?.length).fill(false)
   );
   const [selectedData, setSelectedData] = useState(null);
   const [isTransactionPopupOpen, setTransactionPopupOpen] = useState(false);
