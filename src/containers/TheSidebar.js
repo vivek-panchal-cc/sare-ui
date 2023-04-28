@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -15,6 +16,7 @@ import { useLocation } from 'react-router-dom';
 
 import $ from 'jquery';
 import { menuPermission } from '../_helpers/common-utility';
+import { Link } from 'react-router-dom';
 
 // sidebar nav config
 import navigation from './_nav'
@@ -33,8 +35,10 @@ const TheSidebar = (props) => {
       show={show}
       onShowChange={(val) => dispatch({type: 'set', sidebarShow: val })}
     >
-      <CSidebarBrand className="d-md-down-none" to="/">
+      <CSidebarBrand className="d-md-down-none" to="/admin/dashboard">
+      <Link to="/admin/dashboard">
         <img src={require('assets/img/logo.svg').default} className='cc-logo-styles'/>
+        </Link>
         {/* <CIcon
           className="c-sidebar-brand-full"
           name="logo-negative"
