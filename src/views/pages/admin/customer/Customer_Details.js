@@ -14,36 +14,36 @@ class CustomerDetails extends React.Component {
   };
 
   componentDidMount() {
-    // this.getCustomerTransactionsDetails();
+    this.getCustomerTransactionsDetails();
     this.getCustomerDetails();
   }
 
-  // getCustomerTransactionsDetails() {
-  //   customerService.customerTransactionDetails(this.state.id).then((res) => {
-  //     if (res.success === false) {
-  //       notify.error(res.message);
-  //       history.push("/admin/customers");
-  //     } else {
-  //       this.setState({
-  //         customerTransactions: res?.data?.result,
-  //         page: res?.data?.page,
-  //         totalPage: res?.data?.totalPage,
-  //       });
-  //     }
-  //   });
-  // }
+  getCustomerTransactionsDetails() {
+    customerService.customerTransactionDetails(this.state.id).then((res) => {
+      if (res.success === false) {
+        notify.error(res.message);
+        history.push("/admin/customers");
+      } else {
+        this.setState({
+          customerTransactions: res?.data?.result,
+          page: res?.data?.page,
+          totalPage: res?.data?.totalPage,
+        });
+      }
+    });
+  }
 
   getCustomerDetails() {
     customerService.getCustomerDetails(this.state.id).then((res) => {
       if (res.success === false) {
         notify.error(res.message);
       } else {
-        if (res.data == null) {
+        if (res?.data == null) {
           notify.error("Customer not found");
           history.push("/admin/customers");
         } else {
           this.setState({
-            customer: res.data,
+            customer: res?.data,
           });
         }
       }
