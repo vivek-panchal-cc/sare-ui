@@ -205,9 +205,12 @@ class Dashboard extends React.Component {
                 </CCardTitle>
                 <CCardText>
                   <h4 className="dashboard-card-number">
-                    {/* {this.state.transaction_total} */}
+                    {/* {this.state.transaction_total ? this.state.transaction_total : "N/A"} */}
                   </h4>
-                  <div className="dashboard-table-container">
+                  <div
+                    className="dashboard-table-container"
+                    style={{ marginTop: "55px" }}
+                  >
                     <table className="custom-table">
                       <thead>
                         <tr>
@@ -243,9 +246,7 @@ class Dashboard extends React.Component {
                 </CCardTitle>
                 <CCardText>
                   <h4 className="dashboard-card-number">
-                    {this.state.total_kyc
-                      ? this.state.total_kyc
-                      : "0"}
+                    {this.state.total_kyc ? this.state.total_kyc : "0"}
                   </h4>
                   <div className="dashboard-table-container">
                     <table className="custom-table">
