@@ -56,8 +56,8 @@ async function updateNotification(postData, id) {
   setLoading(true);
   const requestOptions = {
     method: "POST",
-    headers: authHeaderFile("notifications", "update"),
-    body: postData,
+    headers: authHeader("notifications", "update"),
+    body: JSON.stringify(postData),
   };
 
   let response;
@@ -78,8 +78,8 @@ async function createNotification(postData) {
   setLoading(true);
   const requestOptions = {
     method: "POST",
-    headers: authHeaderFile("notifications", "create"),
-    body: postData,
+    headers: authHeader("notifications", "create"),
+    body: JSON.stringify(postData),
   };
 
   let response;

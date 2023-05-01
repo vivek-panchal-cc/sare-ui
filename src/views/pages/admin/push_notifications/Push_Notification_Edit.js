@@ -35,7 +35,7 @@ class PushNotificationEdit extends React.Component {
       fields: {
         id: this.props.match.params.id,
         title: "",
-        image: null,
+        // image: null,
         description: "",
         status: "",
         customer_type: "",
@@ -78,13 +78,13 @@ class PushNotificationEdit extends React.Component {
     }, 300);
   }
 
-  downloadFile(url) {
-    if (url) {
-      const urlArray = url.split("/");
-      const fileName = urlArray[urlArray.length - 1];
-      FileSaver.saveAs(url, fileName);
-    }
-  }
+  // downloadFile(url) {
+  //   if (url) {
+  //     const urlArray = url.split("/");
+  //     const fileName = urlArray[urlArray.length - 1];
+  //     FileSaver.saveAs(url, fileName);
+  //   }
+  // }
 
   handleChange(e) {
     const { name, value } = e.target;
@@ -93,20 +93,26 @@ class PushNotificationEdit extends React.Component {
 
   handleSubmit() {
     if (this.validator.allValid()) {
-      const formData = new FormData();
-      //   formData.append('id', this.state.account_number);
-      formData.append("title", this.state.fields.title);
-      formData.append("description", this.state.fields.description);
-      formData.append("type", this.state.fields.type);
-      formData.append("customer_type", this.state.fields.customer_type);
-      formData.append("status", this.state.fields.status);
-      if (typeof this.state.fields.image === "string") {
-        formData.append("image", "");
-      } else {
-        formData.append("image", this.state.fields.image);
-      }
+      // const formData = new FormData();      
+      // formData.append("title", this.state.fields.title);
+      // formData.append("description", this.state.fields.description);
+      // formData.append("type", this.state.fields.type);
+      // formData.append("customer_type", this.state.fields.customer_type);
+      // formData.append("status", this.state.fields.status);
+      // if (typeof this.state.fields.image === "string") {
+      //   formData.append("image", "");
+      // } else {
+      //   formData.append("image", this.state.fields.image);
+      // }
+      let postVal = {        
+        title: this.state.fields.title,
+        description: this.state.fields.description,
+        type: this.state.fields.type,
+        customer_type: this.state.fields.customer_type,
+        status: this.state.fields.status,
+      };
       pushNotificationService
-        .updateNotification(formData, this.state.fields.id)
+        .updateNotification(postVal, this.state.fields.id)
         .then((res) => {
           if (res.success === false) {
             notify.error(res.message);
@@ -120,33 +126,33 @@ class PushNotificationEdit extends React.Component {
     }
   }
 
-  handleImageChange = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      const base64 = reader.result;
-      this.setState({
-        fields: {
-          ...this.state.fields,
-          image: file,
-        },
-        imagePreview: base64,
-      });
-    };
-  };
+  // handleImageChange = (event) => {
+  //   const file = event.target.files[0];
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(file);
+  //   reader.onloadend = () => {
+  //     const base64 = reader.result;
+  //     this.setState({
+  //       fields: {
+  //         ...this.state.fields,
+  //         image: file,
+  //       },
+  //       imagePreview: base64,
+  //     });
+  //   };
+  // };
 
-  handleInputChange(e) {
-    const value =
-      e.target.type === "checkbox" ? e.target.checked : e.target.value;
-    const statusValue = value ? 1 : 0;
-    this.setState({
-      fields: {
-        ...this.state.fields,
-        status: statusValue,
-      },
-    });
-  }
+  // handleInputChange(e) {
+  //   const value =
+  //     e.target.type === "checkbox" ? e.target.checked : e.target.value;
+  //   const statusValue = value ? 1 : 0;
+  //   this.setState({
+  //     fields: {
+  //       ...this.state.fields,
+  //       status: statusValue,
+  //     },
+  //   });
+  // }
 
   render() {
     return (
@@ -286,7 +292,7 @@ class PushNotificationEdit extends React.Component {
                     )}
                   </CFormText>
                 </CFormGroup>
-                <CFormGroup>
+                {/* <CFormGroup>
                   <CLabel htmlFor="nf-name">Image</CLabel>
                   <div>
                     <input
@@ -338,7 +344,7 @@ class PushNotificationEdit extends React.Component {
                       </span>
                     )}
                   </div>
-                </CFormGroup>
+                </CFormGroup> */}
                 <CFormText className="help-block module_permission"></CFormText>
               </CCardBody>
               <CCardFooter>

@@ -21,6 +21,7 @@ import {
   CSelect,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
+import MessagePopup from "./MyComponent";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { agentService } from "../../../../services/admin/agent.service";
 import { pushNotificationService } from "../../../../services/admin/push_notification.service";
@@ -461,7 +462,9 @@ class Push_Notifications_Index extends React.Component {
                           <tr key={u.id}>
                             <td>{index + 1}</td>
                             <td>{u.title}</td>
-                            <td>{u.description}</td>
+                            <td>
+                              <MessagePopup message={u.description} />
+                            </td>
                             <td>
                               {u.customer_type.charAt(0).toUpperCase() +
                                 u.customer_type.slice(1)}

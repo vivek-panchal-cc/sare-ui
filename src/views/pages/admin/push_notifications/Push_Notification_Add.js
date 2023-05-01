@@ -36,7 +36,7 @@ class Push_Notification_Add extends React.Component {
         customer_type: "",
         status: "",
         type: "",
-        image: null,
+        // image: null,
       },
     };
     if (this.props._renderAccess === false) {
@@ -52,41 +52,40 @@ class Push_Notification_Add extends React.Component {
     this.setState({ fields: { ...this.state.fields, [name]: value } });
   }
 
-  handleImageChange = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      const base64 = reader.result;
-      //   formData.append("file", file, name);
-      this.setState({
-        fields: {
-          ...this.state.fields,
-          image: file,
-        },
-        imagePreview: base64,
-      });
-    };
-  };
+  // handleImageChange = (event) => {
+  //   const file = event.target.files[0];
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(file);
+  //   reader.onloadend = () => {
+  //     const base64 = reader.result;
+  //     //   formData.append("file", file, name);
+  //     this.setState({
+  //       fields: {
+  //         ...this.state.fields,
+  //         image: file,
+  //       },
+  //       imagePreview: base64,
+  //     });
+  //   };
+  // };
 
   handleSubmit() {
     if (this.validator.allValid()) {
-      const formData = new FormData();
-      formData.append("title", this.state.fields.title);
-      formData.append("description", this.state.fields.description);
-      formData.append("customer_type", this.state.fields.customer_type);
-      formData.append("type", this.state.fields.type);
-      formData.append("status", this.state.fields.status);
+      // const formData = new FormData();
+      // formData.append("title", this.state.fields.title);
+      // formData.append("description", this.state.fields.description);
+      // formData.append("customer_type", this.state.fields.customer_type);
+      // formData.append("type", this.state.fields.type);
+      // formData.append("status", this.state.fields.status);
 
-      if (typeof this.state.fields.image === "string") {
-        formData.append("image", null);
-      } else {
-        formData.append("image", this.state.fields.image);
-      }
-      console.log('formData', formData)
+      // if (typeof this.state.fields.image === "string") {
+      //   formData.append("image", null);
+      // } else {
+      //   formData.append("image", this.state.fields.image);
+      // }     
 
       pushNotificationService
-        .createNotification(formData)
+        .createNotification(this.state.fields)
         .then((res) => {
           if (res.status === false) {
             notify.error(res.message);
@@ -252,7 +251,7 @@ class Push_Notification_Add extends React.Component {
                     )}
                   </CFormText>
                 </CFormGroup>
-                <CFormGroup>
+                {/* <CFormGroup>
                   <CLabel htmlFor="nf-name">Image</CLabel>
                   <div>
                     <input
@@ -273,7 +272,7 @@ class Push_Notification_Add extends React.Component {
                       />
                     )}
                   </div>
-                </CFormGroup>
+                </CFormGroup> */}
               </CCardBody>
               <CCardFooter>
                 <CButton
