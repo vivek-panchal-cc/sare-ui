@@ -51,6 +51,14 @@ const _nav = [
     id: "agents_sidebar_id",
   },
   {
+    _tag: 'CSidebarNavItem',
+    name: 'Pages',
+    to: '/admin/cms_pages',
+    icon: <FontAwesomeIcon icon={faFileAlt} className="c-sidebar-nav-icon" />,
+    module_name: 'cms_pages',
+    id: 'cms_pages_sidebar_id'
+  },
+  {
     _tag: "CSidebarNavTitle",
     _children: ["Access"],
   },

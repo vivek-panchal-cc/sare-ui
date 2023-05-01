@@ -4,7 +4,7 @@ import moment from 'moment'
 import { CCard, CCardBody, CCardHeader, CCol, CRow, CContainer, CCardFooter } from '@coreui/react'
 import ReactHtmlParser from 'react-html-parser';
 
-const Fullpage = (props) => {
+const FullPage = (props) => {
   return (
     <>
       <CContainer fluid>
@@ -30,4 +30,4 @@ const Fullpage = (props) => {
   )
 }
 
-export default Fullpage
+export default FullPage
