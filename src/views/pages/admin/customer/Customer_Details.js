@@ -5,17 +5,36 @@ import CustomerComponent from "./Customer_Components";
 import "../../../../scss/Draft.css";
 
 class CustomerDetails extends React.Component {
-  state = {    
+  state = {
     customer: [],
+    customerTransactions: [],
+    page: [],
+    totalPage: [],
     id: this.props.match.params.id,
   };
 
-  componentDidMount() {   
+  componentDidMount() {
+    // this.getCustomerTransactionsDetails();
     this.getCustomerDetails();
-  }  
-  
+  }
+
+  // getCustomerTransactionsDetails() {
+  //   customerService.customerTransactionDetails(this.state.id).then((res) => {
+  //     if (res.success === false) {
+  //       notify.error(res.message);
+  //       history.push("/admin/customers");
+  //     } else {
+  //       this.setState({
+  //         customerTransactions: res?.data?.result,
+  //         page: res?.data?.page,
+  //         totalPage: res?.data?.totalPage,
+  //       });
+  //     }
+  //   });
+  // }
+
   getCustomerDetails() {
-    customerService.getCustomerDetails(this.state.id).then((res) => {      
+    customerService.getCustomerDetails(this.state.id).then((res) => {
       if (res.success === false) {
         notify.error(res.message);
       } else {
@@ -36,7 +55,10 @@ class CustomerDetails extends React.Component {
       <div>
         {
           <CustomerComponent
-          customer={this.state.customer}            
+            customer={this.state.customer}
+            customerTransactions={this.state.customerTransactions}
+            page={this.state.page}
+            totalPage={this.state.totalPage}
           />
         }
       </div>
