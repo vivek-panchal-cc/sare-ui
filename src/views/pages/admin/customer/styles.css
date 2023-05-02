@@ -19,3 +19,27 @@
 .customTable td:nth-child(2) {
   width: auto;
 }
+
+.transactionCustomTable {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.transactionCustomTable td:first-child {
+  width: 40%;
+}
+
+.transactionCustomTable td {
+  /* border: 1px solid black; */
+  border: none;
+  padding: 8px;
+}
+
+.transactionCustomTable tbody tr {
+  /* border: 1px solid black; */
+  border: none;
+}
+
+.transactionCustomTable td:nth-child(2) {
+  width: auto;
+}

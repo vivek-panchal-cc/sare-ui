@@ -9,14 +9,135 @@ import {
   CContainer,
   CTooltip,
   CLink,
+  CFormGroup,
+  CLabel,
+  CInput,
+  CSelect,
 } from "@coreui/react";
+import {
+  faSortDown,
+  faSortUp,
+  faArrowLeft,
+} from "@fortawesome/free-solid-svg-icons";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { capitalize } from "_helpers";
 import { globalConstants } from "../../../../constants/admin/global.constants";
+import { customerService } from "../../../../services/admin";
+import { notify, _canAccess } from "../../../../_helpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import './styles.css'
+import CustomerTransactionDetails from "./Customer_Transaction_Details";
+import "./styles.css";
 
 const CustomerDetailsComponent = (props) => {
-  const { customer } = props;
+  const { customer, customerTransactions } = props;
+  const [isTransactionPopupOpen, setTransactionPopupOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(0);
+  const [fields, setFields] = useState({
+    pageNo: 1,
+    sort_dir: "desc",
+    sort_field: "name",
+    credit_acc: "",
+    ref_id: "",
+    status: "",
+    from: "",
+    to: "",
+    totalPage: 1,
+  });
+  const [sortOrder, setSortOrder] = useState({
+    column: null,
+    direction: null,
+  });
+  const [userList, setUserList] = useState([]);
+  const [userListFlag, setUserListFlag] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFields((prevFields) => ({ ...prevFields, [name]: value }));
+  };
+
+  const seeTransactions = (data) => {
+    setTransactionPopupOpen(true);
+    setSelectedId(data);
+  };
+
+  const getCustomerTransactionsDetails = () => {
+    customerService
+      .customerTransactionDetails(customer.account_number, fields)
+      .then((res) => {
+        if (res.success === false) {
+          notify.error(res.message);
+        } else {
+          if (res?.data?.length === 0) {
+            setUserList([]);
+          } else {
+            setUserList(res.data.result);
+          }
+        }
+      });
+  };
+
+  const handleSearch = () => {
+    getCustomerTransactionsDetails();
+    setUserListFlag(true);
+  };
+
+  const handleReset = () => {
+    setFields({
+      pageNo: 1,
+      sort_dir: "desc",
+      sort_field: "name",
+      credit_acc: "",
+      ref_id: "",
+      status: "",
+      from: "",
+      to: "",
+      totalPage: 1,
+    });
+    setUserListFlag(false);
+    getCustomerTransactionsDetails();
+  };
+
+  const sortData = (column) => {
+    let direction = "asc";
+    if (
+      sortOrder.column === column &&
+      sortOrder.direction &&
+      sortOrder.direction === "asc"
+    ) {
+      direction = "desc";
+    }
+    setSortOrder({ column, direction });
+  };
+
+  const sortedData =
+    customerTransactions &&
+    customerTransactions?.length > 0 &&
+    sortOrder.column &&
+    sortOrder.direction
+      ? customerTransactions.sort((a, b) => {
+          const columnA = a[sortOrder.column];
+          const columnB = b[sortOrder.column];
+          if (columnA < columnB) {
+            return sortOrder.direction === "asc" ? -1 : 1;
+          }
+          if (columnA > columnB) {
+            return sortOrder.direction === "asc" ? 1 : -1;
+          }
+          return 0;
+        })
+      : customerTransactions;
+
+  const renderSortIcon = (column) => {
+    if (sortOrder.column === column) {
+      if (sortOrder.direction === "asc") {
+        return <FontAwesomeIcon icon={faSortUp} />;
+      } else {
+        return <FontAwesomeIcon icon={faSortDown} />;
+      }
+    }
+    return null;
+  };
+
   return (
     <>
       <CContainer fluid>
@@ -58,9 +179,7 @@ const CustomerDetailsComponent = (props) => {
                           <td>
                             <b>Name</b>
                           </td>
-                          <td>
-                            {customer.name ? customer.name : "N/A"}
-                          </td>
+                          <td>{customer.name ? customer.name : "N/A"}</td>
                         </tr>
                         <tr>
                           <td>
@@ -163,6 +282,299 @@ const CustomerDetailsComponent = (props) => {
                 </CRow>
               </CCardBody>
             </CCard>
+
+            <CRow>
+              <CCol xl={12}>
+                <CCard>
+                  <CCardHeader>
+                    <strong>Transactions</strong>
+                  </CCardHeader>
+                  <CCardBody>
+                    <CRow>
+                      <CCol xl={2}>
+                        <CFormGroup row>
+                          <CCol xs="12">
+                            <CLabel htmlFor="ref_id">Reference Id</CLabel>
+                            <CInput
+                              id="ref_id"
+                              placeholder="Search Reference Id"
+                              name="ref_id"
+                              value={fields.ref_id}
+                              onChange={handleChange}
+                              onKeyPress={(event) => {
+                                if (event.key === "Enter") {
+                                  handleSearch();
+                                }
+                              }}
+                            />
+                          </CCol>
+                        </CFormGroup>
+                      </CCol>
+                      <CCol xl={2}>
+                        <CFormGroup row>
+                          <CCol xs="12">
+                            <CLabel htmlFor="credit_acc">Account Number</CLabel>
+                            <CInput
+                              id="credit_acc"
+                              placeholder="Search Account Number"
+                              name="credit_acc"
+                              value={fields.credit_acc}
+                              onChange={handleChange}
+                              onKeyPress={(event) => {
+                                if (event.key === "Enter") {
+                                  handleSearch();
+                                }
+                              }}
+                            />
+                          </CCol>
+                        </CFormGroup>
+                      </CCol>
+                      <CCol xl={2}>
+                        <CFormGroup row>
+                          <CCol xs="12">
+                            <CLabel htmlFor="from">From Date</CLabel>
+                            <CInput
+                              type="date"
+                              id="from"
+                              name="from"
+                              value={fields.from}
+                              onChange={handleChange}
+                              style={{ cursor: "pointer" }}
+                              onKeyPress={(event) => {
+                                if (event.key === "Enter") {
+                                  handleSearch();
+                                }
+                              }}
+                            />
+                          </CCol>
+                        </CFormGroup>
+                      </CCol>
+                      <CCol xl={2}>
+                        <CFormGroup row>
+                          <CCol xs="12">
+                            <CLabel htmlFor="to">To Date</CLabel>
+                            <CInput
+                              type="date"
+                              id="to"
+                              name="to"
+                              value={fields.to}
+                              onChange={handleChange}
+                              style={{ cursor: "pointer" }}
+                              onKeyPress={(event) => {
+                                if (event.key === "Enter") {
+                                  handleSearch();
+                                }
+                              }}
+                            />
+                          </CCol>
+                        </CFormGroup>
+                      </CCol>
+                      <CCol xl={2}>
+                        <CFormGroup row>
+                          <CCol xs="12">
+                            <CLabel htmlFor="status">Status</CLabel>
+                            <CSelect
+                              id="status"
+                              placeholder="Status"
+                              name="status"
+                              value={fields.status}
+                              onChange={handleChange}
+                              style={{ cursor: "pointer" }}
+                              onKeyPress={(event) => {
+                                if (event.key === "Enter") {
+                                  handleSearch();
+                                }
+                              }}
+                            >
+                              <option value="">-- Select Status --</option>
+                              <option value="success">Success</option>
+                              <option value="fail">Fail</option>
+                            </CSelect>
+                          </CCol>
+                        </CFormGroup>
+                      </CCol>
+                    </CRow>
+                    <CRow>
+                      <CCol xl={12}>
+                        <CFormGroup row>
+                          <CCol xs="1">
+                            <button
+                              className="btn btn-dark btn-md"
+                              onClick={handleSearch}
+                            >
+                              Search
+                            </button>
+                          </CCol>
+                          <CCol xs="2">
+                            <button
+                              className="btn btn-dark btn-md"
+                              onClick={handleReset}
+                            >
+                              Clear
+                            </button>
+                          </CCol>
+                        </CFormGroup>
+                      </CCol>
+                    </CRow>
+                  </CCardBody>
+                  {/* <CCardHeader>
+                    <h5>Transactions</h5>
+                  </CCardHeader> */}
+                  <CCardBody>
+                    <div className="position-relative table-responsive">
+                      <table className="table">
+                        <thead>
+                          <tr>
+                            <th
+                              onClick={() => sortData("ref_id")}
+                              style={{ cursor: "pointer" }}
+                            >
+                              Reference Id {renderSortIcon("ref_id")}
+                            </th>
+                            <th
+                              onClick={() => sortData("credit_acc")}
+                              style={{ cursor: "pointer" }}
+                            >
+                              Account Number {renderSortIcon("credit_acc")}
+                            </th>
+                            <th
+                              onClick={() => sortData("amount")}
+                              style={{ cursor: "pointer" }}
+                            >
+                              Amount {renderSortIcon("amount")}
+                            </th>
+                            <th
+                              onClick={() => sortData("created_at")}
+                              style={{ cursor: "pointer" }}
+                            >
+                              Transaction Date {renderSortIcon("created_at")}
+                            </th>
+                            <th
+                              onClick={() => sortData("status")}
+                              style={{ cursor: "pointer" }}
+                            >
+                              Status {renderSortIcon("status")}
+                            </th>
+                            {(_canAccess("customers", "update") ||
+                              _canAccess("customers", "delete")) && (
+                              <>
+                                <th>Action</th>
+                              </>
+                            )}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {isTransactionPopupOpen && (
+                            <CustomerTransactionDetails
+                              transactionDetails={selectedId}
+                              onClose={() => setTransactionPopupOpen(false)}
+                            />
+                          )}
+                          {userListFlag ? (
+                            userList?.length > 0 ? (
+                              userList?.map((data) => (
+                                <tr key={data.id}>
+                                  <td>{data.ref_id}</td>
+                                  <td>{data.credit_acc}</td>
+                                  <td>{data.amount}</td>
+                                  <td>
+                                    {new Date(
+                                      data.created_at
+                                    ).toLocaleDateString("en-GB", {
+                                      day: "2-digit",
+                                      month: "2-digit",
+                                      year: "numeric",
+                                    })}{" "}
+                                    {new Date(
+                                      data.created_at
+                                    ).toLocaleTimeString("en-US")}
+                                  </td>
+                                  <td>{capitalize(data.status)}</td>
+                                  {_canAccess("customers", "update") && (
+                                    <>
+                                      <td>
+                                        {_canAccess("customers", "update") && (
+                                          <CTooltip
+                                            content={
+                                              globalConstants.Details_BTN
+                                            }
+                                          >
+                                            <CLink
+                                              className="btn  btn-md btn-primary"
+                                              aria-current="page"
+                                              onClick={() =>
+                                                seeTransactions(data)
+                                              }
+                                            >
+                                              <FontAwesomeIcon icon={faEye} />
+                                            </CLink>
+                                          </CTooltip>
+                                        )}
+                                      </td>
+                                    </>
+                                  )}
+                                </tr>
+                              ))
+                            ) : (
+                              <tr>
+                                <td colSpan="5">No records found</td>
+                              </tr>
+                            )
+                          ) : sortedData?.length > 0 ? (
+                            sortedData?.map((data) => (
+                              <tr key={data.id}>
+                                <td>{data.ref_id}</td>
+                                <td>{data.credit_acc}</td>
+                                <td>{data.amount}</td>
+                                <td>
+                                  {new Date(data.created_at).toLocaleDateString(
+                                    "en-GB",
+                                    {
+                                      day: "2-digit",
+                                      month: "2-digit",
+                                      year: "numeric",
+                                    }
+                                  )}{" "}
+                                  {new Date(data.created_at).toLocaleTimeString(
+                                    "en-US"
+                                  )}
+                                </td>
+                                <td>{capitalize(data.status)}</td>
+                                {_canAccess("customers", "update") && (
+                                  <>
+                                    <td>
+                                      {_canAccess("customers", "update") && (
+                                        <CTooltip
+                                          content={globalConstants.Details_BTN}
+                                        >
+                                          <CLink
+                                            className="btn  btn-md btn-primary"
+                                            aria-current="page"
+                                            onClick={() =>
+                                              seeTransactions(data)
+                                            }
+                                          >
+                                            <FontAwesomeIcon icon={faEye} />
+                                          </CLink>
+                                        </CTooltip>
+                                      )}
+                                    </td>
+                                  </>
+                                )}
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td colSpan="3">No records found</td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </CCardBody>
+                </CCard>
+              </CCol>
+            </CRow>
           </CCol>
         </CRow>
       </CContainer>
