@@ -27,6 +27,8 @@ const Push_Notifications_Index = React.lazy(() => import('./views/pages/admin/pu
 const Push_Notification_Add = React.lazy(() => import('./views/pages/admin/push_notifications/Push_Notification_Add'));
 const Push_Notification_Edit = React.lazy(() => import('./views/pages/admin/push_notifications/Push_Notification_Edit'));
 
+const Business_Entities_Index = React.lazy(() => import('./views/pages/admin/business_entities/Business_Entities'));
+
 const User_Groups_Index = React.lazy(() => import('./views/pages/admin/user_groups/User_Groups_Index'));
 const User_Groups_Add = React.lazy(() => import('./views/pages/admin/user_groups/User_Groups_Add'));
 const User_Groups_Edit = React.lazy(() => import('./views/pages/admin/user_groups/User_Groups_Edit'));
@@ -110,6 +112,8 @@ const routes = [
   { path: '/admin/notifications', exact: true, name: 'Push Notifications', component: Push_Notifications_Index, module_name: 'notifications', action: 'view' },
   { path: '/admin/notifications/add', exact: true, name: 'Add', component: Push_Notification_Add, module_name: 'notifications', action: 'create'},
   { path: '/admin/notifications/edit/:id', exact: true, name: 'Edit', component: Push_Notification_Edit, module_name: 'notifications', action: 'update' },
+
+  { path: '/admin/business_entities', exact: true, name: 'Business Entities', component: Business_Entities_Index, module_name: 'business_entities', action: 'view' },
 
   // module_name and action parameter used for ACL mechanisam its required column
   { path: '/admin/user_groups', exact: true, name: 'Groups Management', component: User_Groups_Index, module_name: 'user_groups', action: 'view' },
