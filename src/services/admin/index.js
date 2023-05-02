@@ -13,3 +13,4 @@ export * from './dashboard.service';
 export * from './sms.service';
 export * from './bank.service';
 export * from './faq.service';
+export * from './push_notification.service';
