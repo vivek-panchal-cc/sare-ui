@@ -69,9 +69,9 @@ const _nav = [
     icon: <FontAwesomeIcon icon={faFileAlt} className="c-sidebar-nav-icon" />,
     module_name: 'cms_pages',
     id: 'cms_pages_sidebar_id',
-    _tag: "CSidebarNavItem",
   },
   {
+    _tag: "CSidebarNavItem",
     name: "Business Entities",
     to: "/admin/business_entities",
     icon: (
