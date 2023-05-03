@@ -20,6 +20,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { notify } from "../../../../_helpers/index";
 import logo from "../img/logo.svg";
 import uploadKYC from "../img/upload.svg";
+import { businessEntitiesService } from "../../../../services/admin/business_entities.service";
 import "../css/styles.css";
 
 const KycForm = ({ props }) => {
@@ -32,7 +33,10 @@ const KycForm = ({ props }) => {
     city: props?.res?.city,
     pincode: props?.res?.pincode,
   });
-
+  const [businessEntity, setBusinessEntity] = useState(
+    props?.res?.business_entity
+  );
+  const [businessEntities, setBusinessEntities] = useState([]);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneNumberError, setPhoneNumberError] = useState("");
   const [idNumber, setIdNumber] = useState(props?.res?.kyc_files[0]?.id_number);
@@ -49,9 +53,10 @@ const KycForm = ({ props }) => {
   const [selectedImageFile, setSelectedImageFile] = useState(null);
   const { mobile, secret_key } = useParams();
   const history = useHistory();
-  const alreadyRedirected = useRef(false);  
+  const alreadyRedirected = useRef(false);
 
   let mobileNo = props?.res?.mobile_number;
+  let businessType = props?.res?.kyc_type;
   let formData = new FormData();
 
   // Validation Changes in Email done as per QA team requirement.
@@ -69,6 +74,20 @@ const KycForm = ({ props }) => {
       unListen();
     };
   }, [history]);
+
+  useEffect(() => {
+    getBusinessEntities();
+  }, []);
+
+  const getBusinessEntities = () => {
+    businessEntitiesService.getBusinessEntitiesList().then((res) => {
+      if (res.success === false) {
+        notify.error(res.message);
+      } else {
+        setBusinessEntities(res?.data?.result);
+      }
+    });
+  };
 
   const handleFullNameChange = (e) => {
     setFullName(e.target.value);
@@ -119,6 +138,10 @@ const KycForm = ({ props }) => {
     setIdExpirationDate(e.target.value);
   };
 
+  const handleBusinessEntityChange = (e) => {
+    setBusinessEntity(e.target.value);
+  };
+
   const handleDownloadPdf = (event) => {
     setLoading(true);
     event.preventDefault();
@@ -154,10 +177,10 @@ const KycForm = ({ props }) => {
     setLoading(true);
     event.preventDefault();
     if (url) {
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.target = '_blank';
-      link.download = url.substring(url.lastIndexOf('/') + 1);
+      link.target = "_blank";
+      link.download = url.substring(url.lastIndexOf("/") + 1);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -184,7 +207,6 @@ const KycForm = ({ props }) => {
     }
   };
 
-
   const clearImage = () => {
     setIdFile("");
   };
@@ -206,6 +228,11 @@ const KycForm = ({ props }) => {
       setError(0);
     } else if (!validateEmail(email)) {
       setError(2);
+    } else if (
+      businessType === "business" &&
+      (!businessEntity || businessEntity === "")
+    ) {
+      setError(0);
     } else {
       setLoading(false);
       setEditing(true);
@@ -253,6 +280,11 @@ const KycForm = ({ props }) => {
       setError(10);
     } else if (!idExpirationDate) {
       setError(11);
+    } else if (
+      businessType === "business" &&
+      (!businessEntity || businessEntity === "")
+    ) {
+      setError(12);
     } else {
       setLoading(true);
       setEditing(true);
@@ -266,15 +298,16 @@ const KycForm = ({ props }) => {
       formData.append("city", homeAddress.city);
       formData.append("pincode", homeAddress.pincode);
       formData.append("phone_number", mobileNo);
-      // formData.append("file", idFile);
       formData.append("id_number", idNumber);
       formData.append("id_expiration_date", idExpirationDate);
-      if (typeof idFile === 'string'){
-        // formData.delete('file');
+      if (businessType === "business") {
+        formData.append("business_entity", businessEntity);
+      }
+      if (typeof idFile === "string") {
         formData.append("file", null);
       } else {
         formData.append("file", idFile);
-      }      
+      }
       try {
         setLoading(true);
         const res = await kycService.store(formData);
@@ -291,10 +324,13 @@ const KycForm = ({ props }) => {
       }
     }
   };
+
   let imgType;
-  if (typeof idFile == "string") {    
+  if (typeof idFile === "string") {
     let img = idFile?.split(".");
-    imgType = img?.includes("jpeg", "jpg", "png");
+    imgType = ["jpeg", "jpg", "png", "JPEG", "JPG", "PNG"].some((ext) =>
+      img?.includes(ext)
+    );
   }
 
   return (
@@ -631,7 +667,9 @@ const KycForm = ({ props }) => {
                                 href={idFile}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                onClick={(event) => handleUploadedPdf(idFile, event)}
+                                onClick={(event) =>
+                                  handleUploadedPdf(idFile, event)
+                                }
                                 disabled={editing}
                               >
                                 <strong>
@@ -689,6 +727,69 @@ const KycForm = ({ props }) => {
                       </Button>
                     </ModalFooter>
                   </Modal>
+                  {businessType === "business" && (
+                    <FormGroup>
+                      <Label for="businessEntity">Business Entity</Label>
+                      <Input
+                        type="select"
+                        name="businessEntity"
+                        id="businessEntity"
+                        value={businessEntity}
+                        placeholder="Business Entity"
+                        onChange={handleBusinessEntityChange}
+                        disabled={editing}
+                        hidden={businessType !== "business"}
+                        style={{
+                          cursor: "pointer",
+                          fontFamily: "Plus Jakarta Sans Medium",
+                          fontSize: "14px",
+                          fontWeight: "500",
+                        }}
+                      >
+                        <option
+                          style={{
+                            cursor: "pointer",
+                            fontFamily: "Plus Jakarta Sans Medium",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                          }}
+                          value=""
+                          hidden={businessType !== "business"}
+                        >
+                          Select Business Entity
+                        </option>
+                        {businessEntities?.map((entity) => (
+                          <option
+                            key={entity.id}
+                            value={entity.id}
+                            style={{
+                              cursor: "pointer",
+                              fontFamily: "Plus Jakarta Sans Medium",
+                              fontSize: "14px",
+                              fontWeight: "500",
+                            }}
+                            hidden={businessType !== "business"}
+                          >
+                            {entity.entity}
+                          </option>
+                        ))}
+                      </Input>
+                      {error === 0 &&
+                      !businessEntity &&
+                      businessType === "business" ? (
+                        <span
+                          className="font-recia"
+                          style={{
+                            color: "#f00",
+                            fontSize: "14px",
+                            display: "block",
+                          }}
+                        >
+                          Business Entity is required
+                        </span>
+                      ) : null}
+                    </FormGroup>
+                  )}
                   <FormGroup>
                     <Label for="idNumber">ID Number</Label>
                     <Input

@@ -55,6 +55,7 @@ class KycRequest_list extends React.Component {
         mobile_number: "",
         name: "",
         status: "",
+        type: "",
         totalPage: 1,
       },
       _openPopup: false,
@@ -167,6 +168,7 @@ class KycRequest_list extends React.Component {
             mobile_number: "",
             name: "",
             status: "",
+            type: "",
             totalPage: 1,
           },
         },
@@ -294,7 +296,7 @@ class KycRequest_list extends React.Component {
             <CCard>
               <CCardBody>
                 <CRow>
-                  <CCol xl={3}>
+                  <CCol xl={2}>
                     <CFormGroup row>
                       <CCol xs="12">
                         <CLabel htmlFor="name">Account Number</CLabel>
@@ -313,7 +315,7 @@ class KycRequest_list extends React.Component {
                       </CCol>
                     </CFormGroup>
                   </CCol>
-                  <CCol xl={3}>
+                  <CCol xl={2}>
                     <CFormGroup row>
                       <CCol xs="12">
                         <CLabel htmlFor="name">Mobile Number</CLabel>
@@ -332,7 +334,7 @@ class KycRequest_list extends React.Component {
                       </CCol>
                     </CFormGroup>
                   </CCol>
-                  <CCol xl={3}>
+                  <CCol xl={2}>
                     <CFormGroup row>
                       <CCol xs="12">
                         <CLabel htmlFor="name">Name</CLabel>
@@ -351,7 +353,7 @@ class KycRequest_list extends React.Component {
                       </CCol>
                     </CFormGroup>
                   </CCol>
-                  <CCol xl={3}>
+                  <CCol xl={2}>
                     <CFormGroup row>
                       <CCol xs="12">
                         <CLabel htmlFor="name">Status</CLabel>
@@ -374,6 +376,30 @@ class KycRequest_list extends React.Component {
                           </option>
                           <option value="approved">Approved</option>
                           <option value="rejected">Rejected</option>
+                        </CSelect>
+                      </CCol>
+                    </CFormGroup>
+                  </CCol>
+                  <CCol xl={2}>
+                    <CFormGroup row>
+                      <CCol xs="12">
+                        <CLabel htmlFor="name">Type</CLabel>
+                        <CSelect
+                          id="type"
+                          placeholder="Search Type"
+                          name="type"
+                          value={this.state.fields.type}
+                          onChange={this.handleChange}
+                          style={{ cursor: "pointer" }}
+                          onKeyPress={(event) => {
+                            if (event.key === "Enter") {
+                              this.handleSearch();
+                            }
+                          }}
+                        >
+                          <option value="">-- Select Type --</option>
+                          <option value="business">Business</option>
+                          <option value="individual">Individual</option>
                         </CSelect>
                       </CCol>
                     </CFormGroup>
@@ -415,7 +441,9 @@ class KycRequest_list extends React.Component {
         <CRow>
           <CCol xl={12}>
             <CCard>
-              <CCardHeader><b>KYC Requests</b></CCardHeader>
+              <CCardHeader>
+                <b>KYC Requests</b>
+              </CCardHeader>
               <CCardBody>
                 <div className="position-relative table-responsive">
                   <table className="table">
@@ -505,6 +533,22 @@ class KycRequest_list extends React.Component {
                               )}
                           </span>
                         </th>
+                        <th onClick={() => this.handleColumnSort("type")}>
+                          <span className="sortCls">
+                            <span className="table-header-text-mrg">Type</span>
+                            {this.state.fields.sort_field !== "type" && (
+                              <FontAwesomeIcon icon={faSort} />
+                            )}
+                            {this.state.fields.sort_dir === "asc" &&
+                              this.state.fields.sort_field === "type" && (
+                                <FontAwesomeIcon icon={faSortUp} />
+                              )}
+                            {this.state.fields.sort_dir === "desc" &&
+                              this.state.fields.sort_field === "type" && (
+                                <FontAwesomeIcon icon={faSortDown} />
+                              )}
+                          </span>
+                        </th>
                         {(_canAccess("cms_pages", "update") ||
                           _canAccess("cms_pages", "delete")) && (
                           <>
@@ -523,6 +567,7 @@ class KycRequest_list extends React.Component {
                             <td>{u.mobile_number}</td>
                             <td>{u.name ? u.name : "-"}</td>
                             <td>{capitalize(u.status.replaceAll("_", " "))}</td>
+                            <td>{capitalize(u.type)}</td>
                             {_canAccess("cms_pages", "update") && (
                               <>
                                 <td>
