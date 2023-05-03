@@ -10,7 +10,9 @@ import {
   faPiggyBank,
   faQuestionCircle,
   faHandshake,
-  faUserSecret, faEnvelope
+  faUserSecret,
+  faEnvelope,
+  faBusinessTime,
 } from "@fortawesome/free-solid-svg-icons";
 
 const _nav = [
@@ -46,7 +48,9 @@ const _nav = [
     _tag: "CSidebarNavItem",
     name: "Agents",
     to: "/admin/agents",
-    icon: <FontAwesomeIcon icon={faUserSecret} className="c-sidebar-nav-icon" />,
+    icon: (
+      <FontAwesomeIcon icon={faUserSecret} className="c-sidebar-nav-icon" />
+    ),
     module_name: "agents",
     id: "agents_sidebar_id",
   },
@@ -64,7 +68,17 @@ const _nav = [
     to: '/admin/cms_pages',
     icon: <FontAwesomeIcon icon={faFileAlt} className="c-sidebar-nav-icon" />,
     module_name: 'cms_pages',
-    id: 'cms_pages_sidebar_id'
+    id: 'cms_pages_sidebar_id',
+    _tag: "CSidebarNavItem",
+  },
+  {
+    name: "Business Entities",
+    to: "/admin/business_entities",
+    icon: (
+      <FontAwesomeIcon icon={faBusinessTime} className="c-sidebar-nav-icon" />
+    ),
+    module_name: "business_entities",
+    id: "business_entities_sidebar_id",
   },
   {
     _tag: "CSidebarNavTitle",

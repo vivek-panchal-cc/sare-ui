@@ -14,3 +14,4 @@ export * from './sms.service';
 export * from './bank.service';
 export * from './faq.service';
 export * from './push_notification.service';
+export * from './business_entities.service';
