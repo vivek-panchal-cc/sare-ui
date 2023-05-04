@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { Component } from "react";
 import slugify from "react-slugify";
 import { _canAccess } from "../../../../_helpers/index";
@@ -84,7 +85,7 @@ class Cms_Pages_Add extends Component {
   }
 
   /********** Editor Change handler   *****************/
-  handleEditorChange = (content, editor) => {
+  handleEditorChange = (content) => {
     this.setState({
       initialValue: content,
     });
@@ -125,7 +126,7 @@ class Cms_Pages_Add extends Component {
 
   /******** media Modal gallery  ************/
 
-  _handleApplyAction = (event, editor) => {
+  _handleApplyAction = () => {
     const img_src = `${
       process.env.REACT_APP_API_URL +
       "uploads/media/" +
@@ -171,7 +172,7 @@ class Cms_Pages_Add extends Component {
 
   /*********** Delete image from gallery   ***********/
 
-  _handleDeleteAction = (event) => {
+  _handleDeleteAction = () => {
     if (this.state.selectedMediaId !== "") {
       mediaService
         .deleteMedia({ media_id: this.state.selectedMediaId })
@@ -407,7 +408,7 @@ class Cms_Pages_Add extends Component {
                             xl={this.state.selectedMediaFile !== "" ? 9 : 12}
                           >
                             <CRow className="pt-4 media-popup">
-                              {this.state.media.length > 0 &&
+                              {this.state?.media?.length > 0 &&
                                 this.state.media.map((u, index) => (
                                   <CCol xs="12" sm="6" lg="3" key={index}>
                                     <div
@@ -424,7 +425,7 @@ class Cms_Pages_Add extends Component {
                                           u.media_path
                                         }`}
                                         alt="Media Image"
-                                        onClick={(event) => {
+                                        onClick={() => {
                                           this.selectMedia(u._id, u.media_path);
                                         }}
                                       />

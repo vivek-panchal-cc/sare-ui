@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import $ from "jquery";
 import slugify from "react-slugify";
 
@@ -444,7 +443,7 @@ class Cms_Pages_Edit extends Component {
                             xl={this.state.selectedMediaFile !== "" ? 9 : 12}
                           >
                             <CRow className="pt-4 media-popup">
-                              {this.state.media.length > 0 &&
+                              {this.state?.media?.length > 0 &&
                                 this.state.media.map((u, index) => (
                                   <CCol xs="12" sm="6" lg="3" key={index}>
                                     <div
