@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./page.css";
-import moment from "moment";
 import {
   CCard,
   CCardBody,
@@ -8,7 +7,6 @@ import {
   CCol,
   CRow,
   CContainer,
-  CCardFooter,
   CTooltip,
   CLink,
   CModal,
@@ -19,21 +17,20 @@ import {
   CButton,
   CFormGroup,
   CLabel,
-  CInput,
-  CFormText,
   CSelect,
   CTextarea,
 } from "@coreui/react";
+import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import KYCDetailsPopup from "./kycDetailsPopup";
-import ReactHtmlParser from "react-html-parser";
 import { capitalize } from "_helpers";
 import { globalConstants } from "../../../../constants/admin/global.constants";
 import { notify, history } from "../../../../_helpers/index";
 import CIcon from "@coreui/icons-react";
 import { kycRequestService } from "../../../../services/admin/kyc_request.service";
-import FileSaver, { saveAs } from "file-saver";
+import { businessEntitiesService } from "../../../../services/admin/business_entities.service";
+import FileSaver from "file-saver";
 import "../customer/styles.css";
 
 const KycDetailComponent = (props) => {
@@ -45,6 +42,47 @@ const KycDetailComponent = (props) => {
   const [comment, setComment] = useState("");
   const [status, setStatus] = useState("");
   const kycDetailId = props.kycDetail.id;
+  const [businessEntities, setBusinessEntities] = useState([]);
+  const [detailView, setDetailView] = useState("");
+  const [entityName, setEntityName] = useState("");
+  const params = useParams();
+
+  useEffect(() => {
+    getDetailView();
+    getBusinessEntities();
+  }, []);
+
+  const getDetailView = () => {
+    kycRequestService.detailview(params?.id).then((res) => {
+      if (res.status === false) {
+        notify.error(res.message);
+      } else {
+        getBusinessEntities(res.data);
+      }
+    });
+  };
+
+  const getBusinessEntities = (data = {}) => {
+    let businessEntity = props?.kycDetail?.business_entity;
+    if (props?.kycDetail.length === 0) {
+      businessEntity = data?.business_entity;
+    }
+
+    businessEntitiesService.getBusinessEntitiesList().then((res) => {
+      if (res.success === false) {
+        notify.error(res.message);
+      } else {
+        setBusinessEntities(res?.data?.result);
+        const matchingEntity = res?.data?.result.find(
+          (entity) => entity?.id === businessEntity
+        );
+        if (matchingEntity) {
+          const name = matchingEntity?.entity;
+          setEntityName(name);
+        }
+      }
+    });
+  };
 
   function handleSubmit() {
     kycRequestService
@@ -162,6 +200,20 @@ const KycDetailComponent = (props) => {
                               : ""}
                           </td>
                         </tr>
+                        <tr>
+                          <td>
+                            <b>Type</b>
+                          </td>
+                          <td>{capitalize(props.kycDetail.type)}</td>
+                        </tr>
+                        {props?.kycDetail?.type === "business" && (
+                          <tr>
+                            <td>
+                              <b>Business Entity</b>
+                            </td>
+                            <td>{entityName}</td>
+                          </tr>
+                        )}
                         <tr>
                           <td>
                             <b>Status</b>
