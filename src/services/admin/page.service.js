@@ -29,13 +29,12 @@ async function getPageList(postData) {
   let response;
   try {
     response = await fetch(
-      `${process.env.REACT_APP_API_URL}api/cms_pages/index`,
+      `${process.env.REACT_APP_API_URL}api/cms-pages`,
       requestOptions
     );
   } catch (error) {
     notify.error("Something went wrong");
     setLoading(true);
-    const response = undefined;
   }
   return handleResponse(response);
 }
@@ -53,13 +52,12 @@ async function createPages(postData) {
   let response;
   try {
     response = await fetch(
-      `${process.env.REACT_APP_API_URL}api/cms_pages/add`,
+      `${process.env.REACT_APP_API_URL}api/cms-pages/add`,
       requestOptions
     );
   } catch (error) {
     notify.error("Something went wrong");
     setLoading(true);
-    const response = undefined;
   }
   return handleResponse(response);
 }
@@ -74,7 +72,7 @@ async function deletePage(id) {
   let response;
   try {
     response = await fetch(
-      `${process.env.REACT_APP_API_URL}api/cms_pages/${id}`,
+      `${process.env.REACT_APP_API_URL}api/cms-pages/${id}`,
       requestOptions
     );
   } catch (error) {
@@ -97,7 +95,7 @@ async function getPage(id) {
   let response;
     try {
         response = await fetch(
-            `${process.env.REACT_APP_API_URL}api/cms_pages/${id}`,
+            `${process.env.REACT_APP_API_URL}api/cms-pages/${id}`,
             requestOptions
         );
     } catch (error) {
@@ -113,7 +111,7 @@ async function getPage(id) {
 async function updatePage(postData) {
   setLoading(true);
   const requestOptions = {
-    method: "POST",
+    method: "PUT",
     headers: authHeader("cms_pages", "update"),
     body: JSON.stringify(postData),
   };
@@ -121,7 +119,7 @@ async function updatePage(postData) {
   let response;
   try {
     response = await fetch(
-      `${process.env.REACT_APP_API_URL}api/cms_pages/edit`,
+      `${process.env.REACT_APP_API_URL}api/cms-pages/${postData.id}`,
       requestOptions
     );
   } catch (error) {
@@ -142,7 +140,7 @@ async function detailView(id) {
   let response;
     try {
         response = await fetch(
-            `${process.env.REACT_APP_API_URL}api/cms_pages/${id}`,
+            `${process.env.REACT_APP_API_URL}api/cms-pages/${id}`,
             requestOptions
         );
     } catch (error) {
@@ -156,14 +154,14 @@ async function detailView(id) {
 async function changePageStatus(id, postData) {
   setLoading(true);
   const requestOptions = {
-    method: "PUT",
+    method: "POST",
     headers: authHeader("cms_pages", "edit"),
     body: JSON.stringify(postData),
   };
   let response;
   try {
     response = await fetch(
-      `${process.env.REACT_APP_API_URL}api/cms_pages/${id}`,
+      `${process.env.REACT_APP_API_URL}api/cms-pages/${id}/change-status`,
       requestOptions
     );
   } catch (error) {
@@ -200,14 +198,14 @@ async function changeBulkPageStatus(postData) {
   setLoading(true);
   const requestOptions = {
     method: "POST",
-    headers: authHeader("users", "update"),
+    headers: authHeader("cms_pages", "update"),
     body: JSON.stringify(postData),
   };
 
   let response;
   try {
     response = await fetch(
-      `${process.env.REACT_APP_API_URL}api/cms_pages/change_bulk_page_status`,
+      `${process.env.REACT_APP_API_URL}api/cms-pages/change_bulk_page_status`,
       requestOptions
     );
   } catch (error) {

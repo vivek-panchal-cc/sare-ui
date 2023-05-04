@@ -281,7 +281,7 @@ class Cms_Pages_Add extends Component {
     return (
       <CCard>
         <CCardHeader>
-          Add Page
+          <strong>Add Page</strong>
           <div className="card-header-actions">
             <CTooltip content={globalConstants.BACK_MSG}>
               <CLink

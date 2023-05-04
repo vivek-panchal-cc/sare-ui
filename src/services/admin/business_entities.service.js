@@ -14,6 +14,7 @@ export const businessEntitiesService = {
   deleteBusinessEntity,
   changeBusinessEntityStatus,
   createBusinessEntity,
+  frontBusinessEntitiesList,
 };
 
 async function getBusinessEntitiesList(postData) {
@@ -141,6 +142,25 @@ async function createBusinessEntity(postData) {
     notify.error("Something went wrong");
     setLoading(false);
     const response = undefined;
+  }
+  return handleResponse(response);
+}
+
+async function frontBusinessEntitiesList(postData) {
+  setLoading(true);
+  const requestOptions = {
+    method: "GET",
+  };
+
+  let response;
+  try {
+    response = await fetch(
+      `${process.env.REACT_APP_KYC_API}business-entities`,
+      requestOptions
+    );
+  } catch (error) {
+    notify.error("Something went wrong");
+    setLoading(false);
   }
   return handleResponse(response);
 }

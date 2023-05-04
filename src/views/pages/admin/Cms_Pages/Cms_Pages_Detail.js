@@ -35,7 +35,7 @@ class DetailView extends React.Component {
         notify.error(res.message);
       } else {
         this.setState({
-          pages: [res.result],
+          pages: [res?.data],
         });
       }
     });

@@ -80,7 +80,7 @@ const KycForm = ({ props }) => {
   }, []);
 
   const getBusinessEntities = () => {
-    businessEntitiesService.getBusinessEntitiesList().then((res) => {
+    businessEntitiesService.frontBusinessEntitiesList().then((res) => {
       if (res.success === false) {
         notify.error(res.message);
       } else {

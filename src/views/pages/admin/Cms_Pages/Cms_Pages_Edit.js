@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { Component } from "react";
 import $ from "jquery";
 import slugify from "react-slugify";
@@ -75,7 +76,7 @@ class Cms_Pages_Edit extends Component {
   }
 
   /*************** * Bind Method For Form Editor **********************/
-  handleEditorChange = (content, editor) => {
+  handleEditorChange = (content) => {
     this.setState({
       initialValue: content,
     });
@@ -86,9 +87,14 @@ class Cms_Pages_Edit extends Component {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
-    this.setState({
-      [name]: value,
-    });
+    if (name === "status") {
+      const updateStatus = this.state.status === 1 ? 0 : 1;
+      this.setState({ ...this.state, [name]: updateStatus });
+    } else {
+      this.setState({
+        [name]: value,
+      });
+    }
   }
   /********** Retrive Api of Listing media images  *****************/
   getMedia() {
@@ -114,7 +120,7 @@ class Cms_Pages_Edit extends Component {
   }
 
   /******** media Modal gallery  ************/
-  _handleApplyAction = (event) => {
+  _handleApplyAction = () => {
     const img_src = `${
       process.env.REACT_APP_API_URL +
       "uploads/media/" +
@@ -158,7 +164,7 @@ class Cms_Pages_Edit extends Component {
     }
   }
 
-  _handleDeleteAction = (event) => {
+  _handleDeleteAction = () => {
     if (this.state.selectedMediaId !== "") {
       mediaService
         .deleteMedia({ media_id: this.state.selectedMediaId })
@@ -237,21 +243,21 @@ class Cms_Pages_Edit extends Component {
       ) {
         const slug = slugify(this.state.title, { delimiter: "-" });
         pageService.getPage(this.state.id).then((res) => {
-          if (res.status === false) {
+          if (res.success === false) {
             notify.error(res.message);
             history.push("/admin/cms_pages");
           } else {
-            if (res.result == null) {
+            if (res?.data == null) {
               notify.error("Page not found");
               history.push("/admin/cms_pages");
             } else {
               this.setState({
-                title: res.result.title,
-                meta_title: res.result.meta_title,
-                meta_desc: res.result.meta_desc,
-                meta_keywords: res.result.meta_keywords,
-                initialValue: res.result.content,
-                status: res.result.status,
+                title: res?.data?.title,
+                meta_title: res?.data?.meta_title,
+                meta_desc: res?.data?.meta_desc,
+                meta_keywords: res?.data?.meta_keywords,
+                initialValue: res?.data?.content,
+                status: res?.data?.status,
                 slug: slug,
               });
             }
@@ -278,7 +284,7 @@ class Cms_Pages_Edit extends Component {
           meta_keywords: this.state.meta_keywords,
           meta_desc: this.state.meta_desc,
           status: this.state.status,
-          _id: this.state.id,
+          id: this.state.id,
         })
         .then((res) => {
           if (res.status === "error") {
@@ -310,7 +316,7 @@ class Cms_Pages_Edit extends Component {
     return (
       <CCard>
         <CCardHeader>
-          Edit Page
+          <strong>Edit Page</strong><p></p>
           <div className="card-header-actions">
             <CTooltip content={globalConstants.BACK_MSG}>
               <CLink
@@ -460,7 +466,7 @@ class Cms_Pages_Edit extends Component {
                                           u.media_path
                                         }`}
                                         alt="Media Image"
-                                        onClick={(event) => {
+                                        onClick={() => {
                                           this.selectMedia(u._id, u.media_path);
                                         }}
                                       />
@@ -616,7 +622,7 @@ class Cms_Pages_Edit extends Component {
 
                 file_browser_callback_types: "image",
 
-                file_picker_callback: function (callback, value, meta) {
+                file_picker_callback: function (callback, _value, meta) {
                   if (meta.filetype == "image") {
                     var input = document.getElementById("my-file");
                     input.click();
@@ -679,10 +685,11 @@ class Cms_Pages_Edit extends Component {
 
             <CCol sm="11">
               <CFormGroup variant="custom-checkbox" inline>
-                {this.state.status && (
+                {this.state.status === 1 && (
                   <CSwitch
                     className="mr-1"
                     color="primary"
+                    id="status"
                     name="status"
                     value={this.state.status}
                     defaultChecked
@@ -690,10 +697,11 @@ class Cms_Pages_Edit extends Component {
                   />
                 )}
 
-                {this.state.status === false && (
+                {this.state.status === 0 && (
                   <CSwitch
                     className="mr-1"
                     color="primary"
+                    id="status"
                     name="status"
                     value={this.state.status}
                     onChange={this.handleChange}
