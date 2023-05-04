@@ -76,7 +76,9 @@ const KycForm = ({ props }) => {
   }, [history]);
 
   useEffect(() => {
-    getBusinessEntities();
+    if (businessType === "business") {
+      getBusinessEntities();
+    }
   }, []);
 
   const getBusinessEntities = () => {
@@ -84,7 +86,7 @@ const KycForm = ({ props }) => {
       if (res.success === false) {
         notify.error(res.message);
       } else {
-        setBusinessEntities(res?.data?.result);
+        setBusinessEntities(res?.data);
       }
     });
   };
