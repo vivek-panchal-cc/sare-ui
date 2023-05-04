@@ -73,7 +73,7 @@ const KycDetailComponent = (props) => {
         notify.error(res.message);
       } else {
         setBusinessEntities(res?.data?.result);
-        const matchingEntity = res?.data?.result.find(
+        const matchingEntity = res?.data?.result?.find(
           (entity) => entity?.id === businessEntity
         );
         if (matchingEntity) {

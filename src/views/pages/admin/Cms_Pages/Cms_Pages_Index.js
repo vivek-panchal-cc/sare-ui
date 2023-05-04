@@ -34,12 +34,6 @@ import {
   _loginUsersDetails,
 } from "../../../../_helpers/index";
 import { globalConstants } from "../../../../constants/admin/global.constants";
-const CheckBoxes = React.lazy(() =>
-  import("../../../../components/admin/Checkboxes")
-);
-const MultiActionBar = React.lazy(() =>
-  import("../../../../components/admin/MultiActionBar")
-);
 
 class Page_list extends React.Component {
   constructor(props) {
@@ -56,15 +50,15 @@ class Page_list extends React.Component {
     this.state = {
       fields: {
         pageNo: 1,
-        sort_dir: "desc",
-        sort_field: "search_page_title_name",
-        search_page_title_name: "",
+        direction: "desc",
+        sort: "title",
+        title: "",
         totalPage: 1,
       },
       _openPopup: false,
       page_list: [],
-      multiaction: [],
-      allCheckedbox: false,
+      multiAction: [],
+      allCheckedBox: false,
     };
 
     if (this.props._renderAccess === false) {
@@ -81,28 +75,28 @@ class Page_list extends React.Component {
 
   getCmsPageList() {
     pageService.getPageList(this.state.fields).then((res) => {
-      if (res.status === false) {
+      if (res.success === false) {
         notify.error(res.message);
       } else {
         this.setState({
-          totalRecords: res?.totalRecords,
+          totalRecords: res?.data?.totalRecords,
           fields: {
             ...this.state.fields,
-            totalPage: res?.totalPage,
+            totalPage: res?.data?.totalPage,
           },
-          page_list: res?.result,
+          page_list: res?.data?.result,
         });
 
         /*multi delete cms pages */
-        if (res?.result?.length > 0) {
-          let pages = res?.result;
-          let multiaction = [];
+        if (res?.data?.result?.length > 0) {
+          let pages = res?.data?.result;
+          let multiAction = [];
           for (var key in pages) {
-            multiaction[pages[key]._id] = false;
+            multiAction[pages[key].id] = false;
           }
-          this.setState({ multiaction: multiaction });
+          this.setState({ multiAction: multiAction });
         } else if (res?.result?.length === 0) {
-          this.setState({ multiaction: [] });
+          this.setState({ multiAction: [] });
         }
       }
     });
@@ -129,10 +123,10 @@ class Page_list extends React.Component {
       {
         fields: {
           ...this.state.fields,
-          sort_dir: ["desc"].includes(this.state.fields.sort_dir)
+          direction: ["desc"].includes(this.state.fields.direction)
             ? "asc"
             : "desc",
-          sort_field: fieldName,
+          sort: fieldName,
         },
       },
       () => {
@@ -146,15 +140,20 @@ class Page_list extends React.Component {
     this.setState({ fields: { ...this.state.fields, [name]: value } });
   }
 
+  resetCheckedBox() {
+    this.setState({ allCheckedBox: false });
+  }
+
   handleSearch(type) {
+    this.resetCheckedBox();
     if (type === "reset") {
       this.setState(
         {
           fields: {
             pageNo: 1,
-            sort_dir: "desc",
-            sort_field: "name",
-            search_page_title_name: "",
+            direction: "desc",
+            sort: "title",
+            title: "",
             totalPage: 1,
           },
         },
@@ -182,38 +181,46 @@ class Page_list extends React.Component {
     });
   }
 
-  PageStatusChangedHandler(page_id, status) {
-    pageService.changePageStatus(page_id, { status: !status }).then((res) => {
-      if (res.status === "error") {
-        notify.error(res.message);
-      } else {
-        notify.success(res.message);
-        this.getCmsPageList();
-      }
-    });
+  PageStatusChangedHandler(pageid, status) {
+    let currentStatus;
+    if (status === false) {
+      currentStatus = 1;
+    }
+    if (status === true) {
+      currentStatus = 0;
+    }
+    pageService
+      .changePageStatus(pageid, { status: currentStatus })
+      .then((res) => {
+        if (res.status === "error") {
+          notify.error(res.message);
+        } else {
+          notify.success(res.message);
+          this.getCmsPageList();
+        }
+      });
   }
 
   handleAllChecked = (event) => {
-    let multiactions = this.state.multiaction;
-    //console.log(multiactions);
-    for (var key in multiactions) {
-      multiactions[key] = event.target.checked;
+    let multiActions = this.state.multiAction;
+    for (var key in multiActions) {
+      multiActions[key] = event.target.checked;
     }
     this.setState({
-      multiaction: multiactions,
-      allCheckedbox: event.target.checked,
+      multiAction: multiActions,
+      allCheckedBox: event.target.checked,
     });
   };
 
-  handleCheckChieldElement = (event) => {
-    let multiactions = this.state.multiaction;
-    multiactions[event.target.value] = event.target.checked;
-    this.setState({ multiaction: multiactions });
+  handleCheckFieldElement = (event) => {
+    let multiActions = this.state.multiAction;
+    multiActions[event.target.value] = event.target.checked;
+    this.setState({ multiAction: multiActions });
   };
 
-  resetCheckedBox() {
-    this.setState({ allCheckedbox: false });
-  }
+  resetCheckedBox = () => {
+    this.setState({ allCheckedBox: false });
+  };
 
   bulkPageStatusChangeHandler(postData) {
     pageService.changeBulkPageStatus(postData).then((res) => {
@@ -229,7 +236,7 @@ class Page_list extends React.Component {
   handleApplyAction = (actionValue = "") => {
     if (actionValue !== "") {
       let appliedActionId = [];
-      let selectedIds = this.state.multiaction;
+      let selectedIds = this.state.multiAction;
       for (var key in selectedIds) {
         if (selectedIds[key]) {
           appliedActionId.push(key);
@@ -240,7 +247,7 @@ class Page_list extends React.Component {
       switch (actionValue) {
         case "delete":
           pageService
-            .deleteMultiplePages({ cms_ids: appliedActionId })
+            .deleteMultiplePages({ cmsids: appliedActionId })
             .then((res) => {
               if (res.status === false) {
                 notify.error(res.message);
@@ -252,14 +259,14 @@ class Page_list extends React.Component {
           break;
         case "active": {
           this.bulkPageStatusChangeHandler({
-            cms_ids: appliedActionId,
+            cmsids: appliedActionId,
             status: true,
           });
           break;
         }
         case "deactive": {
           this.bulkPageStatusChangeHandler({
-            cms_ids: appliedActionId,
+            cmsids: appliedActionId,
             status: false,
           });
           break;
@@ -287,9 +294,14 @@ class Page_list extends React.Component {
                         <CInput
                           id="name"
                           placeholder="Search Title"
-                          name="search_page_title_name"
-                          value={this.state.fields.search_page_title_name}
+                          name="title"
+                          value={this.state.fields.title}
                           onChange={this.handleChange}
+                          onKeyPress={(event) => {
+                            if (event.key === "Enter") {
+                              this.handleSearch("search");
+                            }
+                          }}
                         />
                       </CCol>
                     </CFormGroup>
@@ -333,7 +345,7 @@ class Page_list extends React.Component {
           <CCol xl={12}>
             <CCard>
               <CCardHeader>
-                Pages
+                <strong>Pages</strong>
                 <div className="card-header-actions">
                   {_canAccess("cms_pages", "create") && (
                     <CTooltip content={globalConstants.ADD_BTN}>
@@ -350,43 +362,43 @@ class Page_list extends React.Component {
               </CCardHeader>
               <CCardBody>
                 <div className="position-relative table-responsive">
-                  <MultiActionBar
+                  {/* <MultiActionBar
                     onClick={this.handleApplyAction}
-                    checkBoxData={this.state.multiaction}
+                    checkBoxData={this.state.multiAction}
                     module_name={"cms_pages"}
-                  />
+                  /> */}
                   <table className="table">
                     <thead>
                       <tr>
-                        <th>
+                        {/* <th>
                           <input
                             type="checkbox"
                             onClick={this.handleAllChecked}
                             value="checkedall"
                             onChange={() => {}}
-                            checked={this.state.allCheckedbox}
+                            checked={this.state.allCheckedBox}
                           />
-                        </th>
+                        </th> */}
                         <th>#</th>
                         <th
                           onClick={() =>
-                            this.handleColumnSort("search_page_title_name")
+                            this.handleColumnSort("title")
                           }
                         >
                           <span className="sortCls">
                             <span className="table-header-text-mrg">Title</span>
-                            {this.state.fields.sort_field !==
-                              "search_page_title_name" && (
+                            {this.state.fields.sort !==
+                              "title" && (
                               <FontAwesomeIcon icon={faSort} />
                             )}
-                            {this.state.fields.sort_dir === "asc" &&
-                              this.state.fields.sort_field ===
-                                "search_page_title_name" && (
+                            {this.state.fields.direction === "asc" &&
+                              this.state.fields.sort ===
+                                "title" && (
                                 <FontAwesomeIcon icon={faSortUp} />
                               )}
-                            {this.state.fields.sort_dir === "desc" &&
-                              this.state.fields.sort_field ===
-                                "search_page_title_name" && (
+                            {this.state.fields.direction === "desc" &&
+                              this.state.fields.sort ===
+                                "title" && (
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
@@ -396,15 +408,15 @@ class Page_list extends React.Component {
                             <span className="table-header-text-mrg">
                               Status
                             </span>
-                            {this.state.fields.sort_field !== "status" && (
+                            {this.state.fields.sort !== "status" && (
                               <FontAwesomeIcon icon={faSort} />
                             )}
-                            {this.state.fields.sort_dir === "asc" &&
-                              this.state.fields.sort_field === "status" && (
+                            {this.state.fields.direction === "asc" &&
+                              this.state.fields.sort === "status" && (
                                 <FontAwesomeIcon icon={faSortUp} />
                               )}
-                            {this.state.fields.sort_dir === "desc" &&
-                              this.state.fields.sort_field === "status" && (
+                            {this.state.fields.direction === "desc" &&
+                              this.state.fields.sort === "status" && (
                                 <FontAwesomeIcon icon={faSortDown} />
                               )}
                           </span>
@@ -412,7 +424,7 @@ class Page_list extends React.Component {
                         {(_canAccess("cms_pages", "update") ||
                           _canAccess("cms_pages", "delete")) && (
                           <>
-                            <th>Action</th>
+                            <th style={{ width: "20%" }}>Action</th>
                           </>
                         )}
                       </tr>
@@ -421,23 +433,23 @@ class Page_list extends React.Component {
                     <tbody>
                       {this.state?.page_list?.length > 0 &&
                         this.state.page_list.map((u, index) => (
-                          <tr key={u._id}>
-                            <td>
+                          <tr key={u.id}>
+                            {/* <td>
                               <CheckBoxes
                                 handleCheckChieldElement={
-                                  this.handleCheckChieldElement
+                                  this.handleCheckFieldElement
                                 }
-                                _id={u._id}
-                                _isChecked={this.state.multiaction[u._id]}
+                                _id={u.id}
+                                _isChecked={this.state.multiAction[u.id]}
                               />
-                            </td>
+                            </td> */}
 
                             <td>{index + 1}</td>
                             <td>
                               {" "}
                               {_canAccess("cms_pages", "view") && (
                                 <CLink
-                                  to={`/admin/cms_pages/detailview/${u._id}`}
+                                  to={`/admin/cms_pages/detailview/${u.id}`}
                                 >
                                   {u.title}
                                 </CLink>
@@ -445,12 +457,12 @@ class Page_list extends React.Component {
                             </td>
                             <td>
                               {
-                                /*current_user.id !== u._id &&*/
+                                /*current_user.id !== u.id &&*/
                                 _canAccess("cms_pages", "update") && (
                                   <CLink
                                     onClick={() =>
                                       this.PageStatusChangedHandler(
-                                        u._id,
+                                        u.id,
                                         u.status
                                       )
                                     }
@@ -460,7 +472,7 @@ class Page_list extends React.Component {
                                 )
                               }
                               {
-                                /*current_user.id !== u._id && */
+                                /*current_user.id !== u.id && */
                                 _canAccess("cms_pages", "update") === false && (
                                   <>{u.status ? "Active" : "Deactive"}</>
                                 )
@@ -477,7 +489,7 @@ class Page_list extends React.Component {
                                       <CLink
                                         className="btn  btn-md btn-primary"
                                         aria-current="page"
-                                        to={`/admin/cms_pages/edit/${u._id}`}
+                                        to={`/admin/cms_pages/edit/${u.id}`}
                                       >
                                         <CIcon name="cil-pencil"></CIcon>{" "}
                                       </CLink>
@@ -491,7 +503,7 @@ class Page_list extends React.Component {
                                       <button
                                         className="btn  btn-md btn-danger "
                                         onClick={() =>
-                                          this.openDeletePopup(u._id)
+                                          this.openDeletePopup(u.id)
                                         }
                                       >
                                         <CIcon name="cil-trash"></CIcon>

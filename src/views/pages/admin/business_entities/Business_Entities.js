@@ -280,6 +280,7 @@ class BusinessEntitiesIndex extends React.Component {
         } else {
           notify.success(res.message);
           history.push("/admin/business_entities");
+          this.handleClick();
         }
       });
   }
@@ -299,8 +300,7 @@ class BusinessEntitiesIndex extends React.Component {
   };
 
   editBusinessEntity(id) {
-    businessEntitiesService.getBusinessEntitiesDetails(id).then((res) => {
-      console.log("res", res);
+    businessEntitiesService.getBusinessEntitiesDetails(id).then((res) => {      
       if (res.status === false) {
         notify.error(res.message);
       } else {
@@ -332,7 +332,7 @@ class BusinessEntitiesIndex extends React.Component {
           <CCol xs="12">
             <CCard>
               <CCardHeader>
-                <strong>Add Entity</strong>
+                <strong>Add an Entity</strong>
               </CCardHeader>
               <CCardBody>
                 <CFormGroup>
