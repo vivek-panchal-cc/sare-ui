@@ -273,7 +273,6 @@ class Page_list extends React.Component {
   /****************** * Render Data To Dom ************************/
 
   render() {
-    const current_user = _loginUsersDetails();
     return (
       <>
         <CRow>
@@ -420,7 +419,7 @@ class Page_list extends React.Component {
                     </thead>
 
                     <tbody>
-                      {this.state.page_list.length > 0 &&
+                      {this.state?.page_list?.length > 0 &&
                         this.state.page_list.map((u, index) => (
                           <tr key={u._id}>
                             <td>
@@ -504,7 +503,7 @@ class Page_list extends React.Component {
                             )}
                           </tr>
                         ))}
-                      {this.state.page_list.length === 0 && (
+                      {this.state?.page_list?.length === 0 && (
                         <tr>
                           <td colSpan="5">No records found</td>
                         </tr>

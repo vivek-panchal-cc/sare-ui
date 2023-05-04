@@ -91,7 +91,7 @@ const KycDetailComponent = (props) => {
         status: status,
       })
       .then((res) => {
-        if (res.status) {
+        if (res.success === true) {
           notify.success(res.message);
           // window.location.reload();
           history.push("/admin/kyc_requests");
