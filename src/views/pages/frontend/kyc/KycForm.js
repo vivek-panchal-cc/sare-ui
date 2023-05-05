@@ -588,17 +588,28 @@ const KycForm = ({ props }) => {
                           <>
                             {idFile.type.includes("image/") ? (
                               <>
-                                <div className="image-upload-div position-relative">
+                                <div
+                                  className="image-upload-div position-relative"
+                                  style={{ width: "100%" }}
+                                >
                                   <img
                                     src={URL.createObjectURL(idFile)}
                                     alt="uploaded id"
-                                    style={{ cursor: "pointer" }}
+                                    style={{
+                                      cursor: "pointer",
+                                      maxHeight: "270px",
+                                      objectPosition: "center",
+                                      objectFit: "cover",
+                                      height: "270px",
+                                      width: "100%",
+                                    }}
                                   />
                                   <span>
                                     <a
                                       className="view-img"
                                       onClick={clearImage}
                                       disabled={!editing}
+                                      style={{ textAlign: "center" }}
                                     >
                                       {!editing ? "Remove Image" : ""}
                                     </a>
@@ -644,17 +655,28 @@ const KycForm = ({ props }) => {
                           </>
                         ) : imgType ? (
                           <>
-                            <div className="image-upload-div position-relative">
+                            <div
+                              className="image-upload-div position-relative"
+                              style={{ width: "100%" }}
+                            >
                               <img
                                 src={idFile}
                                 alt="uploaded id"
-                                style={{ cursor: "pointer" }}
+                                style={{
+                                  cursor: "pointer",
+                                  maxHeight: "270px",
+                                  objectPosition: "center",
+                                  objectFit: "cover",
+                                  height: "270px",
+                                  width: "100%",
+                                }}
                               />
                               <span>
                                 <a
                                   className="view-img"
                                   onClick={clearImage}
                                   disabled={!editing}
+                                  style={{ textAlign: "center" }}
                                 >
                                   {!editing ? "Remove Image" : ""}
                                 </a>
