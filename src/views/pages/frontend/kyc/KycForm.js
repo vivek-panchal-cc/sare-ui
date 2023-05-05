@@ -20,6 +20,8 @@ import { useParams, useHistory } from "react-router-dom";
 import { notify } from "../../../../_helpers/index";
 import logo from "../img/logo.svg";
 import uploadKYC from "../img/upload.svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { businessEntitiesService } from "../../../../services/admin/business_entities.service";
 import "../css/styles.css";
 
@@ -59,9 +61,6 @@ const KycForm = ({ props }) => {
   let businessType = props?.res?.kyc_type;
   let formData = new FormData();
 
-  // Validation Changes in Email done as per QA team requirement.
-  // Multiple times OTP generated when user tap on back button so I've resolved this functionality by defining onpostate in useEffect()
-  // (Changes made by Vivek Panchal)
   useEffect(() => {
     const unListen = history.listen((location, action) => {
       if (action === "POP" && !alreadyRedirected.current) {
@@ -211,6 +210,15 @@ const KycForm = ({ props }) => {
 
   const clearImage = () => {
     setIdFile("");
+  };
+
+  const handlePreview = () => {
+    if (idFile && !imgType) {
+      setSelectedImageFile(URL.createObjectURL(idFile));
+    } else if (imgType) {
+      setSelectedImageFile(idFile);
+    }
+    setShowModal(true);
   };
 
   const handleSubmit = () => {
@@ -607,11 +615,20 @@ const KycForm = ({ props }) => {
                                   <span>
                                     <a
                                       className="view-img"
-                                      onClick={clearImage}
+                                      onClick={
+                                        !editing ? clearImage : handlePreview
+                                      }
                                       disabled={!editing}
                                       style={{ textAlign: "center" }}
                                     >
-                                      {!editing ? "Remove Image" : ""}
+                                      {!editing ? (
+                                        "Remove Image"
+                                      ) : (
+                                        <div>
+                                          <FontAwesomeIcon icon={faEye} />{" "}
+                                          <span>View</span>
+                                        </div>
+                                      )}
                                     </a>
                                   </span>
                                 </div>
@@ -674,11 +691,20 @@ const KycForm = ({ props }) => {
                               <span>
                                 <a
                                   className="view-img"
-                                  onClick={clearImage}
+                                  onClick={
+                                    !editing ? clearImage : handlePreview
+                                  }
                                   disabled={!editing}
                                   style={{ textAlign: "center" }}
                                 >
-                                  {!editing ? "Remove Image" : ""}
+                                  {!editing ? (
+                                    "Remove Image"
+                                  ) : (
+                                    <div>
+                                      <FontAwesomeIcon icon={faEye} />{" "}
+                                      <span>View</span>
+                                    </div>
+                                  )}
                                 </a>
                               </span>
                             </div>
@@ -740,7 +766,11 @@ const KycForm = ({ props }) => {
                       Image Preview
                     </ModalHeader>
                     <ModalBody>
-                      <img src={selectedImageFile} alt="uploaded id" />
+                      <img
+                        src={selectedImageFile}
+                        alt="uploaded id"
+                        style={{ maxWidth: "100%", height: "auto" }}
+                      />
                     </ModalBody>
                     <ModalFooter>
                       <Button
