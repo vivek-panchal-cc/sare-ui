@@ -596,6 +596,12 @@ body {
   cursor: pointer;
 }
 
+.modal-title {
+  font-family: "Plus Jakarta Sans Medium";;
+  font-weight: 500;
+  font-size: 25px;
+}
+
 .upload-img {
   max-width: 100%;
   max-height: 100%;
