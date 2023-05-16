@@ -25,6 +25,10 @@ import { notify, history, _canAccess } from "../../../../_helpers/index";
 import { globalConstants } from "../../../../constants/admin/global.constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faBan, faSave } from "@fortawesome/free-solid-svg-icons";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import Select from 'react-select';
+
 
 class Push_Notification_Add extends React.Component {
   constructor(props) {
@@ -34,10 +38,16 @@ class Push_Notification_Add extends React.Component {
         title: "",
         description: "",
         customer_type: "",
-        status: "",
         type: "",
-        // image: null,
+        schedule_time: null,
+        schedule_time_formated: null,
+        account_numbers:null,
       },
+      options: [
+        { value: 'chocolate', label: 'Chocolate' },
+        { value: 'strawberry', label: 'Strawberry' },
+        { value: 'vanilla', label: 'Vanilla' }
+      ]
     };
     if (this.props._renderAccess === false) {
       history.push("/admin/notifications");
@@ -47,45 +57,19 @@ class Push_Notification_Add extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(e) {    
+  handleChange(e) {
     const { name, value } = e.target;
     this.setState({ fields: { ...this.state.fields, [name]: value } });
   }
 
-  // handleImageChange = (event) => {
-  //   const file = event.target.files[0];
-  //   const reader = new FileReader();
-  //   reader.readAsDataURL(file);
-  //   reader.onloadend = () => {
-  //     const base64 = reader.result;
-  //     //   formData.append("file", file, name);
-  //     this.setState({
-  //       fields: {
-  //         ...this.state.fields,
-  //         image: file,
-  //       },
-  //       imagePreview: base64,
-  //     });
-  //   };
-  // };
-
   handleSubmit() {
     if (this.validator.allValid()) {
-      // const formData = new FormData();
-      // formData.append("title", this.state.fields.title);
-      // formData.append("description", this.state.fields.description);
-      // formData.append("customer_type", this.state.fields.customer_type);
-      // formData.append("type", this.state.fields.type);
-      // formData.append("status", this.state.fields.status);
-
-      // if (typeof this.state.fields.image === "string") {
-      //   formData.append("image", null);
-      // } else {
-      //   formData.append("image", this.state.fields.image);
-      // }     
-
+      let formData = this.state.fields;
+      if (this.state.fields.schedule_time && this.state.fields.type === 'schedule') {
+        formData.schedule_time = this.convertDatePickerTime(this.state.fields.schedule_time);
+      }
       pushNotificationService
-        .createNotification(this.state.fields)
+        .createNotification(formData)
         .then((res) => {
           if (res.status === false) {
             notify.error(res.message);
@@ -114,6 +98,57 @@ class Push_Notification_Add extends React.Component {
         ),
       300
     );
+    this.getUserList();
+  }
+
+  getUserList() {
+    pushNotificationService
+      .getUserList()
+      .then((res) => {
+        console.log("res", res);
+        if (res.success === true) {
+          let userOptions = [];
+          res?.data.map((value, index) => {
+            userOptions.push({ value: value.account_number, label: value.name });
+          })
+          this.setState({ options: userOptions });
+        }
+      });
+  }
+
+  convertDatePickerTime(str) {
+    var month, day, year, hours, minutes, seconds;
+    var date = new Date(str),
+      month = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    hours = ("0" + date.getHours()).slice(-2);
+    minutes = ("0" + date.getMinutes()).slice(-2);
+    seconds = ("0" + date.getSeconds()).slice(-2);
+
+    var mySQLDate = [date.getFullYear(), month, day].join("-");
+    var mySQLTime = [hours, minutes, seconds].join(":");
+    return [mySQLDate, mySQLTime].join(" ");
+  }
+
+  handledateChange = (date) => {
+    // console.log("datddde", date);
+    // let schedule_time_formated = null;
+    // if(date !== null){
+    //   schedule_time_formated = this.convertDatePickerTimeToMySQLTime(date);
+    //   console.log("schedule_time_formated", schedule_time_formated);
+    //   this.setState({ fields: { ...this.state.fields, schedule_time_formated: schedule_time_formated } });
+    // }
+    this.setState({ fields: { ...this.state.fields, schedule_time: date } });
+
+  }
+
+  selectedCustomerData(customer) {
+    let selectedCustomer = [];
+    customer.forEach((x) => {
+      selectedCustomer.push(x.value);
+    })
+    this.setState({ fields: { ...this.state.fields, account_numbers: selectedCustomer } });
+    console.log(selectedCustomer);
   }
 
   render() {
@@ -204,6 +239,14 @@ class Push_Notification_Add extends React.Component {
                     )}
                   </CFormText>
                 </CFormGroup>
+                {this.state.fields.customer_type === 'all' && (
+                  <>
+                    <CFormGroup>
+                      <CLabel htmlFor="name">Customers</CLabel>
+                      <Select isMulti options={this.state.options} onChange={(data) => this.selectedCustomerData(data)} />
+                    </CFormGroup>
+                  </>
+                )}
                 <CFormGroup>
                   <CLabel htmlFor="name">Type</CLabel>
                   <CSelect
@@ -215,8 +258,8 @@ class Push_Notification_Add extends React.Component {
                     style={{ cursor: "pointer" }}
                   >
                     <option value="">-- Select Type --</option>
-                    <option value="system">System</option>
-                    <option value="custom">Custom</option>
+                    <option value="instant">Instant</option>
+                    <option value="schedule">Schedule</option>
                   </CSelect>
                   <CFormText className="help-block">
                     {this.validator.message(
@@ -227,52 +270,31 @@ class Push_Notification_Add extends React.Component {
                     )}
                   </CFormText>
                 </CFormGroup>
-                <CFormGroup>
-                  <CLabel htmlFor="name">Status</CLabel>
-                  <CSelect
-                    id="name"
-                    placeholder="Status"
-                    name="status"
-                    value={this.state.fields.status}
-                    onChange={this.handleChange}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <option value="">-- Select Status --</option>
-                    <option value="send">Send</option>
-                    <option value="schedule">Schedule</option>
-                    <option value="inprogress">In Progress</option>
-                  </CSelect>
-                  <CFormText className="help-block">
-                    {this.validator.message(
-                      "status",
-                      this.state.fields.status,
-                      "required",
-                      { className: "text-danger" }
-                    )}
-                  </CFormText>
-                </CFormGroup>
-                {/* <CFormGroup>
-                  <CLabel htmlFor="nf-name">Image</CLabel>
-                  <div>
-                    <input
-                      type="file"
-                      accept=".jpg,.jpeg,.png"
-                      onChange={this.handleImageChange}
-                    />
-                    {this.state.imagePreview && (
-                      <img
-                        src={this.state.imagePreview}
-                        alt="Profile"
-                        style={{
-                          maxWidth: "200px",
-                          maxHeight: "200px",
-                          width: "auto",
-                          height: "auto",
-                        }}
-                      />
-                    )}
-                  </div>
-                </CFormGroup> */}
+                {this.state.fields.type === 'schedule' && (
+                  <>
+                    <CFormGroup>
+                      <CLabel htmlFor="name">Schedule Time</CLabel>
+                      <DatePicker
+                        selected={this.state.fields.schedule_time}
+                        onChange={(date) => this.handledateChange(date)}
+                        showTimeSelect
+                        timeFormat="HH:mm"
+                        timeIntervals={15}
+                        dateCaption=''
+                        timeCaption="Time"
+                        dateFormat="dd/MM/yyyy HH:mm"
+                        className="form-control" />
+                      <CFormText className="help-block">
+                        {this.validator.message(
+                          "schedule_time",
+                          this.state.fields.schedule_time,
+                          "required",
+                          { className: "text-danger" }
+                        )}
+                      </CFormText>
+                    </CFormGroup>
+                  </>
+                )}
               </CCardBody>
               <CCardFooter>
                 <CButton
