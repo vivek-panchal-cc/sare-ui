@@ -290,9 +290,8 @@ class Push_Notifications_Index extends React.Component {
                           }}
                         >
                           <option value="">-- Select Status --</option>
-                          <option value="send">Send</option>
-                          <option value="schedule">Schedule</option>
-                          <option value="inprogress">In Progress</option>
+                          <option value="sent">Sent</option>
+                          <option value="pending">Pending</option>
                         </CSelect>
                       </CCol>
                     </CFormGroup>
@@ -432,22 +431,6 @@ class Push_Notifications_Index extends React.Component {
                               )}
                           </span>
                         </th>
-                        <th onClick={() => this.handleColumnSort("type")}>
-                          <span className="sortCls">
-                            <span className="table-header-text-mrg">Type</span>
-                            {this.state.fields.sort !== "type" && (
-                              <FontAwesomeIcon icon={faSort} />
-                            )}
-                            {this.state.fields.direction === "asc" &&
-                              this.state.fields.sort === "type" && (
-                                <FontAwesomeIcon icon={faSortUp} />
-                              )}
-                            {this.state.fields.direction === "desc" &&
-                              this.state.fields.sort === "type" && (
-                                <FontAwesomeIcon icon={faSortDown} />
-                              )}
-                          </span>
-                        </th>
                         {(_canAccess("users", "update") ||
                           _canAccess("users", "delete")) && (
                           <>
@@ -472,19 +455,14 @@ class Push_Notifications_Index extends React.Component {
                             <td>
                               {(() => {
                                 switch (u.status) {
-                                  case "send":
-                                    return "Send";
-                                  case "schedule":
-                                    return "Schedule";
-                                  case "inprogress":
-                                    return "In Progress";
+                                  case "pending":
+                                    return "Pending";
+                                  case "sent":
+                                    return "Sent";
                                   default:
                                     return "";
                                 }
                               })()}
-                            </td>
-                            <td>
-                              {u.type.charAt(0).toUpperCase() + u.type.slice(1)}
                             </td>
                             {(_canAccess("notifications", "update") ||
                               _canAccess("notifications", "delete")) && (

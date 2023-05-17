@@ -26,7 +26,10 @@ import { globalConstants } from "../../../../constants/admin/global.constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CIcon from "@coreui/icons-react";
 import { faArrowLeft, faBan, faSave } from "@fortawesome/free-solid-svg-icons";
-import FileSaver from "file-saver";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import Select from "react-select";
+import moment from "moment";
 
 class PushNotificationEdit extends React.Component {
   constructor(props) {
@@ -35,14 +38,20 @@ class PushNotificationEdit extends React.Component {
       fields: {
         id: this.props.match.params.id,
         title: "",
-        // image: null,
         description: "",
-        status: "",
-        customer_type: "",
-        type: "",
+        customer_type: null,
+        type: null,
+        schedule_time: null,
+        schedule_time_formated: null,
+        account_numbers: null,
       },
+      selectedCustomer: [],
+      disable: false,
     };
 
+    if (this.props._renderAccess === false) {
+      history.push("/admin/notifications");
+    }
     this.handleChange = this.handleChange.bind(this);
     this.validator = new SimpleReactValidator({ autoForceUpdate: this });
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -57,6 +66,7 @@ class PushNotificationEdit extends React.Component {
           "/admin/notifications"
         )
       ) {
+        this.getUserList();
         pushNotificationService
           .getNotifications(this.state.fields.id)
           .then((res) => {
@@ -71,6 +81,30 @@ class PushNotificationEdit extends React.Component {
                   ...this.state.fields,
                   fields: res.data,
                 });
+
+                if (res.data.customer_notifications.length > 0) {
+                  let userData = [];
+
+                  res.data.customer_notifications.forEach((element) => {
+                    userData.push(element.account_number);
+                  });
+
+                  let selectedCustomer = [];
+                  this.state.options.filter((x) => {
+                    if (userData.includes(x.value)) {
+                      return selectedCustomer.push(x);
+                    }
+                  });
+
+                  this.setState({ selectedCustomer: selectedCustomer });
+                } else if (
+                  res.data.customer_notifications.length == 0 &&
+                  res.data.customer_type == "all"
+                ) {
+                  this.setState({
+                    selectedCustomer: { value: "all", label: "All" },
+                  });
+                }
               }
             }
           });
@@ -78,41 +112,51 @@ class PushNotificationEdit extends React.Component {
     }, 300);
   }
 
-  // downloadFile(url) {
-  //   if (url) {
-  //     const urlArray = url.split("/");
-  //     const fileName = urlArray[urlArray.length - 1];
-  //     FileSaver.saveAs(url, fileName);
-  //   }
-  // }
+  getUserList() {
+    pushNotificationService.getUserList().then((res) => {
+      if (res.success === true) {
+        let userData = [{ value: "all", label: "All" }];
+        res.data.forEach((element) => {
+          userData.push({
+            value: element.account_number,
+            label: element.name,
+          });
+        });
+        this.setState({ options: userData });
+      }
+    });
+  }
 
   handleChange(e) {
     const { name, value } = e.target;
     this.setState({ fields: { ...this.state.fields, [name]: value } });
   }
 
+  selectedCustomerData(customer) {
+    if (customer.filter((x) => x.value == "all").length > 0) {
+      this.setState({ selectedCustomer: [{ value: "all", label: "All" }] });
+    } else {
+      let selectedCustomer = [];
+      customer.forEach((x) => {
+        selectedCustomer.push(x.value);
+      });
+      this.setState({
+        fields: { ...this.state.fields, account_numbers: selectedCustomer },
+      });
+      this.setState({ selectedCustomer: customer });
+    }
+  }
+
   handleSubmit() {
     if (this.validator.allValid()) {
-      // const formData = new FormData();      
-      // formData.append("title", this.state.fields.title);
-      // formData.append("description", this.state.fields.description);
-      // formData.append("type", this.state.fields.type);
-      // formData.append("customer_type", this.state.fields.customer_type);
-      // formData.append("status", this.state.fields.status);
-      // if (typeof this.state.fields.image === "string") {
-      //   formData.append("image", "");
-      // } else {
-      //   formData.append("image", this.state.fields.image);
-      // }
-      let postVal = {        
-        title: this.state.fields.title,
-        description: this.state.fields.description,
-        type: this.state.fields.type,
-        customer_type: this.state.fields.customer_type,
-        status: this.state.fields.status,
-      };
+      let formData = this.state.fields;
+      if (this.state.fields.schedule_time) {
+        formData.schedule_time = this.convertDatePickerTime(
+          this.state.fields.schedule_time
+        );
+      }
       pushNotificationService
-        .updateNotification(postVal, this.state.fields.id)
+        .updateNotification(formData, this.state.fields.id)
         .then((res) => {
           if (res.success === false) {
             notify.error(res.message);
@@ -126,33 +170,23 @@ class PushNotificationEdit extends React.Component {
     }
   }
 
-  // handleImageChange = (event) => {
-  //   const file = event.target.files[0];
-  //   const reader = new FileReader();
-  //   reader.readAsDataURL(file);
-  //   reader.onloadend = () => {
-  //     const base64 = reader.result;
-  //     this.setState({
-  //       fields: {
-  //         ...this.state.fields,
-  //         image: file,
-  //       },
-  //       imagePreview: base64,
-  //     });
-  //   };
-  // };
+  convertDatePickerTime(str) {
+    var month, day, year, hours, minutes, seconds;
+    var date = new Date(str),
+      month = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    hours = ("0" + date.getHours()).slice(-2);
+    minutes = ("0" + date.getMinutes()).slice(-2);
+    seconds = ("0" + date.getSeconds()).slice(-2);
 
-  // handleInputChange(e) {
-  //   const value =
-  //     e.target.type === "checkbox" ? e.target.checked : e.target.value;
-  //   const statusValue = value ? 1 : 0;
-  //   this.setState({
-  //     fields: {
-  //       ...this.state.fields,
-  //       status: statusValue,
-  //     },
-  //   });
-  // }
+    var mySQLDate = [date.getFullYear(), month, day].join("-");
+    var mySQLTime = [hours, minutes, seconds].join(":");
+    return [mySQLDate, mySQLTime].join(" ");
+  }
+
+  handledateChange = (date) => {
+    this.setState({ fields: { ...this.state.fields, schedule_time: date } });
+  };
 
   render() {
     return (
@@ -245,6 +279,28 @@ class PushNotificationEdit extends React.Component {
                     )}
                   </CFormText>
                 </CFormGroup>
+                {this.state.fields.customer_type === "all" && (
+                  <>
+                    <CFormGroup>
+                      <CLabel htmlFor="name">Customers</CLabel>
+                      <Select
+                        isMulti
+                        value={this.state.selectedCustomer}
+                        isDisabled={this.state.disable}
+                        options={this.state.options}
+                        onChange={(data) => this.selectedCustomerData(data)}
+                      />
+                      <CFormText className="help-block">
+                        {this.validator.message(
+                          "customer_type",
+                          this.state.fields.customer_type,
+                          "required",
+                          { className: "text-danger" }
+                        )}
+                      </CFormText>
+                    </CFormGroup>
+                  </>
+                )}
                 <CFormGroup>
                   <CLabel htmlFor="name">Type</CLabel>
                   <CSelect
@@ -256,8 +312,8 @@ class PushNotificationEdit extends React.Component {
                     style={{ cursor: "pointer" }}
                   >
                     <option value="">-- Select Type --</option>
-                    <option value="system">System</option>
-                    <option value="custom">Custom</option>
+                    <option value="instant">Instant</option>
+                    <option value="schedule">Schedule</option>
                   </CSelect>
                   <CFormText className="help-block">
                     {this.validator.message(
@@ -268,84 +324,32 @@ class PushNotificationEdit extends React.Component {
                     )}
                   </CFormText>
                 </CFormGroup>
-                <CFormGroup>
-                  <CLabel htmlFor="name">Status</CLabel>
-                  <CSelect
-                    id="name"
-                    placeholder="Status"
-                    name="status"
-                    value={this.state.fields.status}
-                    onChange={this.handleChange}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <option value="">-- Select Status --</option>
-                    <option value="send">Send</option>
-                    <option value="schedule">Schedule</option>
-                    <option value="inprogress">In Progress</option>
-                  </CSelect>
-                  <CFormText className="help-block">
-                    {this.validator.message(
-                      "status",
-                      this.state.fields.status,
-                      "required",
-                      { className: "text-danger" }
-                    )}
-                  </CFormText>
-                </CFormGroup>
-                {/* <CFormGroup>
-                  <CLabel htmlFor="nf-name">Image</CLabel>
-                  <div>
-                    <input
-                      type="file"
-                      accept=".jpg,.jpeg,.png"
-                      onChange={this.handleImageChange}
-                    />
-                    {this.state.imagePreview ? (
-                      <img
-                        src={this.state.imagePreview}
-                        alt="Image"
-                        style={{
-                          maxWidth: "200px",
-                          maxHeight: "200px",
-                          width: "auto",
-                          height: "auto",
-                        }}
+                {this.state.fields.type === "schedule" && (
+                  <>
+                    <CFormGroup>
+                      <CLabel htmlFor="name">Schedule Time</CLabel>
+                      <DatePicker
+                        selected={new Date(this.state.fields.schedule_time)}
+                        onChange={(date) => this.handledateChange(date)}
+                        showTimeSelect
+                        timeFormat="HH:mm"
+                        timeIntervals={15}
+                        dateCaption=""
+                        timeCaption="Time"
+                        dateFormat="dd/MM/yyyy HH:mm"
+                        className="form-control"
                       />
-                    ) : (
-                      <span>
-                        <td>
-                          <img
-                            // src="http://192.168.1.32/SARE/customer-onboard/storage/app/uploads/profile-images/1681901854_file.jpeg"
-                            src={this.state.fields.image}
-                            alt="Image"
-                            style={{
-                              maxWidth: "200px",
-                              maxHeight: "200px",
-                              width: "auto",
-                              height: "auto",
-                            }}
-                          />
-                        </td>
-                        <td>
-                          {this.state.fields.image && (
-                            <CTooltip content={globalConstants.Download_BTN}>
-                              <CLink
-                                className="btn btn-md btn-primary"
-                                aria-current="page"
-                                onClick={() =>
-                                  this.downloadFile(this.state.fields.image)
-                                }
-                              >
-                                <CIcon name="cil-cloud-download"></CIcon>
-                              </CLink>
-                            </CTooltip>
-                          )}
-                        </td>
-                      </span>
-                    )}
-                  </div>
-                </CFormGroup> */}
-                <CFormText className="help-block module_permission"></CFormText>
+                      <CFormText className="help-block">
+                        {this.validator.message(
+                          "schedule_time",
+                          this.state.fields.schedule_time,
+                          "required",
+                          { className: "text-danger" }
+                        )}
+                      </CFormText>
+                    </CFormGroup>
+                  </>
+                )}
               </CCardBody>
               <CCardFooter>
                 <CButton
